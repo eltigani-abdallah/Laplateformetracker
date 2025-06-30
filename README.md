@@ -128,3 +128,31 @@ Advantages of the DAO Pattern:
     1. ResultSet columns (e.g., id, name, age, grade...)
     2. The corresponding properties of a new Student object
     This method is used internally by other methods like findById(), findAll(), etc., to convert database results into usable Java objects.
+
+    Example :
+    In StudentDAO.java
+```
+     public interface StudentDAO {
+    Student findById(Long id);
+    // other methods...
+    }
+```
+    In StudentDAOImpl.java
+```
+    public Student findById(Long id) {
+        try {
+            String sql = "SELECT * FROM students WHERE id = ?";
+            PreparedStatement stmt = connection.prepareStatement(sql);
+            stmt.setLong(1, id);
+            ResultSet rs = stmt.executeQuery();
+            
+            if (rs.next()) {
+                return mapResultSetToStudent(rs);
+            }
+            return null;
+            
+        } catch (SQLException e) {
+            return null;
+        }
+    }
+```
