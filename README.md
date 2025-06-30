@@ -87,7 +87,7 @@ Advantages of the DAO Pattern:
 - **Testability**: It is easy to create mock implementations for testing
 - **Flexibility**: Changing the database only requires changing DAO implementation.
 
-- 'StudentDAO.java': 
+- 'StudentDAO.java': <<interface>> 
     + save() -> Save a student to the database
     + findById() -> Finds a student by their unique ID
     + findAll() -> Retrieves all students from the database
@@ -98,3 +98,33 @@ Advantages of the DAO Pattern:
     + findBySchoolClass -> Finds students by school class
     + count() -> Returns the total number of students 
 
+                    ↑
+                implements
+                    |
+
+- 'StudentDAOImpl.java':
+    - connection -> Database connection object
+    - dbConnection -> Database connection manager
+    + StudentDAOImpl() -> Constructor with dependency injection
+    + save() -> Implements student saving to database
+    + findById() -> Implements finding students by ID
+    + findAll() -> Implements retrieving all students
+    + update() -> Implements student data updating
+    + delete() -> Implements student deletion by ID
+    + findByName() -> Implements finding students by name
+    + findByAge() -> Implements finding students by age
+    + findBySchoolClass -> Implements finding students by school class
+    + count() -> Implements countinf total students
+    + mapResultSetToStudent -> Convert database ResultSet to Student
+
+    NOTE: 
+    - StudentDAO is an interface that defines the contract with all CRUD operations (Create, Read, Update, Delete) and specialized search methods to manipulate student data.
+
+    - StudentDAOImpl is the concrete class that implements this interface. It contains:
+    + Required dependencies (Connection and DatabaseConnection)
+    + The actual implementation of all methods defined in the interface
+    + A private utility method mapResultSetToStudent for data conversion: 
+    When an SQL query is executed, it returns data in the form of a ResultSet, which is essentially a result table. This method performs the "mapping" (transformation) between:
+    1. ResultSet columns (e.g., id, name, age, grade...)
+    2. The corresponding properties of a new Student object
+    This method is used internally by other methods like findById(), findAll(), etc., to convert database results into usable Java objects.
