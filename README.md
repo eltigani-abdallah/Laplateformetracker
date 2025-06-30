@@ -31,7 +31,7 @@ Here are the main layers:
 ### 1. **Model Layer (Data Model)**
 Classes that represent business entities, and contains attributes, constructors, getters/setters, and utility methods.
 
-- 'Student.java' Class:
+- 'Student.java':
     + Student()-> Default constructor  
     + Student() -> Constructor with basic parameters  
     + getId() -> Returns the student's ID  
@@ -68,4 +68,15 @@ Classes that represent business entities, and contains attributes, constructors,
     + getMaxAverageGrade -> Returns the maximum average grade by school subjects for the student class 
     + toString() -> Returns a textual representation of the grade
 
+- 'User.java': 
+    + User() -> Default constructor  
+    + User() -> Constructor with username and password
+    + getId() -> Returns the unique Id of the user
+    + getUsername() -> Returns the username
+    + setUsername() -> Sets the username
+    + getPasswordHash() -> Returns the password hash ! Must be protected
+    + setPassword() -> Sets the password
+    + getEmail() -> Returns the user email
+    + setEmail() -> Sets the user email
+    + toString() -> Returns a textual representation of the user
 
