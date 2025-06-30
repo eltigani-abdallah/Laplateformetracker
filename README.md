@@ -60,12 +60,7 @@ Classes that represent business entities, and contains attributes, constructors,
     + setDate() -> Sets the date of the grade
     + getComment() -> Returns the teacher comment
     + setComment() -> Sets the teacher comment
-    + getGrades() -> Returns the list of the student's grades by school subjects 
     + getWeightedGradeValue() -> Calculates and returns the ponderated value of the grade (value * coefficient)
-    + addGrade() -> Adds a grade to the list of grades by school subjects  
-    + calculateAverageGrade -> Calculates and returns the average of the grades by school subjects
-    + getMinAverageGrade -> Returns the minimum average grade by school subjects for the student class
-    + getMaxAverageGrade -> Returns the maximum average grade by school subjects for the student class 
     + toString() -> Returns a textual representation of the grade
 
 - 'User.java': 
@@ -97,7 +92,6 @@ Advantages of the DAO Pattern:
     + findByAge() -> Finds students within a specific age
     + findBySchoolClass -> Finds students by school class
     + count() -> Returns the total number of students 
-
                     ↑
                 implements
                     |
@@ -130,15 +124,15 @@ Advantages of the DAO Pattern:
     This method is used internally by other methods like findById(), findAll(), etc., to convert database results into usable Java objects.
 
     Example :
-    In StudentDAO.java
-```
+
+```java
+    // In StudentDAO.java
      public interface StudentDAO {
     Student findById(Long id);
     // other methods...
     }
-```
-    In StudentDAOImpl.java
-```
+
+    // In StudentDAOImpl.java
     public Student findById(Long id) {
         try {
             String sql = "SELECT * FROM students WHERE id = ?";
@@ -156,3 +150,22 @@ Advantages of the DAO Pattern:
         }
     }
 ```
+- 'GradeDAO.java': <<interface>> 
+    + saveGrade() -> Saves a grade to the database
+    + updateGrade() -> Updates an existing grade by its ID
+    + deleteGrade() -> Delete an existing gade by its ID
+    + saveComment() -> Saves a teacher's comment for his subject
+    + updateComment() -> Updates an existing comment
+    + deleteComment() -> Deletes an existing comment
+    + saveCoefficient() -> Saves a grade coefficient
+    + updateCoefficient() -> Updates an existing coefficient
+    + findById() -> Finds a grade by its unique ID
+    + findAllStudentSubject() -> Retrieves all the student's subject
+    + findByStudentID() -> Finds grades by student ID
+    + findBySchoolSubject() -> Finds grades by subject and student ID
+    + findGradeByDate() -> Finds grades by date
+    + getMinAverageBySubject() -> Finds minumum average by subject in the student class list
+    + getMaximumAverageBySubject() -> Finds maximum average by subject in the student class list
+    + calculateWeightedAverageGrade -> Calculates and returns the pondereate (coeff) average of the grades by school subjects
+    + count() -> Returns the total number of grades
+
