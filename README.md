@@ -95,7 +95,6 @@ Advantages of the DAO Pattern:
                     ↑
                 implements
                     |
-
 - 'StudentDAOImpl.java':
     - connection -> Database connection object
     - dbConnection -> Database connection manager
@@ -159,13 +158,36 @@ Advantages of the DAO Pattern:
     + deleteComment() -> Deletes an existing comment
     + saveCoefficient() -> Saves a grade coefficient
     + updateCoefficient() -> Updates an existing coefficient
-    + findById() -> Finds a grade by its unique ID
+    + findGradeById() -> Finds a grade by its unique ID
     + findAllStudentSubject() -> Retrieves all the student's subject
     + findByStudentID() -> Finds grades by student ID
-    + findBySchoolSubject() -> Finds grades by subject and student ID
-    + findGradeByDate() -> Finds grades by date
+    + findGradesBySchoolSubject() -> Finds grades by subject and student ID
+    + findGradesByDate() -> Finds grades by date
     + getMinAverageBySubject() -> Finds minumum average by subject in the student class list
     + getMaximumAverageBySubject() -> Finds maximum average by subject in the student class list
     + calculateWeightedAverageGrade -> Calculates and returns the pondereate (coeff) average of the grades by school subjects
     + count() -> Returns the total number of grades
-
+                        ↑
+                    implements
+                        |
+- 'GradeDAOImpl.java':
+    - connection -> Database connection object
+    - dbConnection -> Database connection manager
+    + GradeDAOImpl() -> Constructor with dependency injection
+    + saveGrade() -> Implements grade saving to database
+    + updateGrade() -> Implements grade updating by ID
+    + deleteGrade() -> Implements grade deletion by ID
+    + saveComment() -> Implements comment saving for a subject
+    + updateComment() -> Implement comment updating
+    + deleteComment() -> Implement comment deletion
+    + saveCoefficient() -> Implements coefficient saving
+    + updateCoefficient() -> Implements coefficient updating
+    + findGradeById() -> Implements finding grade by ID
+    + findAllStudentSubject() -> Implements retrieving all student's subjects
+    + findGradeByStudentId() -> Implements finding grades by student ID
+    + findGradesBySchoolSubject() -> Implements finding grades by subject and student ID
+    + findGradesByDate() -> Implements finding grades by date
+    + getMinAverageBySubject() -> Implements finding minimum average by subject
+    + getMaximumAverageBySubject() -> Implements finding maximum average by subject
+    + calculateWeightedAverageGrade() -> Implements weighted average calculation by subject
+    + mapResultSetToGrade() -> Convert database ResultSet to Grade
