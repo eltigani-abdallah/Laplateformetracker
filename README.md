@@ -23,3 +23,49 @@ This project is a student management system developed in Java with a PostgreSQL 
 - **Registration**: to add new users
 - **Export Results**: CSV, PDF
 - **Automatic Backup**: Protection against data loss
+
+## Project Architecture
+This application follows a classic layered architecture with the MVC (Model-View-Controller) pattern.
+Here are the main layers:
+
+### 1. **Model Layer (Data Model)**
+Classes that represent business entities, and contains attributes, constructors, getters/setters, and utility methods.
+
+- 'Student.java' Class:
+    + Student()-> Default constructor  
+    + Student() -> Constructor with basic parameters  
+    + getId() -> Returns the student's ID  
+    + setId() -> Sets the student's ID  
+    + getFirstName() -> Returns the student's first name  
+    + setFirstName() -> Sets the student's first name  
+    + getLastName() -> Returns the student's last name  
+    + setLastName() -> Sets the student's last name  
+    + getAge() -> Returns the student's age  
+    + setAge() -> Sets the student's age  
+    + getFullName -> Returns the full name (first name + last name) 
+    + getStudentClass -> Returns the student's class by ID 
+    + toString -> Returns a textual representation of the student 
+
+- 'Grade.java': 
+    + Grade()-> Default constructor  
+    + Grade() -> Constructor with student ID, school subject, grade value
+    + getId() -> Returns the unique grade ID
+    + getSubject() -> Returns the school subject of the grade
+    + setSubject() -> Sets the school subject of the grade
+    + getValue() -> Returns the numeric value of the grade
+    + setValue() -> Sets the numeric value of the grade
+    + getCoefficient() -> Returns the grade coefficient
+    + setCoefficient() -> Sets the grade coefficient
+    + getDate() -> Returns the date of the grade
+    + setDate() -> Sets the date of the grade
+    + getComment() -> Returns the teacher comment
+    + setComment() -> Sets the teacher comment
+    + getGrades() -> Returns the list of the student's grades by school subjects 
+    + getWeightedGradeValue() -> Calculates and returns the ponderated value of the grade (value * coefficient)
+    + addGrade() -> Adds a grade to the list of grades by school subjects  
+    + calculateAverageGrade -> Calculates and returns the average of the grades by school subjects
+    + getMinAverageGrade -> Returns the minimum average grade by school subjects for the student class
+    + getMaxAverageGrade -> Returns the maximum average grade by school subjects for the student class 
+    + toString() -> Returns a textual representation of the grade
+
+
