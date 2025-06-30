@@ -87,3 +87,14 @@ Advantages of the DAO Pattern:
 - **Testability**: It is easy to create mock implementations for testing
 - **Flexibility**: Changing the database only requires changing DAO implementation.
 
+- 'StudentDAO.java': 
+    + save() -> Save a student to the database
+    + findById() -> Finds a student by their unique ID
+    + findAll() -> Retrieves all students from the database
+    + update() -> Updates an existing student's information
+    + delete() -> Deletes a student by their ID
+    + findByName() -> Finds students by their name
+    + findByAge() -> Finds students within a specific age
+    + findBySchoolClass -> Finds students by school class
+    + count() -> Returns the total number of students 
+
