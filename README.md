@@ -191,3 +191,19 @@ Advantages of the DAO Pattern:
     + getMaximumAverageBySubject() -> Implements finding maximum average by subject
     + calculateWeightedAverageGrade() -> Implements weighted average calculation by subject
     + mapResultSetToGrade() -> Convert database ResultSet to Grade
+
+- 'UserDAO.java': <<interface>>
+    + saveUser() -> Saves a user to the database 
+    + findUserByUsername () -> Finds a user by username
+    + authenticateUser() -> Checks if username/password combination is valid
+                        ↑
+                    implements
+                        |
+- 'UserDAOImpl.java':
+    - connection -> Database connection object
+    - dbConnection -> Database connection manager
+    + UserDAOImpl() -> Implements finding user by username
+    + saveUser() -> Implements user saving to database
+    + findUserByUsername -> Implements findinf user by username
+    + authenticateUser() -> Implements login authentication
+    + mapResultSetToUser() -> Convert database ResultSet to User
