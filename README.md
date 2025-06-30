@@ -207,3 +207,19 @@ Advantages of the DAO Pattern:
     + findUserByUsername -> Implements findinf user by username
     + authenticateUser() -> Implements login authentication
     + mapResultSetToUser() -> Convert database ResultSet to User
+
+### 3. **Database**
+ - 'DatabaseConnection.java':
+    - url -> Database UrL string
+    - username -> Database username
+    - password -> Database password
+    - connection -> Active database connection object
+    + DatabaseConnection() -> Default constructor
+    + connect() -> Establishes database connection
+    + disconnect() -> Closes database connection
+    + getConnection() -> Returns active connection
+    + isConnected() -> Checks if connection is active
+    + executeQuery() -> Executes SELECT query
+    + executeUpdate() -> Executes INSERT/UPDATE/DELETE query
+    + executeSafeQuery() -> Executes SQL query with parameters for security
+
