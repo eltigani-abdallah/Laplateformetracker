@@ -80,3 +80,10 @@ Classes that represent business entities, and contains attributes, constructors,
     + setEmail() -> Sets the user email
     + toString() -> Returns a textual representation of the user
 
+### 2. **DAO (Data Access Object) Layer**
+The DAO pattern separates data access logic from business logic.
+Advantages of the DAO Pattern:
+- **Separation of concerns**: Data access logic is isolated
+- **Testability**: It is easy to create mock implementations for testing
+- **Flexibility**: Changing the database only requires changing DAO implementation.
+
