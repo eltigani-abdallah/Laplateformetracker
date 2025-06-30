@@ -223,3 +223,11 @@ Advantages of the DAO Pattern:
     + executeUpdate() -> Executes INSERT/UPDATE/DELETE query
     + executeSafeQuery() -> Executes SQL query with parameters for security
 
+- 'DatabaseConfig.java':
+    - properties -> Properties object for configuration
+    - configFile -> Configuration file path
+    + DatabaseConfig() -> Default constructor, loads configuration
+    + loadConfig() -> Loads configuration from properties file
+    + getDatabaseUrl() -> Returns database URL
+    + getDatabaseUsername() -> Returns database username
+    + getDatabasePassword() -> Returns database password
