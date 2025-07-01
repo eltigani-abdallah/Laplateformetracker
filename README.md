@@ -24,6 +24,26 @@ This project is a student management system developed in Java with a PostgreSQL 
 - **Export Results**: CSV, PDF
 - **Automatic Backup**: Protection against data loss
 
+```
+A secure authentification process:
+┌─────────────────┐    ┌──────────────────┐    ┌─────────────────┐
+│   Controller    │───>│   UserService    │───>|    UserDAO      │
+│                 │    │                  │    │                 │
+│ - loginUser()   │    │ + createUser()   │    │ + saveUser()    │
+│ - registerUser()│    │ + authenticate() │    │ + findByUsername│
+└─────────────────┘    │ + hashPassword() │    └─────────────────┘
+                       └──────────────────┘              │
+                                │                        |
+                                ▼                        ▼
+                       ┌───────────────────┐    ┌─────────────────┐
+                       │ PasswordEncoder   │    │   Database      │
+                       │                   │    │                 │
+                       │ + hashPassword()  │    │ users table     │
+                       │ + verifyPassword()│    │ - passwordHash  │
+                       └───────────────────┘    └─────────────────┘
+
+```
+
 ## Project Architecture
 This application follows a classic layered architecture with the MVC (Model-View-Controller) pattern.
 Here are the main layers:
@@ -58,10 +78,14 @@ Classes that represent business entities, and contains attributes, constructors,
     + setCoefficient() -> Sets the grade coefficient
     + getDate() -> Returns the date of the grade
     + setDate() -> Sets the date of the grade
-    + getComment() -> Returns the teacher comment
-    + setComment() -> Sets the teacher comment
     + getWeightedGradeValue() -> Calculates and returns the ponderated value of the grade (value * coefficient)
     + toString() -> Returns a textual representation of the grade
+
+- 'SubjectComment.java':
+    + getId() -> Returns unique comment ID
+    + getStudentId() -> Returns student ID
+    + getSubject() -> Returns school subject
+    + getComment() -> Returns teacher's trimester comment
 
 - 'User.java': 
     + User() -> Default constructor  
@@ -69,8 +93,8 @@ Classes that represent business entities, and contains attributes, constructors,
     + getId() -> Returns the unique Id of the user
     + getUsername() -> Returns the username
     + setUsername() -> Sets the username
-    + getPasswordHash() -> Returns the password hash ! Must be protected
-    + setPassword() -> Sets the password
+    + getPasswordHash() -> Returns the password hash (for DAO access only)
+    + setPasswordHash() -> Sets the password hash (for DAO access only)
     + getEmail() -> Returns the user email
     + setEmail() -> Sets the user email
     + toString() -> Returns a textual representation of the user
@@ -158,7 +182,7 @@ Advantages of the DAO Pattern:
     + deleteComment() -> Deletes an existing comment
     + saveCoefficient() -> Saves a grade coefficient
     + updateCoefficient() -> Updates an existing coefficient
-    + findGradeById() -> Finds a grade by its unique ID
+    + findGradesById() -> Finds a grade by its unique ID
     + findAllStudentSubject() -> Retrieves all the student's subject
     + findByStudentID() -> Finds grades by student ID
     + findGradesBySchoolSubject() -> Finds grades by subject and student ID
@@ -191,6 +215,24 @@ Advantages of the DAO Pattern:
     + getMaximumAverageBySubject() -> Implements finding maximum average by subject
     + calculateWeightedAverageGrade() -> Implements weighted average calculation by subject
     + mapResultSetToGrade() -> Convert database ResultSet to Grade
+
+- 'SubjectCommentDAO.java': <<interface>>
+    + saveComment() -> Saves a comment for a subject
+    + updateComment() -> Updates an existing comment
+    + deleteComment() -> Deletes a comment
+    + findCommentsByStudentAndSubject() -> Finds comments for student/subject
+                        ↑
+                    implements
+                        |
+- 'SubjectCommentDAOImpl.java':
+    - connection -> Database connection object
+    - dbConnection -> Database connection manager
+    + SubjectCommentDAOImpl() -> Constructor with dependency injection
+    + saveComment() -> Implements comment saving to database
+    + updateComment() -> Implements comment updating
+    + deleteComment() -> Implements comment deletion
+    + findCommentsByStudentAndSubject() -> Implements finding comments by student and subject
+    + mapResultSetToComment() -> Convert database ResultSet to Comment
 
 - 'UserDAO.java': <<interface>>
     + saveUser() -> Saves a user to the database 
@@ -231,3 +273,4 @@ Advantages of the DAO Pattern:
     + getDatabaseUrl() -> Returns database URL
     + getDatabaseUsername() -> Returns database username
     + getDatabasePassword() -> Returns database password
+
