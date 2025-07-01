@@ -49,9 +49,10 @@ This application follows a classic layered architecture with the MVC (Model-View
 Here are the main layers:
 
 ### 1. **Model Layer (Data Model)**
+* * *
 Classes that represent business entities, and contains attributes, constructors, getters/setters, and utility methods.
 
-- 'Student.java':
+- **Student.java**:
     + Student()-> Default constructor  
     + Student() -> Constructor with basic parameters  
     + getStudentId() -> Returns the student's ID  
@@ -66,7 +67,33 @@ Classes that represent business entities, and contains attributes, constructors,
     + setClassName() -> Sets the class name (in db should be class_name VARCHAR(10) to stock "5B", "T1" ect...)
     + toString -> Returns a textual representation of the student 
 
-- 'Grade.java': 
+    ```plaintext
++-------------------------------------------+
+|                 Student                   |
++-------------------------------------------+
+| - studentId: Long                         |
+| - firstName: String                       |
+| - lastName: String                        |
+| - age: int                                |
+| - className: String                       |
++-------------------------------------------+
+| + Student()                               |
+| + Student(String, String, int)            |
+| + getStudentId(): Long                    |
+| + getFirstName(): String                  |
+| + setFirstName(String): void              |
+| + getLastName(): String                   |
+| + setLastName(String): void               |
+| + getAge(): int                           |
+| + setAge(int): void                       |
+| + getFullName(): String                   |
+| + getStudentClassName(): String           |
+| + setClassName(String): void              |
+| + toString(): String                      |
++-------------------------------------------+
+```
+
+- **Grade.java**: 
     + Grade()-> Default constructor  
     + Grade() -> Constructor with student ID, school subject, grade value
     + getId() -> Returns the unique grade ID
@@ -81,13 +108,13 @@ Classes that represent business entities, and contains attributes, constructors,
     + getWeightedGradeValue() -> Calculates and returns the ponderated value of the grade (value * coefficient)
     + toString() -> Returns a textual representation of the grade
 
-- 'SubjectComment.java':
+- **SubjectComment.java**:
     + getId() -> Returns unique comment ID
     + getStudentId() -> Returns student ID
     + getSubject() -> Returns school subject
     + getComment() -> Returns teacher's trimester comment
 
-- 'User.java': 
+- **User.java**: 
     + User() -> Default constructor  
     + User() -> Constructor with username and password
     + getId() -> Returns the unique Id of the user
@@ -100,13 +127,15 @@ Classes that represent business entities, and contains attributes, constructors,
     + toString() -> Returns a textual representation of the user
 
 ### 2. **DAO (Data Access Object) Layer**
+* * *
+
 The DAO pattern separates data access logic from business logic.
 Advantages of the DAO Pattern:
 - **Separation of concerns**: Data access logic is isolated
 - **Testability**: It is easy to create mock implementations for testing
 - **Flexibility**: Changing the database only requires changing DAO implementation.
 
-- 'StudentDAO.java': <<interface>> 
+- **StudentDAO.java**: interface
     + save() -> Save a student to the database
     + findStudentById() -> Finds a student by their unique ID
     + findAllStudent() -> Retrieves all students from the database
@@ -131,7 +160,7 @@ Advantages of the DAO Pattern:
                 implements
                     |
 
-- 'StudentDAOImpl.java':
+- **StudentDAOImpl.java**:
     - connection -> Database connection object
     - dbConnection -> Database connection manager
     + StudentDAOImpl() -> Constructor with dependency injection
@@ -200,7 +229,7 @@ Snipset example in StudentDAOImpl:
         }
     }
 ```
-- 'GradeDAO.java': interface
+- **GradeDAO.java**: interface
     + saveGrade() -> Saves a grade to the database
     + updateGrade() -> Updates an existing grade by its ID
     + deleteGrade() -> Delete an existing gade by its ID
@@ -217,7 +246,7 @@ Snipset example in StudentDAOImpl:
                     implements
                         |
 
-- 'GradeDAOImpl.java':
+- **GradeDAOImpl.java**:
     - connection -> Database connection object
     - dbConnection -> Database connection manager
     + GradeDAOImpl() -> Constructor with dependency injection
@@ -256,7 +285,7 @@ ORDER BY g.subject
 LIMIT ? OFFSET ?
 ```
 
-- 'SubjectCommentDAO.java':  interface 
+- **SubjectCommentDAO.java**:  interface 
     + saveComment() -> Saves a comment for a subject
     + updateComment() -> Updates an existing comment
     + deleteComment() -> Deletes a comment
@@ -266,7 +295,7 @@ LIMIT ? OFFSET ?
                     implements
                         |
 
-- 'SubjectCommentDAOImpl.java':
+- **SubjectCommentDAOImpl.java**:
     - connection -> Database connection object
     - dbConnection -> Database connection manager
     + SubjectCommentDAOImpl() -> Constructor with dependency injection
@@ -276,7 +305,7 @@ LIMIT ? OFFSET ?
     + findCommentsByStudentAndSubject() -> Implements finding comments by student and subject
     + mapResultSetToComment() -> Convert database ResultSet to Comment
 
-- 'UserDAO.java': interface
+- **UserDAO.java**: interface
     + saveUser() -> Saves a user to the database 
     + findUserByUsername () -> Finds a user by username
     + authenticateUser() -> Checks if username/password combination is valid
@@ -285,7 +314,7 @@ LIMIT ? OFFSET ?
                     implements
                         |
 
-- 'UserDAOImpl.java':
+- **UserDAOImpl.java**:
     - connection -> Database connection object
     - dbConnection -> Database connection manager
     + UserDAOImpl() -> Implements finding user by username
@@ -295,7 +324,9 @@ LIMIT ? OFFSET ?
     + mapResultSetToUser() -> Convert database ResultSet to User
 
 ### 3. **Database**
- - 'DatabaseConnection.java':
+* * *
+
+ - **DatabaseConnection.java**:
     - url -> Database UrL string
     - username -> Database username
     - password -> Database password
@@ -310,7 +341,7 @@ LIMIT ? OFFSET ?
     + executeSafeQuery() -> Executes SQL query with parameters for security
     + closeResources()
 
-- 'DatabaseConfig.java':
+- **DatabaseConfig.java**:
     - properties -> Properties object for configuration
     - configFile -> Configuration file path
     + DatabaseConfig() -> Default constructor, loads configuration
@@ -320,9 +351,10 @@ LIMIT ? OFFSET ?
     + getDatabasePassword() -> Returns database password
 
 ### 4. **Service Layer (Business Logic)**
+* * *
 The Service layer contains business logic and orchestrates calls to the DAOs
 
-- 'StudentService.java':
+- **StudentService.java**:
     - studentDAO -> StudentDAO instance
     - validator -> InputValidator instance
     + StudentService() -> Constructor with DAO injection
@@ -333,12 +365,12 @@ The Service layer contains business logic and orchestrates calls to the DAOs
     + deleteStudent() -> Deletes student by ID
     + searchStudents()  -> Returns paginated student list - use StudentDAO.searchGeneral() with SearchCriteria and pagination
 
-- 'GradeService.java':
+- **GradeService.java**:
     - gradeDAO -> GradeDAO instance
     + GradeService() -> Constructeur
     + searchBySubject() -> Use GradeDAO.searchBySubject() with SearchCriteria and pagination
 
-- 'StatisticsService.java':
+- **StatisticsService.java**:
     - studentDAO -> StudentDAO instance
     + StatisticsService() -> Constructor with DAO injection
     + calculateClassAverageBySubject() -> Calculates class average by subject
@@ -347,21 +379,21 @@ The Service layer contains business logic and orchestrates calls to the DAOs
     + getTopPerformers() -> Returns top N performing students
     + getStudentStatistics() -> Returns general statistics summary
 
-- 'AuthenticationService.java':
+- **AuthenticationService.java**:
     - userDAO -> UserDAO instance
     - currentUser -> Current logged-in user
     + AuthenticationService() -> Constructor with UserDAO injection
     + authenticate() -> Authenticates user with login/password
     + isAuthenticated() -> Checks if user is logged in
 
-- 'ImportExportService.java':
+- **ImportExportService.java**:
     - csvHandler -> CSV file handler
     - pdfExporter -> PDF file exporter
     + ImportExportService() -> Default constructor
     + exportToCSV() -> Exports research result to CSV file
     + exportToPDF() -> Exports graphs to PDF file
 
-- 'BackupService.java':
+- **BackupService.java**:
     + BackupService() -> Constructor with DAO injection
     + createBackup() -> Creates complete system backup
     + restoreBackup() -> Restores system from backup
@@ -373,8 +405,9 @@ The Service layer contains business logic and orchestrates calls to the DAOs
     - extractBackup(String) -> Extracts compressed backup
 
 ### 5. **Controller Layer** 
+* * *
 
-- 'MainController.java':
+- **MainController.java**:
     - studentService -> StudentService instance
     - authService -> AuthenticationService instance
     - currentStage -> Stage instance
@@ -391,7 +424,7 @@ The Service layer contains business logic and orchestrates calls to the DAOs
     + showRegister() -> Displays register view
     + loadView(String) -> Dynamically loads a FXML view
 
-- 'AuthenticationController.java':
+- **AuthenticationController.java**:
     - authService -> AuthenticationService instance
     - usernameField -> TextField instance
     - passwordField -> PasswordField instance
@@ -403,7 +436,7 @@ The Service layer contains business logic and orchestrates calls to the DAOs
     + showMainView() -> Displays main view after login
     + showAlert() -> Displays alert dialog box
 
-- 'StudentFormController.java':
+- **StudentFormController.java**:
     + initialize() -> Initializes student form
     + setStudent(Student) -> Loads student data into form
     + handleSaveStudent() -> Handles student creation/update
@@ -412,7 +445,7 @@ The Service layer contains business logic and orchestrates calls to the DAOs
     + clearForm() -> Clears all form fields
     + validateStudentForm() -> Validates student data
 
-- 'StatisticsController.java':
+- **StatisticsController.java**:
     + initialize() -> Initializes the controller
     + loadStatistics() -> Loads statistics data
     + updateCharts() -> Updates all chart displays
@@ -421,7 +454,7 @@ The Service layer contains business logic and orchestrates calls to the DAOs
     - createAgeDistributionChart() -> Creates age distribution pie chart
     - createGradeDistributionChart() -> Creates grade distribution bar chart
 
-- 'CommentController.java':
+- **CommentController.java**:
     - commentService -> SubjectCommentService instance
     + initialize() -> Initializes comment controller
     + validateCommentInput() -> Validates comment data
@@ -430,7 +463,7 @@ The Service layer contains business logic and orchestrates calls to the DAOs
     + handleUpdateComment() -> Handles comment modification
     + handleDeleteComment() -> Handles comment deletion
 
-- 'BackupController.java':
+- **BackupController.java**:
     - backupService -> BackupService instance
     + handleCreateBackup() -> Handles backup creation
     + handleRestoreBackup() -> Handles backup restoration
@@ -438,14 +471,14 @@ The Service layer contains business logic and orchestrates calls to the DAOs
     + showBackupList() -> Displays available backups
     + handleDeleteBackup() -> Handles backup deletion
 
-- 'ImportExportController'.java:
+- **ImportExportController.java**:
     - importExportService -> ImportExportService instance
     + initialize() -> Initializes import/export controller
     + handleFileSelection() -> Handles file picker dialog
     + handleCSVExport() -> Handles CSV file export
     + handlePDFExport() -> Handles PDF file export
 
-- 'SearchController.java':
+- **SearchController.java**:
     - studentService -> StudentService instance
     - gradeService -> GradeService instance
     + initialize() -> Initializes search controller
@@ -457,7 +490,7 @@ The Service layer contains business logic and orchestrates calls to the DAOs
     + updateSearchResults() -> Updates search result display
     + handlePagination() -> Manages pagination controls
 
-- 'GradeController.java':
+- **GradeController.java**:
     - gradeService -> GradeService instance
     + initialize() -> Initializes grade controller
     + handleAddGrade() -> Handles adding new grades
@@ -466,21 +499,23 @@ The Service layer contains business logic and orchestrates calls to the DAOs
     + validateGradeInput() -> Validates grade data
     + refreshGradeView() -> Updates grade display
 
-## 6. **View**
+### 6. **View**
+* * *
 
-- 'MainView.java':
+- **MainView.java**:
 
-- 'StudentView.java':
+- **StudentView.java**:
 
-- 'AuthenticationView.java':
+- **AuthenticationView.java**:
 
-- 'GeneralGraphicView.java':
+- **GeneralGraphicView.java**:
 
-- 'StudentGraphicView.java':
+- **StudentGraphicView.java**:
 
 ### 7. **Utils Layer**
+* * *
 
-- 'SearchCriteria.java':
+- **SearchCriteria.java**:
     - searchValue -> Value typed in the search bar
     - pageNumber -> Page number (default: 1)
     - pageSize -> Page size (default: 15)
@@ -495,7 +530,7 @@ The Service layer contains business logic and orchestrates calls to the DAOs
     + getOffset() -> Calculates the offset ((pageNumber - 1) * pageSize)
     + toString() -> String representation
 
-- 'SubjectResult.java':
+- **SubjectResult.java**:
     - subject -> Subject
     - grades -> List of grades (String format "grade1, grade2, grade3...")
     - studentAverage -> Student's average
@@ -518,7 +553,7 @@ The Service layer contains business logic and orchestrates calls to the DAOs
     + setTeacherComment() -> Sets the teacher's comment
     + toString() -> String representation
 
-- 'InputValidator.java':
+- **InputValidator.java**:
     + isValidName() -> Validates name format
     + isValidAge() -> Validates if age is within acceptable range
     + isValidGrade() -> Validates if grade is within valid range
@@ -527,7 +562,7 @@ The Service layer contains business logic and orchestrates calls to the DAOs
     + sanitizeInput() -> Cleans and secures an input string
     + validateStudent(Student) -> Validates all student fields when adding new student
 
-- 'PasswordUtils.java':
+- **PasswordUtils.java**:
     + generateSalt() -> Generates random salt
     + hashPassword(String, String) -> Hashes password with salt
     + hashPasswordWithSalt(String) -> Hashes password with auto-generated salt
@@ -535,7 +570,7 @@ The Service layer contains business logic and orchestrates calls to the DAOs
     + validatePasswordStrength(String) -> Validates password strength
     + getPasswordCriteria() -> Returns validation criteria
 
-- 'CSVHandler.java':
+- **CSVHandler.java**:
     + CSVHandler() -> Default constructor with standard delimiters
     + CSVHandler() -> Constructor with custom delimiters
     + exportGeneralSearchResults() -> Exports general search results list to CSV file
@@ -546,7 +581,7 @@ The Service layer contains business logic and orchestrates calls to the DAOs
     - parseGeneralFromCSV() -> Parses CSV line to general object
     - formatGeneralToCSV() -> Formats general object to CSV line
 
-- 'PDFExporter.java':
+- **PDFExporter.java**:
     - document -> Document instance
     - writer -> PdfWriter instance
     + PDFExporter() -> Default constructor, initializes PDF components
