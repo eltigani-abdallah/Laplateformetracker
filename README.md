@@ -271,11 +271,42 @@ public abstract class BaseDAO<T> {
     // other methods...
     }
      ```
-
+```
++------------------------------------------------+
+|               StudentDAO                       |
++------------------------------------------------+
+| + save(Student): void                          |
+| + findStudentById(Long): Student               |
+| + findAllStudents(): List<Student>             |
+| + updateStudent(Student): void                 |
+| + deleteStudent(Long): void                    |
+| + searchGeneral(SearchCriteria): List<Student> |
+| + countSearchGeneral(SearchCriteria): Long     |
++------------------------------------------------+
                     ↑
                 implements
                     |
-
++-------------------------------------------------+
+|                  StudentDAOImpl                 |
++-------------------------------------------------+
+| - connection: Connection                        |
+| - dbConnection: DatabaseConnection              |
++-------------------------------------------------+
+| + StudentDAOImpl(Connection)                    |
+| + saveStudent(Student): void                    |
+| + findStudentById(Long): Student                |
+| + findAllStudents(): List<Student>              |
+| + updateStudent(Student): void                  |
+| + deleteStudent(Long): void                     |
+| + searchGeneral(SearchCriteria): List<Student>  |
+| + countSearchGeneral(SearchCriteria): Long      |
+| + count(): Long                                 |
+| - mapResultSetToStudent(ResultSet): Student     |
++-------------------------------------------------+
+|                 <<extends>>                     |
+|              BaseDAO<Student>                   |
++-------------------------------------------------+
+```
 - **StudentDAOImpl.java**: `extends BaseDAO<Student>`
     - `StudentDAOImpl(Connection)` -> Constructor with connection injection
     - `saveStudent()` -> Implements student saving to database
