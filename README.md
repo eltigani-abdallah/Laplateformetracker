@@ -161,7 +161,7 @@ Classes that represent business entities, and contains attributes, constructors,
 - **User.java**: 
     - `User()` -> Default constructor  
     - `User()` -> Constructor with username and password
-    - `getId()` -> Returns the unique Id of the user
+    - `getUserId()` -> Returns the unique Id of the user
     - `getUsername()` -> Returns the username
     - `setUsername()` -> Sets the username
     - `getPasswordHash()` -> Returns the password hash (for DAO access only)
@@ -169,6 +169,28 @@ Classes that represent business entities, and contains attributes, constructors,
     - `getEmail()` -> Returns the user email
     - `setEmail()` -> Sets the user email
     - `toString()` -> Returns a textual representation of the user
+
+```
++-------------------------------------------+
+|                  User                     |
++-------------------------------------------+
+| - id: Long                                |
+| - username: String                        |
+| - passwordHash: String                    |
+| - email: String                           |
++-------------------------------------------+
+| + User()                                  |
+| + User(String, String)                    |
+| + getUserId(): Long                       |
+| + getUsername(): String                   |
+| + setUsername(String): void               |
+| + getPasswordHash(): String               |
+| + setPasswordHash(String): void           |
+| + getEmail(): String                      |
+| + setEmail(String): void                  |
+| + toString(): String                      |
++-------------------------------------------+
+```
 
 ### 2. **DAO (Data Access Object) Layer**
 * * *
