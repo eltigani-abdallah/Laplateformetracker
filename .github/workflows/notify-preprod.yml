@@ -14,5 +14,6 @@ jobs:
           curl -X POST "${{ secrets.GCHAT_WEBHOOK }}" \
           -H 'Content-Type: application/json' \
           -d '{
-                "text": "*${{ github.actor }}* just pushed to preprod, commit says: ${{ github.event.head_commit.message }} "
+                "text": "*${{ github.actor }}* just pushed to preprod! \n
+                commit says: ${{ github.event.head_commit.message }} "
               }'
