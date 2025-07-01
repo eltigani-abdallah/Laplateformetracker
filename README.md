@@ -53,19 +53,19 @@ Here are the main layers:
 Classes that represent business entities, and contains attributes, constructors, getters/setters, and utility methods.
 
 - **Student.java**:
-    + Student()-> Default constructor  
-    + Student() -> Constructor with basic parameters  
-    + getStudentId() -> Returns the student's ID  
-    + getFirstName() -> Returns the student's first name  
-    + setFirstName() -> Sets the student's first name  
-    + getLastName() -> Returns the student's last name  
-    + setLastName() -> Sets the student's last name  
-    + getAge() -> Returns the student's age  
-    + setAge() -> Sets the student's age  
-    + getFullName() -> Returns the full name (first name + last name) 
-    + getStudentClassName() -> Returns the class name
-    + setClassName() -> Sets the class name (in db should be class_name VARCHAR(10) to stock "5B", "T1" ect...)
-    + toString -> Returns a textual representation of the student 
+    + `Student()`-> Default constructor  
+    + `Student()` -> Constructor with basic parameters  
+    + `getStudentId()` -> Returns the student's ID  
+    + `getFirstName()` -> Returns the student's first name  
+    + `setFirstName()` -> Sets the student's first name  
+    + `getLastName()` -> Returns the student's last name  
+    + `setLastName()` -> Sets the student's last name  
+    + `getAge()` -> Returns the student's age  
+    + `setAge()` -> Sets the student's age  
+    + `getFullName()` -> Returns the full name (first name + last name) 
+    + `getStudentClassName()` -> Returns the class name
+    + `setClassName()` -> Sets the class name (in db should be class_name VARCHAR(10) to stock "5B", "T1" ect...)
+    + `toString()` -> Returns a textual representation of the student 
 
 ```
 +-------------------------------------------+
