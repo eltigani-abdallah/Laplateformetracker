@@ -67,7 +67,7 @@ Classes that represent business entities, and contains attributes, constructors,
     + setClassName() -> Sets the class name (in db should be class_name VARCHAR(10) to stock "5B", "T1" ect...)
     + toString -> Returns a textual representation of the student 
 
-    ```plaintext
+```
 +-------------------------------------------+
 |                 Student                   |
 +-------------------------------------------+
