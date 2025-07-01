@@ -62,6 +62,8 @@ Classes that represent business entities, and contains attributes, constructors,
     - `setLastName()` -> Sets the student's last name  
     - `getAge()` -> Returns the student's age  
     - `setAge()` -> Sets the student's age  
+    - `getAverageGrade()` -> Returns the student's average grade
+    - `setAverageGrade()` -> Sets the student's average grade
     - `getFullName()` -> Returns the full name (first name - last name) 
     - `getStudentClassName()` -> Returns the class name
     - `setClassName()` -> Sets the class name (in db should be class_name VARCHAR(10) to stock "5B", "T1" ect...)
@@ -84,6 +86,8 @@ Classes that represent business entities, and contains attributes, constructors,
 | - setFirstName(String): void              |
 | - getLastName(): String                   |
 | - setLastName(String): void               |
+| - getAverageGrade(): double               |
+| - setAverageGrade(double): void           |
 | - getAge(): int                           |
 | - setAge(int): void                       |
 | - getFullName(): String                   |
@@ -97,6 +101,8 @@ Classes that represent business entities, and contains attributes, constructors,
     - `Grade()`-> Default constructor  
     - `Grade()` -> Constructor with student ID, school subject, grade value
     - `getGradeId()` -> Returns the unique grade ID
+    - `getStudentId()` -> Returns the student ID
+    - `setStudentId()` -> Sets the student ID
     - `getSubject()` -> Returns the school subject of the grade
     - `setSubject()` -> Sets the school subject of the grade
     - `getValue()` -> Returns the numeric value of the grade
@@ -105,7 +111,7 @@ Classes that represent business entities, and contains attributes, constructors,
     - `setCoefficient()` -> Sets the grade coefficient
     - `getDate()` -> Returns the date of the grade
     - `setDate()` -> Sets the date of the grade
-    - `getWeightedGradeValue()` -> Calculates and returns the ponderated value of the grade (value * coefficient)
+    - `getWeightedGradeValue()` -> Calculates and returns the weighted value of the grade (value * coefficient)
     - `toString()` -> Returns a textual representation of the grade
 
 ```
@@ -122,6 +128,8 @@ Classes that represent business entities, and contains attributes, constructors,
 | - Grade()                                 |
 | - Grade(Long, String, double, double)     |
 | - getGradeId(): Long                      |
+| - getStudentId(): Long                    |
+| - setStudentId(Long): void                |
 | - getSubject(): String                    |
 | - setSubject(String): void                |
 | - getValue(): double                      |
@@ -140,6 +148,7 @@ Classes that represent business entities, and contains attributes, constructors,
     - `getStudentId()` -> Returns student ID
     - `getSubject()` -> Returns school subject
     - `getComment()` -> Returns teacher's trimester comment
+    - `setComment()` -> Sets teacher's comment
 
 ```
 +-------------------------------------------+
@@ -155,6 +164,7 @@ Classes that represent business entities, and contains attributes, constructors,
 | + getStudentId(): Long                    |
 | + getSubject(): String                    |
 | + getComment(): String                    |
+| + setComment(String): void                |
 +-------------------------------------------+
 ```
 
@@ -201,15 +211,55 @@ Advantages of the DAO Pattern:
 - **Testability**: It is easy to create mock implementations for testing
 - **Flexibility**: Changing the database only requires changing DAO implementation.
 
+- **BaseDAO.java**: Abstract base class for all DAOs
+    - `connection` -> Database connection object
+    - `BaseDAO(Connection)` -> Constructor with connection injection
+    - `mapResultSet(ResultSet)` -> Abstract method to convert ResultSet to entity
+    - `count(String)` -> Generic count method for any table
+    - `closeResources(ResultSet, PreparedStatement)` -> Utility to close database resources
+
+```java
+public abstract class BaseDAO<T> {
+    protected Connection connection;
+    
+    public BaseDAO(Connection connection) {
+        this.connection = connection;
+    }
+    
+    protected abstract T mapResultSet(ResultSet rs) throws SQLException;
+    protected int count(String tableName) { ... }
+    protected void closeResources(ResultSet rs, PreparedStatement stmt) { ... }
+}
+```
++------------------------------------------------------+
+|                 BaseDAO                              |
++------------------------------------------------------+
+| - connection: Connection                             |
++------------------------------------------------------+
+| + BaseDAO(Connection)                                |
+| + mapResultSet(ResultSet): T                         |
+| + count(String): int                                 |
+| + closeResources(ResultSet, PreparedStatement): void |
++------------------------------------------------------+
+
+> The `BaseDAO` class is an abstract template for all Data Access Objects (DAOs) in the project. It includes:
+> 
+> - **Connection**: A database connection object for performing data operations.
+> - **Constructor**: Initializes the DAO with a specific database connection.
+> - **mapResultSet**: An abstract method that subclasses must implement to convert a `ResultSet` into an entity of type `T`.
+> - **count**: A generic method for counting records in any table.
+> - **closeResources**: A utility method for safely closing database resources, preventing memory leaks.
+> 
+> When creating a new DAO for a specific entity (like User or Product), extend the `BaseDAO` class and implement the `mapResultSet` method to define the conversion from `ResultSet` to the desired entity. This structure ensures consistent and efficient data access across the application.
+
 - **StudentDAO.java**: interface
-    - save() -> Save a student to the database
-    - findStudentById() -> Finds a student by their unique ID
-    - findAllStudent() -> Retrieves all students from the database
-    - updateStudent() -> Updates an existing student's information
-    - deleteStudent() -> Deletes a student by their ID
-    - searchGeneral() -> General research with pagination
-    - countSearchGeneral() -> count results for general research for pagination
-    - count() -> Returns the total number of students 
+    - `save()` -> Save a student to the database
+    - `findStudentById()` -> Finds a student by their unique ID
+    - `findAllStudent()` -> Retrieves all students from the database
+    - `updateStudent()` -> Updates an existing student's information
+    - `deleteStudent()` -> Deletes a student by their ID
+    - `searchGeneral()` -> General research with pagination
+    - `countSearchGeneral()` -> count results for general research for pagination
 
     NOTE: 
     - StudentDAO is an interface that defines the contract with all CRUD operations (Create, Read, Update, Delete) and specialized search methods to manipulate student data.
@@ -226,30 +276,16 @@ Advantages of the DAO Pattern:
                 implements
                     |
 
-- **StudentDAOImpl.java**:
-    - connection -> Database connection object
-    - dbConnection -> Database connection manager
-    - StudentDAOImpl() -> Constructor with dependency injection
-    - saveStudent() -> Implements student saving to database
-    - findStudentById() -> Implements finding students by ID
-    - findAllStudent() -> Implements retrieving all students
-    - updateStudent() -> Implements student data updating
-    - deleteStudent() -> Implements student deletion by ID
-    - searchGeneral() -> Implement general search across all fields with pagination
-    - countSearchGeneral() -> Implements counts the results of the general search
-    - count() -> Implements counting total students
-    - mapResultSetToStudent -> Convert database ResultSet to Student 
-
-    NOTE: 
-    - StudentDAOImpl is the concrete class that implements his interface. It contains:
-    - Required dependencies (Connection and DatabaseConnection)
-    - The actual implementation of all methods defined in the interface
-    - A private utility method mapResultSetToStudent for data conversion: 
-    When an SQL query is executed, it returns data in the form of a ResultSet, which is essentially a result table. 
-    This method performs the "mapping" (transformation) between:
-        - ResultSet columns (e.g., id, name, age, grade...)
-        - The corresponding properties of a new Student object
-    This method is used internally by other methods like findById(), findAll(), etc., to convert database results into usable Java objects.
+- **StudentDAOImpl.java**: `extends BaseDAO<Student>`
+    - `StudentDAOImpl(Connection)` -> Constructor with connection injection
+    - `saveStudent()` -> Implements student saving to database
+    - `findStudentById()` -> Implements finding students by ID
+    - `findAllStudent()` -> Implements retrieving all students
+    - `updateStudent()` -> Implements student data updating
+    - `deleteStudent()` -> Implements student deletion by ID
+    - `searchGeneral()` -> Implement general search across all fields with pagination
+    - `countSearchGeneral()` -> Implements counts the results of the general search
+    - `mapResultSetTo(ResultSet)` -> Convert database ResultSet to Student object
 
 SQL requests example:
 
@@ -296,37 +332,29 @@ Snipset example in StudentDAOImpl:
     }
 ```
 - **GradeDAO.java**: interface
-    - saveGrade() -> Saves a grade to the database
-    - updateGrade() -> Updates an existing grade by its ID
-    - deleteGrade() -> Delete an existing gade by its ID
-    - saveCoefficient() -> Saves a grade coefficient
-    - updateCoefficient() -> Updates an existing coefficient
-    - getMinAverageBySubject() -> Finds minumum average by subject in the student class list 
-    - getMaximumAverageBySubject() -> Finds maximum average by subject in the student class list 
-    - searchBySubject() -> Complete research by subject with pagination
-    - countBySubject() -> Count for pagination
-    - calculateWeightedAverageGrade -> Calculates and returns the pondereate (coeff) average of the grades by school subjects
-    - count() -> Returns the total number of grades
+    - `saveGrade()` -> Saves a grade to the database
+    - `updateGrade()` -> Updates an existing grade by its ID
+    - `deleteGrade()` -> Delete an existing gade by its ID
+    - `saveCoefficient()` -> Saves a grade coefficient
+    - `updateCoefficient()` -> Updates an existing coefficient
+    - `searchBySubject()` -> Complete research by subject with pagination
+    - `countBySubject()` -> Count for pagination
+    - `count()` -> Returns the total number of grades
 
                         ↑
                     implements
                         |
 
-- **GradeDAOImpl.java**:
-    - connection -> Database connection object
-    - dbConnection -> Database connection manager
-    - GradeDAOImpl() -> Constructor with dependency injection
-    - saveGrade() -> Implements grade saving to database
-    - updateGrade() -> Implements grade updating by ID
-    - deleteGrade() -> Implements grade deletion by ID
-    - saveCoefficient() -> Implements coefficient saving
-    - updateCoefficient() -> Implements coefficient updating
-    - getMinAverageBySubject() -> Implements finding minimum average by subject
-    - getMaximumAverageBySubject() -> Implements finding maximum average by subject
-    - searchBySubject() -> Complex request with GROUP BY to returns all the info in one request (subject - grades - min average grade, max average grade, student average, comment)
-    - countBySubject() -> 
-    - calculateWeightedAverageGrade() -> Implements weighted average calculation by subject
-    - mapResultSetToGrade() -> Convert database ResultSet to Grade
+- **GradeDAOImpl.java**: `extends BaseDAO<Grade>`
+    - `GradeDAOImpl(Connection)` -> Constructor with connection injection
+    - `saveGrade()` -> Implements grade saving to database
+    - `updateGrade()` -> Implements grade updating by ID
+    - `deleteGrade()` -> Implements grade deletion by ID
+    - `saveCoefficient()` -> Implements coefficient saving
+    - `updateCoefficient()` -> Implements coefficient updating
+    - `searchBySubject()` -> Complex request with GROUP BY to returns all the info in one request (subject - grades - min average grade, max average grade, student average, comment)
+    - `countBySubject()` ->  Implements subject count
+    - `mapResultSet(ResultSet)` -> Convert database ResultSet to Grade
 
 ```sql
 -- Example of countBySubject() request
@@ -352,218 +380,215 @@ LIMIT ? OFFSET ?
 ```
 
 - **SubjectCommentDAO.java**:  interface 
-    - saveComment() -> Saves a comment for a subject
-    - updateComment() -> Updates an existing comment
-    - deleteComment() -> Deletes a comment
-    - findCommentsByStudentAndSubject() -> Finds comments for student/subject
+    - `saveComment()` -> Saves a comment for a subject
+    - `updateComment()` -> Updates an existing comment
+    - `deleteComment()` -> Deletes a comment
+    - `findCommentsByStudentAndSubject()` -> Finds comments for student/subject
 
                         ↑
                     implements
                         |
 
-- **SubjectCommentDAOImpl.java**:
-    - connection -> Database connection object
-    - dbConnection -> Database connection manager
-    - SubjectCommentDAOImpl() -> Constructor with dependency injection
-    - saveComment() -> Implements comment saving to database
-    - updateComment() -> Implements comment updating
-    - deleteComment() -> Implements comment deletion
-    - findCommentsByStudentAndSubject() -> Implements finding comments by student and subject
-    - mapResultSetToComment() -> Convert database ResultSet to Comment
+- **SubjectCommentDAOImpl.java**: `extends BaseDAO<SubjectComment>`
+    - `SubjectCommentDAOImpl(Connection)` -> Constructor with connection injection
+    - `saveComment()` -> Implements comment saving to database
+    - `updateComment()` -> Implements comment updating
+    - `deleteComment()` -> Implements comment deletion
+    - `findCommentsByStudentAndSubject()` -> Implements finding comments by student and subject
+    - `mapResultSet(ResultSet)` -> Convert database ResultSet to SubjectComment
 
 - **UserDAO.java**: interface
-    - saveUser() -> Saves a user to the database 
-    - findUserByUsername () -> Finds a user by username
-    - authenticateUser() -> Checks if username/password combination is valid
+    - `saveUser()` -> Saves a user to the database 
+    - `findUserByUsername ()` -> Finds a user by username
+    - `authenticateUser()` -> Checks if username/password combination is valid
 
                         ↑
                     implements
                         |
 
-- **UserDAOImpl.java**:
-    - connection -> Database connection object
-    - dbConnection -> Database connection manager
-    - UserDAOImpl() -> Implements finding user by username
-    - saveUser() -> Implements user saving to database
-    - findUserByUsername -> Implements findinf user by username
-    - authenticateUser() -> Implements login authentication
-    - mapResultSetToUser() -> Convert database ResultSet to User
+- **UserDAOImpl.java**:  `extends BaseDAO<User>`
+    - `UserDAOImpl(Connection)` -> Constructor with connection injection
+    - `saveUser()` -> Implements user saving to database
+    - `findUserByUsername` -> Implements findinf user by username
+    - `authenticateUser()` -> Implements login authentication
+    - `mapResultSet(ResultSet)` -> Convert database ResultSet to User
 
 ### 3. **Database**
 * * *
 
  - **DatabaseConnection.java**:
-    - url -> Database UrL string
-    - username -> Database username
-    - password -> Database password
-    - connection -> Active database connection object
-    - DatabaseConnection() -> Default constructor
-    - connect() -> Establishes database connection
-    - disconnect() -> Closes database connection
-    - getConnection() -> Returns active connection
-    - isConnected() -> Checks if connection is active
-    - executeQuery() -> Executes SELECT query
-    - executeUpdate() -> Executes INSERT/UPDATE/DELETE query
-    - executeSafeQuery() -> Executes SQL query with parameters for security
-    - closeResources()
+    - `url` -> Database UrL string
+    - `username` -> Database username
+    - `password` -> Database password
+    - `connection` -> Active database connection object
+    - `DatabaseConnection()` -> Default constructor
+    - `connect()` -> Establishes database connection
+    - `disconnect()` -> Closes database connection
+    - `getConnection()` -> Returns active connection
+    - `isConnected()` -> Checks if connection is active
+    - `executeQuery()` -> Executes SELECT query
+    - `executeUpdate()` -> Executes INSERT/UPDATE/DELETE query
+    - `executeSafeQuery()` -> Executes SQL query with parameters for security
+    - `closeResources()`
 
 - **DatabaseConfig.java**:
-    - properties -> Properties object for configuration
-    - configFile -> Configuration file path
-    - DatabaseConfig() -> Default constructor, loads configuration
-    - loadConfig() -> Loads configuration from properties file
-    - getDatabaseUrl() -> Returns database URL
-    - getDatabaseUsername() -> Returns database username
-    - getDatabasePassword() -> Returns database password
+    - `properties` -> Properties object for configuration
+    - `configFile` -> Configuration file path
+    - `DatabaseConfig()` -> Default constructor, loads configuration
+    - `loadConfig()` -> Loads configuration from properties file
+    - `getDatabaseUrl()` -> Returns database URL
+    - `getDatabaseUsername()` -> Returns database username
+    - `getDatabasePassword()` -> Returns database password
 
 ### 4. **Service Layer (Business Logic)**
 * * *
 The Service layer contains business logic and orchestrates calls to the DAOs
 
 - **StudentService.java**:
-    - studentDAO -> StudentDAO instance
-    - validator -> InputValidator instance
-    - StudentService() -> Constructor with DAO injection
-    - createStudent() -> Creates new student with validation
-    - getStudentByID() -> Retrieves student by ID
-    - getAllStudents() -> Retrieves all students
-    - updateStudent() -> Updates existing student
-    - deleteStudent() -> Deletes student by ID
-    - searchStudents()  -> Returns paginated student list - use StudentDAO.searchGeneral() with SearchCriteria and pagination
+    - `studentDAO` -> StudentDAO instance
+    - `validator` -> InputValidator instance
+    - `StudentService()` -> Constructor with DAO injection
+    - `createStudent()` -> Creates new student with validation
+    - `getStudentByID()` -> Retrieves student by ID
+    - `getAllStudents()` -> Retrieves all students
+    - `updateStudent()` -> Updates existing student
+    - `deleteStudent()` -> Deletes student by ID
+    - `searchStudents()`  -> Returns paginated student list - use StudentDAO.searchGeneral() with SearchCriteria and pagination
 
 - **GradeService.java**:
-    - gradeDAO -> GradeDAO instance
-    - GradeService() -> Constructeur
-    - searchBySubject() -> Use GradeDAO.searchBySubject() with SearchCriteria and pagination
+    - `gradeDAO` -> GradeDAO instance
+    - `GradeService()` -> Constructeur
+    - `searchBySubject()` -> Use GradeDAO.searchBySubject() with SearchCriteria and pagination
 
 - **StatisticsService.java**:
-    - studentDAO -> StudentDAO instance
-    - StatisticsService() -> Constructor with DAO injection
-    - calculateClassAverageBySubject() -> Calculates class average by subject
-    - getStudentCountByAgeGroup() -> Returns student count by age group
-    - getGradeDistributionBySubject() -> Returns grade distribution ranges by subject
-    - getTopPerformers() -> Returns top N performing students
-    - getStudentStatistics() -> Returns general statistics summary
+    - `studentDAO` -> StudentDAO instance
+    - `gradeDAO` -> GradeDAO instance
+    - `StatisticsService(StudentDAO, GradeDAO)` -> Constructor with DAO injection
+    - `calculateClassAverageBySubject()` -> Calculates class average by subject
+    - `getStudentCountByAgeGroup()` -> Returns student count by age group
+    - `getGradeDistributionBySubject()` -> Returns grade distribution ranges by subject
+    - `getMinAverageBySubject()` -> Finds minumum average by subject in the student class list 
+    - `getMaximumAverageBySubject()` -> Finds maximum average by subject in the student class list 
+    - `calculateWeightedAverageGrade` -> Calculates and returns the pondereate (coeff) average of the grades by school subjects
 
 - **AuthenticationService.java**:
-    - userDAO -> UserDAO instance
-    - currentUser -> Current logged-in user
-    - AuthenticationService() -> Constructor with UserDAO injection
-    - authenticate() -> Authenticates user with login/password
-    - isAuthenticated() -> Checks if user is logged in
+    - `userDAO` -> UserDAO instance
+    - `currentUser` -> Current logged-in user
+    - `AuthenticationService()` -> Constructor with UserDAO injection
+    - `authenticate()` -> Authenticates user with login/password
+    - `register(User)` -> Registers new user
+    - `isAuthenticated()` -> Checks if user is logged in
 
 - **ImportExportService.java**:
-    - csvHandler -> CSV file handler
-    - pdfExporter -> PDF file exporter
-    - ImportExportService() -> Default constructor
-    - exportToCSV() -> Exports research result to CSV file
-    - exportToPDF() -> Exports graphs to PDF file
+    - `csvHandler` -> CSV file handler
+    - `pdfExporter` -> PDF file exporter
+    - `ImportExportService()` -> Default constructor
+    - `exportToCSV()` -> Exports research result to CSV file
+    - `exportToPDF()` -> Exports graphs to PDF file
 
 - **BackupService.java**:
-    - BackupService() -> Constructor with DAO injection
-    - createBackup() -> Creates complete system backup
-    - restoreBackup() -> Restores system from backup
-    - scheduleAutoBackup() -> Schedules periodic automatic backup
-    - stopAutoBackup() -> Stops automatic backup
-    - listBackups() -> Lists all available backups
-    - deleteBackup(String) -> Deletes specific backup
-    - compressBackup(String) -> Compresses backup to save space
-    - extractBackup(String) -> Extracts compressed backup
+    - `databaseConnection` -> Database connection instance
+    - `BackupService(DatabaseConnection)` -> Constructor with connection injection
+    - `createBackup()` -> Creates complete system backup
+    - `restoreBackup()` -> Restores system from backup
+    - `scheduleAutoBackup()` -> Schedules periodic automatic backup
+    - `listBackups()` -> Lists all available backups
+    - `deleteBackup()` -> Deletes specific backup
 
 ### 5. **Controller Layer** 
 * * *
 
 - **MainController.java**:
-    - studentService -> StudentService instance
-    - authService -> AuthenticationService instance
-    - currentStage -> Stage instance
-    - currentUser -> User instance
-    - initialize() -> Initializes the main controller
-    - showGeneralManagement() -> Displays General management view
-    - showStudentManagement() -> Displays student management view
-    - showGeneralStatistics() -> Displays general statistics view
-    - showStudentStatistics() -> Displays student statistics view
-    - showImportExport() -> Displays import/export pop up
-    - showGradeModifyForm() -> Displays grade modify delete form
-    - showCoefficientModifyForm() -> Displays coefficient modify delete form
-    - showLogin() -> Displays login view
-    - showRegister() -> Displays register view
-    - loadView(String) -> Dynamically loads a FXML view
+    - `studentService` -> StudentService instance
+    - `authService` -> AuthenticationService instance
+    - `currentStage` -> Stage instance
+    - `currentUser` -> User instance
+    - `initialize()` -> Initializes the main controller
+    - `showGeneralManagement()` -> Displays General management view
+    - `showStudentManagement()` -> Displays student management view
+    - `showGeneralStatistics()` -> Displays general statistics view
+    - `showStudentStatistics()` -> Displays student statistics view
+    - `showImportExport()` -> Displays import/export pop up
+    - `showGradeModifyForm()` -> Displays grade modify delete form
+    - `showCoefficientModifyForm()` -> Displays coefficient modify delete form
+    - `showLogin()` -> Displays login view
+    - `showRegister()` -> Displays register view
+    - `loadView()` -> Dynamically loads a FXML view
 
 - **AuthenticationController.java**:
-    - authService -> AuthenticationService instance
-    - usernameField -> TextField instance
-    - passwordField -> PasswordField instance
-    - loginButton -> Button instance
-    - registerButton -> Button instance
-    - initialize() -> Initializes authentication controller
-    - handleLogin() -> Handles login event
-    - handleRegister() -> Handles registration event
-    - showMainView() -> Displays main view after login
-    - showAlert() -> Displays alert dialog box
+    - `authService` -> AuthenticationService instance
+    - `usernameField` -> TextField instance
+    - `passwordField` -> PasswordField instance
+    - `loginButton` -> Button instance
+    - `registerButton` -> Button instance
+    - `initialize()` -> Initializes authentication controller
+    - `handleLogin()` -> Handles login event
+    - `handleRegister()` -> Handles registration event
+    - `showMainView()` -> Displays main view after login
+    - `showAlert()` -> Displays alert dialog box
 
 - **StudentFormController.java**:
-    - initialize() -> Initializes student form
-    - setStudent(Student) -> Loads student data into form
-    - handleSaveStudent() -> Handles student creation/update
-    - handleCancelStudent() -> Handles form cancel
-    - handleDeleteStudent() -> Handles student deletion
-    - clearForm() -> Clears all form fields
-    - validateStudentForm() -> Validates student data
+    - `initialize()` -> Initializes student form
+    - `setStudent()` -> Loads student data into form
+    - `handleSaveStudent()` -> Handles student creation/update
+    - `handleCancelStudent()` -> Handles form cancel
+    - `handleDeleteStudent()` -> Handles student deletion
+    - `clearForm()` -> Clears all form fields
+    - `validateStudentForm()` -> Validates student data
 
 - **StatisticsController.java**:
-    - initialize() -> Initializes the controller
-    - loadStatistics() -> Loads statistics data
-    - updateCharts() -> Updates all chart displays
-    - handleRefresh() -> Handles refresh button click
-    - handleExport() -> Handles export button click
-    - createAgeDistributionChart() -> Creates age distribution pie chart
-    - createGradeDistributionChart() -> Creates grade distribution bar chart
+    - `initialize()` -> Initializes the controller
+    - `loadStatistics()` -> Loads statistics data
+    - `updateCharts()` -> Updates all chart displays
+    - `handleRefresh()` -> Handles refresh button click
+    - `handleExport()` -> Handles export button click
+    - `createAgeDistributionChart()` -> Creates age distribution pie chart
+    - `createGradeDistributionChart()` -> Creates grade distribution bar chart
 
 - **CommentController.java**:
-    - commentService -> SubjectCommentService instance
-    - initialize() -> Initializes comment controller
-    - validateCommentInput() -> Validates comment data
-    - refreshCommentView() -> Updates comment display
-    - handleAddComment() -> Handles comment addition
-    - handleUpdateComment() -> Handles comment modification
-    - handleDeleteComment() -> Handles comment deletion
+    - `commentService` -> SubjectCommentService instance
+    - `initialize()` -> Initializes comment controller
+    - `validateCommentInput()` -> Validates comment data
+    - `refreshCommentView()` -> Updates comment display
+    - `handleAddComment()` -> Handles comment addition
+    - `handleUpdateComment()` -> Handles comment modification
+    - `handleDeleteComment()` -> Handles comment deletion
 
 - **BackupController.java**:
-    - backupService -> BackupService instance
-    - handleCreateBackup() -> Handles backup creation
-    - handleRestoreBackup() -> Handles backup restoration
-    - handleAutoBackupSchedule() -> Manages auto-backup settings
-    - showBackupList() -> Displays available backups
-    - handleDeleteBackup() -> Handles backup deletion
+    - `backupService` -> BackupService instance
+    - `handleCreateBackup()` -> Handles backup creation
+    - `handleRestoreBackup()` -> Handles backup restoration
+    - `handleAutoBackupSchedule()` -> Manages auto-backup settings
+    - `showBackupList()` -> Displays available backups
+    - `handleDeleteBackup()` -> Handles backup deletion
 
 - **ImportExportController.java**:
-    - importExportService -> ImportExportService instance
-    - initialize() -> Initializes import/export controller
-    - handleFileSelection() -> Handles file picker dialog
-    - handleCSVExport() -> Handles CSV file export
-    - handlePDFExport() -> Handles PDF file export
+    - `importExportService` -> ImportExportService instance
+    - `initialize()` -> Initializes import/export controller
+    - `handleFileSelection()` -> Handles file picker dialog
+    - `handleCSVExport()` -> Handles CSV file export
+    - `handlePDFExport()` -> Handles PDF file export
 
 - **SearchController.java**:
-    - studentService -> StudentService instance
-    - gradeService -> GradeService instance
-    - initialize() -> Initializes search controller
-    - clearSearchResults() -> Clears current search results
-    - exportSearchResults() -> Exports current search to CSV/PDF
-    - handleGeneralSearch() -> Handles general student search
-    - handleSubjectSearch() -> Handles subject-specific search
-    - handleAdvancedSearch() -> Handles complex search criteria
-    - updateSearchResults() -> Updates search result display
-    - handlePagination() -> Manages pagination controls
+    - `studentService` -> StudentService instance
+    - `gradeService` -> GradeService instance
+    - `initialize()` -> Initializes search controller
+    - `clearSearchResults()` -> Clears current search results
+    - `exportSearchResults()` -> Exports current search to CSV/PDF
+    - `handleGeneralSearch()` -> Handles general student search
+    - `handleSubjectSearch()` -> Handles subject-specific search
+    - `handleAdvancedSearch()` -> Handles complex search criteria
+    - `updateSearchResults()` -> Updates search result display
+    - `handlePagination()` -> Manages pagination controls
 
 - **GradeController.java**:
-    - gradeService -> GradeService instance
-    - initialize() -> Initializes grade controller
-    - handleAddGrade() -> Handles adding new grades
-    - handleUpdateGrade() -> Handles grade modifications
-    - handleDeleteGrade() -> Handles grade deletion
-    - validateGradeInput() -> Validates grade data
-    - refreshGradeView() -> Updates grade display
+    - `gradeService` -> GradeService instance
+    - `initialize()` -> Initializes grade controller
+    - `handleAddGrade()` -> Handles adding new grades
+    - `handleUpdateGrade()` -> Handles grade modifications
+    - `handleDeleteGrade()` -> Handles grade deletion
+    - `validateGradeInput()` -> Validates grade data
+    - `refreshGradeView()` -> Updates grade display
 
 ### 6. **View**
 * * *
@@ -582,77 +607,80 @@ The Service layer contains business logic and orchestrates calls to the DAOs
 * * *
 
 - **SearchCriteria.java**:
-    - searchValue -> Value typed in the search bar
-    - pageNumber -> Page number (default: 1)
-    - pageSize -> Page size (default: 15)
-    - SearchCriteria() -> Default constructor
-    - SearchCriteria() -> Constructor with searchValue
-    - getSearchValue() -> Returns the search value
-    - setSearchValue() -> Sets the search value
-    - getPageNumber() -> Returns the page number
-    - setPageNumber() -> Sets the page number
-    - getPageSize() -> Returns the page size
-    - setPageSize() -> Sets the page size
-    - getOffset() -> Calculates the offset ((pageNumber - 1) * pageSize)
-    - toString() -> String representation
+    - `searchValue` -> Value typed in the search bar
+    - `pageNumber` -> Page number (default: 1)
+    - `pageSize` -> Page size (default: 15)
+    - `SearchCriteria()` -> Default constructor
+    - `SearchCriteria()` -> Constructor with searchValue
+    - `getSearchValue()` -> Returns the search value
+    - `setSearchValue()` -> Sets the search value
+    - `getPageNumber()` -> Returns the page number
+    - `setPageNumber()` -> Sets the page number
+    - `getPageSize()` -> Returns the page size
+    - `setPageSize()` -> Sets the page size
+    - `getOffset()` -> Calculates the offset ((pageNumber - 1) * pageSize)
+    - `toString()` -> String representation
 
 - **SubjectResult.java**:
-    - subject -> Subject
-    - grades -> List of grades (String format "grade1, grade2, grade3...")
-    - studentAverage -> Student's average
-    - classMinAverage -> Minimum class average
-    - classMaxAverage -> Maximum class average
-    - teacherComment -> Teacher's comment
-    - SubjectResult() -> Default constructor
-    - SubjectResult() -> Constructor with all parameters
-    - getSubject() -> Returns the subject
-    - setSubject() -> Sets the subject
-    - getGrades() -> Returns the formatted grades
-    - setGrades() -> Sets the formatted grades
-    - getStudentAverage() -> Returns the student's average
-    - setStudentAverage() -> Sets the student's average
-    - getClassMinAverage() -> Returns the minimum class average
-    - setClassMinAverage() -> Sets the minimum class average
-    - getClassMaxAverage() -> Returns the maximum class average
-    - setClassMaxAverage() -> Sets the maximum class average
-    - getTeacherComment() -> Returns the teacher's comment
-    - setTeacherComment() -> Sets the teacher's comment
-    - toString() -> String representation
+    - `subject` -> Subject
+    - `grades` -> List of grades (String format "grade1, grade2, grade3...")
+    - `studentAverage` -> Student's average
+    - `classMinAverage` -> Minimum class average
+    - `classMaxAverage` -> Maximum class average
+    - `teacherComment` -> Teacher's comment
+    - `SubjectResult()` -> Default constructor
+    - `SubjectResult()` -> Constructor with all parameters
+    - `getSubject()` -> Returns the subject
+    - `setSubject()` -> Sets the subject
+    - `getGrades()` -> Returns the formatted grades
+    - `setGrades()` -> Sets the formatted grades
+    - `getStudentAverage()` -> Returns the student's average
+    - `setStudentAverage()` -> Sets the student's average
+    - `getClassMinAverage()` -> Returns the minimum class average
+    - `setClassMinAverage()` -> Sets the minimum class average
+    - `getClassMaxAverage()` -> Returns the maximum class average
+    - `setClassMaxAverage()` -> Sets the maximum class average
+    - `getTeacherComment()` -> Returns the teacher's comment
+    - `setTeacherComment()` -> Sets the teacher's comment
+    - `toString()` -> String representation
 
 - **InputValidator.java**:
-    - isValidName() -> Validates name format
-    - isValidAge() -> Validates if age is within acceptable range
-    - isValidGrade() -> Validates if grade is within valid range
-    - isValidEmail() -> Validates email format
-    - isValidId() -> Validates ID format
-    - sanitizeInput() -> Cleans and secures an input string
-    - validateStudent(Student) -> Validates all student fields when adding new student
+    - `isValidName()` -> Validates name format
+    - `isValidAge()` -> Validates if age is within acceptable range
+    - `isValidGrade()` -> Validates if grade is within valid range
+    - `isValidEmail()` -> Validates email format
+    - `isValidId()` -> Validates ID format
+    - `sanitizeInput()` -> Cleans and secures an input string
+    - `validateStudent()` -> Validates all student fields when adding new student
+    - `validateGrade()` -> Validates all grade fields
+    - `validateUser()` -> Validates user registration data
 
 - **PasswordUtils.java**:
-    - generateSalt() -> Generates random salt
-    - hashPassword(String, String) -> Hashes password with salt
-    - hashPasswordWithSalt(String) -> Hashes password with auto-generated salt
-    - verifyPassword(String, String) -> Verifies if password matches hash
-    - validatePasswordStrength(String) -> Validates password strength
-    - getPasswordCriteria() -> Returns validation criteria
+    - `generateSalt()` -> Generates random salt
+    - `hashPassword()` -> Hashes password with salt
+    - `hashPasswordWithSalt()` -> Hashes password with auto-generated salt
+    - `verifyPassword()` -> Verifies if password matches hash
+    - `validatePasswordStrength()` -> Validates password strength
+    - `getPasswordCriteria()` -> Returns validation criteria
 
 - **CSVHandler.java**:
-    - CSVHandler() -> Default constructor with standard delimiters
-    - CSVHandler() -> Constructor with custom delimiters
-    - exportGeneralSearchResults() -> Exports general search results list to CSV file
-    - exportStudentSearchResults() -> Exports grade list to CSV file
-    - validateCSVFormat(S) -> Validates CSV file format
-    - parseStudentFromCSV() -> Parses CSV line to Student object
-    - formatStudentToCSV() -> Formats Student object to CSV line
-    - parseGeneralFromCSV() -> Parses CSV line to general object
-    - formatGeneralToCSV() -> Formats general object to CSV line
+    - `delimiter` -> CSV delimiter character (default: comma)
+    - `CSVHandler()` -> Default constructor with standard delimiters
+    - `CSVHandler()` -> Constructor with custom delimiters
+    - `exportGeneralSearchResults()` -> Exports general search results list to CSV file
+    - `exportStudentSearchResults()` -> Exports grade list to CSV file
+    - `validateCSVFormat(S)` -> Validates CSV file format
+    - `parseStudentFromCSV()` -> Parses CSV line to Student object
+    - `formatStudentToCSV()` -> Formats Student object to CSV line
+    - `parseGeneralFromCSV()` -> Parses CSV line to general object
+    - `formatGeneralToCSV()` -> Formats general object to CSV line
 
 - **PDFExporter.java**:
-    - document -> Document instance
-    - writer -> PdfWriter instance
-    - PDFExporter() -> Default constructor, initializes PDF components
-    - exportStatisticsGeneralGraph() -> Exports general statistics graph to PDF file
-    - exportStatisticsStudentGraph() -> Exports student statistics graph to PDF file
-    - formatStudentData() -> Formats student data for PDF
-    - addHeader() -> Adds header to PDF document
-    - addFooter() -> Adds footer to PDF document
+    - `document` -> Document instance
+    - `writer` -> PdfWriter instance
+    - `PDFExporter()` -> Default constructor, initializes PDF components
+    - `exportStatisticsGeneralGraph()` -> Exports general statistics graph to PDF file
+    - `exportStatisticsStudentGraph()` -> Exports student statistics graph to PDF file
+    - `formatStudentData()` -> Formats student data for PDF
+    - `addHeader()` -> Adds header to PDF document
+    - `addFooter()` -> Adds footer to PDF document
