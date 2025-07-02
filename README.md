@@ -1195,12 +1195,6 @@ StudentManagementSystem/
 │   │   │   │   │   │   ├── ImportExportController.java
 │   │   │   │   │   │   └── SearchController.java
 │   │   │   │   │   │   └── GradeController.java
-│   │   │   │   │   ├── view/
-│   │   │   │   │   │   ├── MainView.java
-│   │   │   │   │   │   ├── StudentView.java
-│   │   │   │   │   │   ├── AuthenticationView.java
-│   │   │   │   │   │   ├── GeneralGraphicView.java
-│   │   │   │   │   │   └── StudentGraphicView.java
 │   │   │   │   │   ├── utils/
 │   │   │   │   │   │   ├── InputValidator.java
 │   │   │   │   │   │   ├── PasswordUtils.java
