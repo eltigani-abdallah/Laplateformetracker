@@ -1321,3 +1321,21 @@ The `Subject` table holds data about various subjects offered in the school. Eac
 | - coefficient: DECIMAL(3,2) DEFAULT 1.0           |  -- Default coefficient value 1
 | - created_at: TIMESTAMP DEFAULT CURRENT_TIMESTAMP |
 +---------------------------------------------------+
+```
+### Grade Table
+The `Grade` table records the grades received by students for specific subjects.
+Each record is linked to a student and a subject, includes the grade value, the recording date. Timestamps for creation and updates are also included.
+
+```
++---------------------------------------------------------------+
+|                     Grade                                     |
++---------------------------------------------------------------+
+| - id: BIGSERIAL PRIMARY KEY                                   |
+| - student_id: BIGINT REFERENCES Student(id) ON DELETE CASCADE |  -- Foreign key with action
+| - subject_id: BIGINT REFERENCES Subject(id) ON DELETE CASCADE |  -- Foreign key with action
+| - grade: DECIMAL(4,2) CHECK (grade >= 0 AND grade <= 20)      |  -- Constraint on grade
+| - date_recorded: DATE DEFAULT CURRENT_DATE                    |  -- Default date recorded
+| - created_at: TIMESTAMP DEFAULT CURRENT_TIMESTAMP             |
+| - updated_at: TIMESTAMP DEFAULT CURRENT_TIMESTAMP             |
++---------------------------------------------------------------+
+```
