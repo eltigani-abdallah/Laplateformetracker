@@ -1258,3 +1258,25 @@ StudentManagementSystem/
 ├── .gitignore
 └── pom.xml
 ```
+## Database 
+
+### Diagram tables
+* * *
+### User Table
+The `User` table is designed to manage user accounts within the system.
+It contains essential information about each user, including their credentials, role, and account status. The table keeps track of the creation and update timestamps, ensuring that the system can maintain accurate records of user activities.
+
+```
++--------------------------------------------------+
+|                      User                        |
++--------------------------------------------------+
+| - id: BIGSERIAL PRIMARY KEY                      |
+| - username: VARCHAR(255) NOT NULL UNIQUE         |
+| - password_hash: TEXT NOT NULL                   |
+| - role: VARCHAR(50) DEFAULT 'USER'               |  -- Default role value
+| - email: VARCHAR(255) NOT NULL UNIQUE            |
+| - created_at: TIMESTAMP DEFAULT CURRENT_TIMESTAMP|
+| - updated_at: TIMESTAMP DEFAULT CURRENT_TIMESTAMP|
+| - is_active: BOOLEAN DEFAULT TRUE                |
++--------------------------------------------------+
+```
