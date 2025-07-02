@@ -1339,3 +1339,17 @@ Each record is linked to a student and a subject, includes the grade value, the 
 | - updated_at: TIMESTAMP DEFAULT CURRENT_TIMESTAMP             |
 +---------------------------------------------------------------+
 ```
+### SubjectComment Table
+The `SubjectComment' table is designed to store comments made by teachers for specific students in their respective subjects. Each comment is linked to a student and as subject, allowing for personnalised feedback.
+
+```
++---------------------------------------------------------------+
+|                    SubjectComment                             |
++---------------------------------------------------------------+
+| - id: BIGSERIAL PRIMARY KEY                                   |
+| - student_id: BIGINT REFERENCES Student(id) ON DELETE CASCADE |  -- Foreign key with action
+| - subject_id: BIGINT REFERENCES Subject(id) ON DELETE CASCADE |  -- Foreign key with action
+| - comment: TEXT NOT NULL                                      |  -- Comment from the teacher
+| - created_at: TIMESTAMP DEFAULT CURRENT_TIMESTAMP             |  -- Timestamp for record keeping
++---------------------------------------------------------------+
+```
