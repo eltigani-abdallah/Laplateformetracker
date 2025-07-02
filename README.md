@@ -1205,8 +1205,6 @@ StudentManagementSystem/
 │   │   │   │   │   │   ├── InputValidator.java
 │   │   │   │   │   │   ├── PasswordUtils.java
 │   │   │   │   │   │   ├── CSVHandler.java
-│   │   │   │   │   │   ├── XMLHandler.java
-│   │   │   │   │   │   ├── JSONHandler.java
 │   │   │   │   │   │   └── PDFExporter.java
 │   │   │   │   │   └── Main.java
 │   │   │   │
