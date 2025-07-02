@@ -1264,7 +1264,7 @@ StudentManagementSystem/
 * * *
 ### User Table
 The `User` table is designed to manage user accounts within the system.
-It contains essential information about each user, including their credentials, role, and account status. The table keeps track of the creation and update timestamps, ensuring that the system can maintain accurate records of user activities.
+It contains essential information about each user, including their credentials, role, and account status.
 
 ```
 +--------------------------------------------------+
@@ -1275,8 +1275,18 @@ It contains essential information about each user, including their credentials, 
 | - password_hash: TEXT NOT NULL                   |
 | - role: VARCHAR(50) DEFAULT 'USER'               |  -- Default role value
 | - email: VARCHAR(255) NOT NULL UNIQUE            |
-| - created_at: TIMESTAMP DEFAULT CURRENT_TIMESTAMP|
-| - updated_at: TIMESTAMP DEFAULT CURRENT_TIMESTAMP|
 | - is_active: BOOLEAN DEFAULT TRUE                |
 +--------------------------------------------------+
+```
+
+### Class Table
+The `Class` table stores information about academic classes.
+Each class has a unique identifier, a name.
+```
++---------------------------------------------------+
+|                      Class                        |
++---------------------------------------------------+
+| - id: BIGSERIAL PRIMARY KEY                       |
+| - name: VARCHAR(5) NOT NULL UNIQUE               | -- example : T1, 5B, 3A ..
++---------------------------------------------------+
 ```
