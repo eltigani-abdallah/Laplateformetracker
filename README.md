@@ -1287,13 +1287,13 @@ Each class has a unique identifier, a name.
 |                      Class                        |
 +---------------------------------------------------+
 | - id: BIGSERIAL PRIMARY KEY                       |
-| - class_name: VARCHAR(5) NOT NULL UNIQUE                | -- example : T1, 5B, 3A ..
+| - class_name: VARCHAR(5) NOT NULL UNIQUE          | -- example : T1, 5B, 3A ..
 +---------------------------------------------------+
 ```
 
 ### Student Table
 The `Student` table contains information about individual students. Each student has a unique identifier and various personnal details,
-including their name, age, academic performance...The table also tracks student's active status and timestamps for creation and updates.
+including their name, age... The table also tracks student's active status and timestamps for creation and updates.
 
 ```
 +----------------------------------------------------------------------------------+
@@ -1304,12 +1304,12 @@ including their name, age, academic performance...The table also tracks student'
 | - last_name: VARCHAR(50) NOT NULL                                                |
 | - age: INTEGER CHECK (age > 0 AND age < 150)                                     |  -- Constraint on age
 | - class_id: BIGINT REFERENCES Class(id) ON DELETE SET NULL                       |  -- Foreign key with action
-| - average_grade: DECIMAL(4,2) CHECK (average_grade >= 0 AND average_grade <= 20) |  -- Constraint on average grade
 | - created_at: TIMESTAMP DEFAULT CURRENT_TIMESTAMP                                |
 | - updated_at: TIMESTAMP DEFAULT CURRENT_TIMESTAMP                                |
 | - is_active: BOOLEAN DEFAULT TRUE                                                |
 +----------------------------------------------------------------------------------+
 ```
+
 ### Subject Table
 The `Subject` table holds data about various subjects offered in the school. Each subject has a unique identifier, a name and a coefficient value indicating its weight in grading.
 
@@ -1328,18 +1328,18 @@ The `Grade` table records the grades received by students for specific subjects.
 Each record is linked to a student and a subject, includes the grade value, the recording date. Timestamps for creation and updates are also included.
 
 ```
-+---------------------------------------------------------------------+
-|                              Grade                                  |
-+---------------------------------------------------------------------+
-| - id: BIGSERIAL PRIMARY KEY                                         |
-| - student_id: BIGINT REFERENCES Student(id) ON DELETE CASCADE       |  -- Foreign key with action
-| - subject_id: BIGINT REFERENCES Subject(id) ON DELETE CASCADE       |  -- Foreign key with action
-| - grade: DECIMAL(4,2) CHECK (grade >= 0 AND grade <= 20)            |  -- Constraint on grade
-| - date_recorded: DATE DEFAULT CURRENT_DATE                          |  -- Default date recorded
-| - coefficient: DECIMAL(3,2) DEFAULT 1.0 CHECK (coefficient > 0)     |  -- Coefficient for the specific grade
-| - created_at: TIMESTAMP DEFAULT CURRENT_TIMESTAMP                   |
-| - updated_at: TIMESTAMP DEFAULT CURRENT_TIMESTAMP                   |
-+---------------------------------------------------------------------+
++-----------------------------------------------------------------------+
+|                              Grade                                    |
++-----------------------------------------------------------------------+
+| - id: BIGSERIAL PRIMARY KEY                                           |
+| - student_id: BIGINT REFERENCES Student(id) ON DELETE CASCADE         |  -- Foreign key with action
+| - subject_id: BIGINT REFERENCES Subject(id) ON DELETE CASCADE         |  -- Foreign key with action
+| - grade: DECIMAL(4,2) CHECK (grade >= 0 AND grade <= 20)              |  -- Constraint on grade
+| - date_recorded: DATE DEFAULT CURRENT_DATE                            |  -- Default date recorded
+| - grade_coefficient: DECIMAL(3,2) DEFAULT 1.0 CHECK (coefficient > 0) |  -- Coefficient for the specific grade
+| - created_at: TIMESTAMP DEFAULT CURRENT_TIMESTAMP                     |
+| - updated_at: TIMESTAMP DEFAULT CURRENT_TIMESTAMP                     |
++-----------------------------------------------------------------------+
 ```
 
 ### SubjectComment Table
