@@ -1274,7 +1274,6 @@ It contains essential information about each user, including their credentials, 
 | - username: VARCHAR(255) NOT NULL UNIQUE         |
 | - password_hash: TEXT NOT NULL                   |
 | - role: VARCHAR(50) DEFAULT 'USER'               |  -- Default role value
-| - email: VARCHAR(255) NOT NULL UNIQUE            |
 | - is_active: BOOLEAN DEFAULT TRUE                |
 +--------------------------------------------------+
 ```
@@ -1287,6 +1286,26 @@ Each class has a unique identifier, a name.
 |                      Class                        |
 +---------------------------------------------------+
 | - id: BIGSERIAL PRIMARY KEY                       |
-| - name: VARCHAR(5) NOT NULL UNIQUE               | -- example : T1, 5B, 3A ..
+| - name: VARCHAR(5) NOT NULL UNIQUE                | -- example : T1, 5B, 3A ..
 +---------------------------------------------------+
+```
+
+### Student Table
+The `Student` table contains information about individual students. Each student has a unique identifier and various personnal details,
+including their name, age, academic performance...The table also tracks student's active status and timestamps for creation and updates.
+
+```
++----------------------------------------------------------------------------------+
+|                     Student                                                      |
++----------------------------------------------------------------------------------+
+| - id: BIGSERIAL PRIMARY KEY                                                      |
+| - first_name: VARCHAR(50) NOT NULL                                               |
+| - last_name: VARCHAR(50) NOT NULL                                                |
+| - age: INTEGER CHECK (age > 0 AND age < 150)                                     |  -- Constraint on age
+| - class_id: BIGINT REFERENCES Class(id) ON DELETE SET NULL                       |  -- Foreign key with action
+| - average_grade: DECIMAL(4,2) CHECK (average_grade >= 0 AND average_grade <= 20) |  -- Constraint on average grade
+| - created_at: TIMESTAMP DEFAULT CURRENT_TIMESTAMP                                |
+| - updated_at: TIMESTAMP DEFAULT CURRENT_TIMESTAMP                                |
+| - is_active: BOOLEAN DEFAULT TRUE                                                |
++----------------------------------------------------------------------------------+
 ```
