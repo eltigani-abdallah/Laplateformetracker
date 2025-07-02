@@ -23,26 +23,7 @@ This project is a student management system developed in Java with a PostgreSQL 
 - **Registration**: to add new users
 - **Export Results**: CSV, PDF
 - **Automatic Backup**: Protection against data loss
-
-```
-A secure authentification process:
-┌─────────────────┐    ┌──────────────────┐    ┌─────────────────┐
-│   Controller    │───>│   UserService    │───>|    UserDAO      │
-│                 │    │                  │    │                 │
-│ - loginUser()   │    │ - createUser()   │    │ - saveUser()    │
-│ - registerUser()│    │ - authenticate() │    │ - findByUsername│
-└─────────────────┘    │ - hashPassword() │    └─────────────────┘
-                       └──────────────────┘              │
-                                │                        |
-                                ▼                        ▼
-                       ┌───────────────────┐    ┌─────────────────┐
-                       │ PasswordUtils     │    │   Database      │
-                       │                   │    │                 │
-                       │ - hashPassword()  │    │ users table     │
-                       │ - verifyPassword()│    │ - passwordHash  │
-                       └───────────────────┘    └─────────────────┘
-
-```
+- **Undo operations**: Undo/redo functionality for CRUD actions
 
 ## Project Architecture
 This application follows a classic layered architecture with the MVC (Model-View-Controller) pattern.
@@ -231,6 +212,7 @@ public abstract class BaseDAO<T> {
     protected void closeResources(ResultSet rs, PreparedStatement stmt) { ... }
 }
 ```
+```
 +------------------------------------------------------+
 |                 BaseDAO                              |
 +------------------------------------------------------+
@@ -242,6 +224,7 @@ public abstract class BaseDAO<T> {
 | + closeResources(ResultSet, PreparedStatement): void |
 +------------------------------------------------------+
 
+```
 > The `BaseDAO` class is an abstract template for all Data Access Objects (DAOs) in the project. It includes:
 > 
 > - **Connection**: A database connection object for performing data operations.
@@ -372,9 +355,51 @@ Snipset example in StudentDAOImpl:
     - `countBySubject()` -> Count for pagination
     - `count()` -> Returns the total number of grades
 
+ ```   
++---------------------------------------------------------------+
+|                    GradeDAO                                   |
++---------------------------------------------------------------+
+| + saveGrade(Grade): void                                      |
+| + updateGrade(Grade): void                                    |
+| + deleteGrade(Long): void                                     |
+| + saveCoefficient(double): void                               |
+| + updateCoefficient(Long, double): void                       |
+| + getMinAverageBySubject(String): double                      |
+| + getMaximumAverageBySubject(String): double                  |
+| + searchBySubject(Long, SearchCriteria): List<SubjectResult>  |
+| + countBySubject(Long, String): Long                          |
+| + calculateWeightedAverageGrade(Long): double                 |
+| + count(): Long                                               |
++---------------------------------------------------------------+
+|                  <<interface>>                                |
+|                    GradeDAO                                   |
++---------------------------------------------------------------+
                         ↑
                     implements
                         |
++---------------------------------------------------------------+
+|                  GradeDAOImpl                                 |
++---------------------------------------------------------------+
+| - connection: Connection                                      |
+| - dbConnection: DatabaseConnection                            |
++---------------------------------------------------------------+
+| + GradeDAOImpl(Connection)                                    |
+| + saveGrade(Grade): void                                      |
+| + updateGrade(Grade): void                                    |
+| + deleteGrade(Long): void                                     |
+| + saveCoefficient(double): void                               |
+| + updateCoefficient(Long, double): void                       |
+| + getMinAverageBySubject(String): double                      |
+| + getMaximumAverageBySubject(String): double                  |
+| + searchBySubject(Long, SearchCriteria): List<SubjectResult>  |
+| + countBySubject(Long, String): Long                          |
+| + calculateWeightedAverageGrade(Long): double                 |
+| - mapResultSetToGrade(ResultSet): Grade                       |
++---------------------------------------------------------------+
+|                  <<extends>>                                  |
+|                    BaseDAO<Grade>                             |
++---------------------------------------------------------------+
+```
 
 - **GradeDAOImpl.java**: `extends BaseDAO<Grade>`
     - `GradeDAOImpl(Connection)` -> Constructor with connection injection
@@ -416,9 +441,38 @@ LIMIT ? OFFSET ?
     - `deleteComment()` -> Deletes a comment
     - `findCommentsByStudentAndSubject()` -> Finds comments for student/subject
 
+ ```       
++-----------------------------------------------------------------------+
+|                SubjectCommentDAO                                      |
++-----------------------------------------------------------------------+
+| + saveComment(SubjectComment): void                                   |
+| + updateComment(SubjectComment): void                                 |
+| + deleteComment(Long): void                                           |
+| + findCommentsByStudentAndSubject(Long, String): List<SubjectComment> |
++-----------------------------------------------------------------------+
+|                  <<interface>>                                        |
+|                SubjectCommentDAO                                      |
++-----------------------------------------------------------------------+
                         ↑
                     implements
                         |
++-----------------------------------------------------------------------+
+|              SubjectCommentDAOImpl                                    |
++-----------------------------------------------------------------------+
+| - connection: Connection                                              |
+| - dbConnection: DatabaseConnection                                    |
++-----------------------------------------------------------------------+
+| + SubjectCommentDAOImpl(Connection)                                   |
+| + saveComment(SubjectComment): void                                   |
+| + updateComment(SubjectComment): void                                 |
+| + deleteComment(Long): void                                           |
+| + findCommentsByStudentAndSubject(Long, String): List<SubjectComment> |
+| - mapResultSetToComment(ResultSet): SubjectComment                    |
++-----------------------------------------------------------------------+
+|                  <<extends>>                                          |
+|                BaseDAO<SubjectComment>                                |
++-----------------------------------------------------------------------+
+ ```   
 
 - **SubjectCommentDAOImpl.java**: `extends BaseDAO<SubjectComment>`
     - `SubjectCommentDAOImpl(Connection)` -> Constructor with connection injection
@@ -432,11 +486,36 @@ LIMIT ? OFFSET ?
     - `saveUser()` -> Saves a user to the database 
     - `findUserByUsername ()` -> Finds a user by username
     - `authenticateUser()` -> Checks if username/password combination is valid
-
+```
++-------------------------------------------------+
+|                    UserDAO                      |
++-------------------------------------------------+
+| + saveUser(User): void                          |
+| + findUserByUsername(String): User              |
+| + authenticateUser(String, String): boolean     |
++-------------------------------------------------+
+|                  <<interface>>                  |
+|                    UserDAO                      |
++-------------------------------------------------+
                         ↑
                     implements
                         |
-
++-------------------------------------------------+
+|                  UserDAOImpl                    |
++-------------------------------------------------+
+| - connection: Connection                        |
+| - dbConnection: DatabaseConnection              |
++-------------------------------------------------+
+| + UserDAOImpl(Connection)                       |
+| + saveUser(User): void                          |
+| + findUserByUsername(String): User              |
+| + authenticateUser(String, String): boolean     |
+| - mapResultSetToUser(ResultSet): User           |
++-------------------------------------------------+
+|                  <<extends>>                    |
+|                    BaseDAO<User>                |
++-------------------------------------------------+
+```
 - **UserDAOImpl.java**:  `extends BaseDAO<User>`
     - `UserDAOImpl(Connection)` -> Constructor with connection injection
     - `saveUser()` -> Implements user saving to database
@@ -461,7 +540,27 @@ LIMIT ? OFFSET ?
     - `executeUpdate()` -> Executes INSERT/UPDATE/DELETE query
     - `executeSafeQuery()` -> Executes SQL query with parameters for security
     - `closeResources()`
+```
++-------------------------------------------------+
+|                DatabaseConnection               |
++-------------------------------------------------+
+| - url: String                                   |
+| - username: String                              |
+| - password: String                              |
+| - connection: Connection                        |
++-------------------------------------------------+
+| + DatabaseConnection()                          |
+| + connect(): void                               |
+| + disconnect(): void                            |
+| + getConnection(): Connection                   |
+| + isConnected(): boolean                        |
+| + executeQuery(String): ResultSet               |
+| + executeUpdate(String): void                   |
+| + executeSafeQuery(String, List<Object>): void  |
+| + closeResources(): void                        |
++-------------------------------------------------+
 
+```
 - **DatabaseConfig.java**:
     - `properties` -> Properties object for configuration
     - `configFile` -> Configuration file path
@@ -471,6 +570,20 @@ LIMIT ? OFFSET ?
     - `getDatabaseUsername()` -> Returns database username
     - `getDatabasePassword()` -> Returns database password
 
+```
++-------------------------------------------------+
+|                  DatabaseConfig                 |
++-------------------------------------------------+
+| - properties: Properties                        |
+| - configFile: String                            |
++-------------------------------------------------+
+| + DatabaseConfig()                              |
+| + loadConfig(): void                            |
+| + getDatabaseUrl(): String                      |
+| + getDatabaseUsername(): String                 |
+| + getDatabasePassword(): String                 |
++-------------------------------------------------+
+```
 ### 4. **Service Layer (Business Logic)**
 * * *
 The Service layer contains business logic and orchestrates calls to the DAOs
@@ -485,11 +598,37 @@ The Service layer contains business logic and orchestrates calls to the DAOs
     - `updateStudent()` -> Updates existing student
     - `deleteStudent()` -> Deletes student by ID
     - `searchStudents()`  -> Returns paginated student list - use StudentDAO.searchGeneral() with SearchCriteria and pagination
-
+```
++-------------------------------------------------+
+|                  StudentService                 |
++-------------------------------------------------+
+| - studentDAO: StudentDAO                        |
+| - validator: InputValidator                     |
++-------------------------------------------------+
+| + StudentService(StudentDAO, InputValidator)    |
+| + createStudent(Student): void                  |
+| + getStudentByID(Long): Student                 |
+| + getAllStudents(): List<Student>               |
+| + updateStudent(Student): void                  |
+| + deleteStudent(Long): void                     |
+| + searchStudents(SearchCriteria): List<Student> |
++-------------------------------------------------+
+```
 - **GradeService.java**:
     - `gradeDAO` -> GradeDAO instance
     - `GradeService()` -> Constructeur
     - `searchBySubject()` -> Use GradeDAO.searchBySubject() with SearchCriteria and pagination
+
+```
++--------------------------------------------------------------+
+|                  GradeService                                |
++--------------------------------------------------------------+
+| - gradeDAO: GradeDAO                                         |
++--------------------------------------------------------------+
+| + GradeService(GradeDAO)                                     |
+| + searchBySubject(Long, SearchCriteria): List<SubjectResult> |
++--------------------------------------------------------------+
+```
 
 - **StatisticsService.java**:
     - `studentDAO` -> StudentDAO instance
@@ -501,7 +640,24 @@ The Service layer contains business logic and orchestrates calls to the DAOs
     - `getMinAverageBySubject()` -> Finds minumum average by subject in the student class list 
     - `getMaximumAverageBySubject()` -> Finds maximum average by subject in the student class list 
     - `calculateWeightedAverageGrade` -> Calculates and returns the pondereate (coeff) average of the grades by school subjects
-
+```
++--------------------------------------------------------------------+
+|                StatisticsService                                   |
++--------------------------------------------------------------------+
+| - studentDAO: StudentDAO                                           |
+| - gradeDAO: GradeDAO                                               |
++--------------------------------------------------------------------+
+| + StatisticsService(StudentDAO, GradeDAO)                          |
+| + calculateClassAverageBySubject(String): double                   |
+| + getStudentCountByAgeGroup(): Map<String, Long>                   |
+| + getGradeDistributionBySubject(String): Map<String, List<Double>> |
+| + getTopPerformers(int): List<Student>                             |
+| + getStudentStatistics(): Map<String, Object>                      |
+| + getMinAverageBySubject(String): double                           |
+| + getMaximumAverageBySubject(String): double                       |
+| + calculateWeightedAverageGrade(): double                          |
++--------------------------------------------------------------------+
+```
 - **AuthenticationService.java**:
     - `userDAO` -> UserDAO instance
     - `currentUser` -> Current logged-in user
@@ -510,13 +666,38 @@ The Service layer contains business logic and orchestrates calls to the DAOs
     - `register(User)` -> Registers new user
     - `isAuthenticated()` -> Checks if user is logged in
 
+```
++-------------------------------------------------+
+|              AuthenticationService              |
++-------------------------------------------------+
+| - userDAO: UserDAO                              |
+| - currentUser: User                             |
++-------------------------------------------------+
+| + AuthenticationService(UserDAO)                |
+| + authenticate(String, String): boolean         |
+| + register(User): void                          |
+| + isAuthenticated(): boolean                    |
++-------------------------------------------------+
+```
+
 - **ImportExportService.java**:
     - `csvHandler` -> CSV file handler
     - `pdfExporter` -> PDF file exporter
     - `ImportExportService()` -> Default constructor
     - `exportToCSV()` -> Exports research result to CSV file
     - `exportToPDF()` -> Exports graphs to PDF file
-
+```
++-------------------------------------------------+
+|               ImportExportService               |
++-------------------------------------------------+
+| - csvHandler: CSVHandler                        |
+| - pdfExporter: PDFExporter                      |
++-------------------------------------------------+
+| + ImportExportService()                         |
+| + exportToCSV(List<Student>): void              |
+| + exportToPDF(): void                           |
++-------------------------------------------------+
+```
 - **BackupService.java**:
     - `databaseConnection` -> Database connection instance
     - `BackupService(DatabaseConnection)` -> Constructor with connection injection
@@ -525,6 +706,25 @@ The Service layer contains business logic and orchestrates calls to the DAOs
     - `scheduleAutoBackup()` -> Schedules periodic automatic backup
     - `listBackups()` -> Lists all available backups
     - `deleteBackup()` -> Deletes specific backup
+
+```
++-------------------------------------------------+
+|                BackupService                    |
++-------------------------------------------------+
+| - databaseConnection: DatabaseConnection        |
+| - studentDAO: StudentDAO                        |
++-------------------------------------------------+
+| + BackupService(DatabaseConnection, StudentDAO) |
+| + createBackup(): void                          |
+| + restoreBackup(): void                         |
+| + scheduleAutoBackup(): void                    |
+| + stopAutoBackup(): void                        |
+| + listBackups(): List<String>                   |
+| + deleteBackup(String): void                    |
+| - compressBackup(String): void                  |
+| - extractBackup(String): void                   |
++-------------------------------------------------+
+```
 
 ### 5. **Controller Layer** 
 * * *
@@ -546,6 +746,28 @@ The Service layer contains business logic and orchestrates calls to the DAOs
     - `showRegister()` -> Displays register view
     - `loadView()` -> Dynamically loads a FXML view
 
+```
++-------------------------------------------------+
+|                MainController                   |
++-------------------------------------------------+
+| - studentService: StudentService                |
+| - authService: AuthenticationService            |
+| - currentStage: Stage                           |
+| - currentUser: User                             |
++-------------------------------------------------+
+| + initialize(): void                            |
+| + showGeneralManagement(): void                 |
+| + showStudentManagement(): void                 |
+| + showGeneralStatistics(): void                 |
+| + showStudentStatistics(): void                 |
+| + showImportExport(): void                      |
+| + showGradeModifyForm(): void                   |
+| + showCoefficientModifyForm(): void             |
+| + showLogin(): void                             |
+| + showRegister(): void                          |
+| + loadView(String): void                        |
++-------------------------------------------------+
+```
 - **AuthenticationController.java**:
     - `authService` -> AuthenticationService instance
     - `usernameField` -> TextField instance
@@ -557,7 +779,23 @@ The Service layer contains business logic and orchestrates calls to the DAOs
     - `handleRegister()` -> Handles registration event
     - `showMainView()` -> Displays main view after login
     - `showAlert()` -> Displays alert dialog box
-
+```
++-------------------------------------------------+
+|            AuthenticationController             |
++-------------------------------------------------+
+| - authService: AuthenticationService            |
+| - usernameField: TextField                      |
+| - passwordField: PasswordField                  |
+| - loginButton: Button                           |
+| - registerButton: Button                        |
++-------------------------------------------------+
+| + initialize(): void                            |
+| + handleLogin(): void                           |
+| + handleRegister(): void                        |
+| + showMainView(): void                          |
+| + showAlert(String): void                       |
++-------------------------------------------------+
+```
 - **StudentFormController.java**:
     - `initialize()` -> Initializes student form
     - `setStudent()` -> Loads student data into form
@@ -566,6 +804,19 @@ The Service layer contains business logic and orchestrates calls to the DAOs
     - `handleDeleteStudent()` -> Handles student deletion
     - `clearForm()` -> Clears all form fields
     - `validateStudentForm()` -> Validates student data
+```
++-------------------------------------------------+
+|              StudentFormController              |
++-------------------------------------------------+
+| + initialize(): void                            |
+| + setStudent(Student): void                     |
+| + handleSaveStudent(): void                     |
+| + handleCancelStudent(): void                   |
+| + handleDeleteStudent(): void                   |
+| + clearForm(): void                             |
+| + validateStudentForm(): boolean                |
++-------------------------------------------------+
+```
 
 - **StatisticsController.java**:
     - `initialize()` -> Initializes the controller
@@ -575,7 +826,19 @@ The Service layer contains business logic and orchestrates calls to the DAOs
     - `handleExport()` -> Handles export button click
     - `createAgeDistributionChart()` -> Creates age distribution pie chart
     - `createGradeDistributionChart()` -> Creates grade distribution bar chart
-
+```
++-------------------------------------------------+
+|                StatisticsController             |
++-------------------------------------------------+
+| + initialize(): void                            |
+| + loadStatistics(): void                        |
+| + updateCharts(): void                          |
+| + handleRefresh(): void                         |
+| + handleExport(): void                          |
+| - createAgeDistributionChart(): void            |
+| - createGradeDistributionChart(): void          |
++-------------------------------------------------+
+```
 - **CommentController.java**:
     - `commentService` -> SubjectCommentService instance
     - `initialize()` -> Initializes comment controller
@@ -584,6 +847,20 @@ The Service layer contains business logic and orchestrates calls to the DAOs
     - `handleAddComment()` -> Handles comment addition
     - `handleUpdateComment()` -> Handles comment modification
     - `handleDeleteComment()` -> Handles comment deletion
+```
++-------------------------------------------------+
+|                CommentController                |
++-------------------------------------------------+
+| - commentService: SubjectCommentService         |
++-------------------------------------------------+
+| + initialize(): void                            |
+| + validateCommentInput(): boolean               |
+| + refreshCommentView(): void                    |
+| + handleAddComment(): void                      |
+| + handleUpdateComment(): void                   |
+| + handleDeleteComment(): void                   |
++-------------------------------------------------+
+```
 
 - **BackupController.java**:
     - `backupService` -> BackupService instance
@@ -592,13 +869,38 @@ The Service layer contains business logic and orchestrates calls to the DAOs
     - `handleAutoBackupSchedule()` -> Manages auto-backup settings
     - `showBackupList()` -> Displays available backups
     - `handleDeleteBackup()` -> Handles backup deletion
-
+```
++-------------------------------------------------+
+|                BackupController                 |
++-------------------------------------------------+
+| - backupService: BackupService                  |
++-------------------------------------------------+
+| + handleCreateBackup(): void                    |
+| + handleRestoreBackup(): void                   |
+| + handleAutoBackupSchedule(): void              |
+| + showBackupList(): void                        |
+| + handleDeleteBackup(): void                    |
++-------------------------------------------------+
+```
 - **ImportExportController.java**:
     - `importExportService` -> ImportExportService instance
     - `initialize()` -> Initializes import/export controller
     - `handleFileSelection()` -> Handles file picker dialog
     - `handleCSVExport()` -> Handles CSV file export
     - `handlePDFExport()` -> Handles PDF file export
+
+```
++-------------------------------------------------+
+|              ImportExportController             |
++-------------------------------------------------+
+| - importExportService: ImportExportService      |
++-------------------------------------------------+
+| + initialize(): void                            |
+| + handleFileSelection(): void                   |
+| + handleCSVExport(): void                       |
+| + handlePDFExport(): void                       |
++-------------------------------------------------+
+```
 
 - **SearchController.java**:
     - `studentService` -> StudentService instance
@@ -611,7 +913,23 @@ The Service layer contains business logic and orchestrates calls to the DAOs
     - `handleAdvancedSearch()` -> Handles complex search criteria
     - `updateSearchResults()` -> Updates search result display
     - `handlePagination()` -> Manages pagination controls
-
+```
++-------------------------------------------------+
+|                SearchController                 |
++-------------------------------------------------+
+| - studentService: StudentService                |
+| - gradeService: GradeService                    |
++-------------------------------------------------+
+| + initialize(): void                            |
+| + clearSearchResults(): void                    |
+| + exportSearchResults(): void                   |
+| + handleGeneralSearch(): void                   |
+| + handleSubjectSearch(): void                   |
+| + handleAdvancedSearch(): void                  |
+| + updateSearchResults(): void                   |
+| + handlePagination(): void                      |
++-------------------------------------------------+
+```
 - **GradeController.java**:
     - `gradeService` -> GradeService instance
     - `initialize()` -> Initializes grade controller
@@ -620,6 +938,20 @@ The Service layer contains business logic and orchestrates calls to the DAOs
     - `handleDeleteGrade()` -> Handles grade deletion
     - `validateGradeInput()` -> Validates grade data
     - `refreshGradeView()` -> Updates grade display
+```
++-------------------------------------------------+
+|                GradeController                  |
++-------------------------------------------------+
+| - gradeService: GradeService                    |
++-------------------------------------------------+
+| + initialize(): void                            |
+| + handleAddGrade(): void                        |
+| + handleUpdateGrade(): void                     |
+| + handleDeleteGrade(): void                     |
+| + validateGradeInput(): boolean                 |
+| + refreshGradeView(): void                      |
++-------------------------------------------------+
+```
 
 ### 6. **View**
 * * *
@@ -651,6 +983,26 @@ The Service layer contains business logic and orchestrates calls to the DAOs
     - `setPageSize()` -> Sets the page size
     - `getOffset()` -> Calculates the offset ((pageNumber - 1) * pageSize)
     - `toString()` -> String representation
+```
++-------------------------------------------------+
+|                SearchCriteria                   |
++-------------------------------------------------+
+| - searchValue: String                           |
+| - pageNumber: int                               |
+| - pageSize: int                                 |
++-------------------------------------------------+
+| + SearchCriteria()                              |
+| + SearchCriteria(String): void                  |
+| + getSearchValue(): String                      |
+| + setSearchValue(String): void                  |
+| + getPageNumber(): int                          |
+| + setPageNumber(int): void                      |
+| + getPageSize(): int                            |
+| + setPageSize(int): void                        |
+| + getOffset(): int                              |
+| + toString(): String                            |
++-------------------------------------------------+
+```
 
 - **SubjectResult.java**:
     - `subject` -> Subject
@@ -674,7 +1026,35 @@ The Service layer contains business logic and orchestrates calls to the DAOs
     - `getTeacherComment()` -> Returns the teacher's comment
     - `setTeacherComment()` -> Sets the teacher's comment
     - `toString()` -> String representation
-
+```
++-------------------------------------------------+
+|                SubjectResult                    |
++-------------------------------------------------+
+| - subject: String                               |
+| - grades: String                                |
+| - studentAverage: double                        |
+| - classMinAverage: double                       |
+| - classMaxAverage: double                       |
+| - teacherComment: String                        |
++-------------------------------------------------+
+| + SubjectResult()                               |
+| + SubjectResult(String, String, double,         |
+|                   double, double, String): void |
+| + getSubject(): String                          |
+| + setSubject(String): void                      |
+| + getGrades(): String                           |
+| + setGrades(String): void                       |
+| + getStudentAverage(): double                   |
+| + setStudentAverage(double): void               |
+| + getClassMinAverage(): double                  |
+| + setClassMinAverage(double): void              |
+| + getClassMaxAverage(): double                  |
+| + setClassMaxAverage(double): void              |
+| + getTeacherComment(): String                   |
+| + setTeacherComment(String): void               |
+| + toString(): String                            |
++-------------------------------------------------+
+```
 - **InputValidator.java**:
     - `isValidName()` -> Validates name format
     - `isValidAge()` -> Validates if age is within acceptable range
@@ -685,7 +1065,21 @@ The Service layer contains business logic and orchestrates calls to the DAOs
     - `validateStudent()` -> Validates all student fields when adding new student
     - `validateGrade()` -> Validates all grade fields
     - `validateUser()` -> Validates user registration data
-
+```
++-------------------------------------------------+
+|                InputValidator                   |
++-------------------------------------------------+
+| + isValidName(String): boolean                  |
+| + isValidAge(int): boolean                      |
+| + isValidGrade(double): boolean                 |
+| + isValidEmail(String): boolean                 |
+| + isValidId(String): boolean                    |
+| + sanitizeInput(String): String                 |
+| + validateStudent(Student): boolean             |
+| + validateGrade(Grade): boolean                 |
+| + validateUser(User): boolean                   |
++-------------------------------------------------+
+```
 - **PasswordUtils.java**:
     - `generateSalt()` -> Generates random salt
     - `hashPassword()` -> Hashes password with salt
@@ -693,7 +1087,18 @@ The Service layer contains business logic and orchestrates calls to the DAOs
     - `verifyPassword()` -> Verifies if password matches hash
     - `validatePasswordStrength()` -> Validates password strength
     - `getPasswordCriteria()` -> Returns validation criteria
-
+```
++-------------------------------------------------+
+|                PasswordUtils                    |
++-------------------------------------------------+
+| + generateSalt(): String                        |
+| + hashPassword(String, String): String          |
+| + hashPasswordWithSalt(String): String          |
+| + verifyPassword(String, String): boolean       |
+| + validatePasswordStrength(String): boolean     |
+| + getPasswordCriteria(): String                 |
++-------------------------------------------------+
+```
 - **CSVHandler.java**:
     - `delimiter` -> CSV delimiter character (default: comma)
     - `CSVHandler()` -> Default constructor with standard delimiters
@@ -705,7 +1110,23 @@ The Service layer contains business logic and orchestrates calls to the DAOs
     - `formatStudentToCSV()` -> Formats Student object to CSV line
     - `parseGeneralFromCSV()` -> Parses CSV line to general object
     - `formatGeneralToCSV()` -> Formats general object to CSV line
-
+```
++-------------------------------------------------+
+|                CSVHandler                       |
++-------------------------------------------------+
+| - delimiter: char                               |
++-------------------------------------------------+
+| + CSVHandler()                                  |
+| + CSVHandler(char): void                        |
+| + exportGeneralSearchResults(List): void        |
+| + exportStudentSearchResults(List): void        |
+| + validateCSVFormat(String): boolean            |
+| + parseStudentFromCSV(String): Student          |
+| + formatStudentToCSV(Student): String           |
+| + parseGeneralFromCSV(String): General          |
+| + formatGeneralToCSV(General): String           |
++-------------------------------------------------+
+```
 - **PDFExporter.java**:
     - `document` -> Document instance
     - `writer` -> PdfWriter instance
@@ -715,3 +1136,18 @@ The Service layer contains business logic and orchestrates calls to the DAOs
     - `formatStudentData()` -> Formats student data for PDF
     - `addHeader()` -> Adds header to PDF document
     - `addFooter()` -> Adds footer to PDF document
+
+```
++-------------------------------------------------+
+|                PDFExporter                      |
++-------------------------------------------------+
+| - document: Document                            |
+| - writer: PdfWriter                             |
++-------------------------------------------------+
+| + PDFExporter()                                 |
+| + exportStatisticsGeneralGraph(): void          |
+| + exportStatisticsStudentGraph(): void          |
+| + formatStudentData(Student): void              |
+| + addHeader(): void                             |
+| + addFooter(): void                             |
++-------------------------------------------------+
