@@ -1380,68 +1380,67 @@ The `Backup` table maintains a record of backup operations, including the type o
 erDiagram
     User {
         BIGSERIAL id PK
-        VARCHAR(255) username UK "NOT NULL UNIQUE"
+        VARCHAR username UK "NOT NULL UNIQUE"
         TEXT password_hash "NOT NULL"
-        VARCHAR(50) role "DEFAULT 'USER'"
+        VARCHAR role "DEFAULT USER"
         BOOLEAN is_active "DEFAULT TRUE"
     }
-
+    
     Class {
         BIGSERIAL id PK
-        VARCHAR(50) class_name UK "NOT NULL UNIQUE, ex: T1, 5B, 3A"
+        VARCHAR class_name UK "NOT NULL UNIQUE"
     }
-
+    
     Student {
         BIGSERIAL id PK
-        VARCHAR(50) first_name "NOT NULL"
-        VARCHAR(50) last_name "NOT NULL"
-        INTEGER age "CHECK (age > 0 AND age < 150)"
-        BIGINT class_id FK "REFERENCES Class(id) ON DELETE SET NULL"
-        TIMESTAMP created_at "DEFAULT CURRENT_TIMESTAMP"
-        TIMESTAMP updated_at "DEFAULT CURRENT_TIMESTAMP"
-        BOOLEAN is_active "DEFAULT TRUE"
+        VARCHAR first_name "NOT NULL"
+        VARCHAR last_name "NOT NULL"
+        INTEGER age "CHECK age > 0"
+        BIGINT class_id FK
+        TIMESTAMP created_at
+        TIMESTAMP updated_at
+        BOOLEAN is_active
     }
-
+    
     Subject {
         BIGSERIAL id PK
-        VARCHAR(100) name UK "NOT NULL UNIQUE"
+        VARCHAR name UK "NOT NULL UNIQUE"
         DECIMAL coefficient "DEFAULT 1.0"
-        TIMESTAMP created_at "DEFAULT CURRENT_TIMESTAMP"
+        TIMESTAMP created_at
     }
-
+    
     Grade {
         BIGSERIAL id PK
-        BIGINT student_id FK "REFERENCES Student(id) ON DELETE CASCADE"
-        BIGINT subject_id FK "REFERENCES Subject(id) ON DELETE CASCADE"
-        DECIMAL grade "CHECK (grade >= 0 AND grade <= 20)"
-        DATE date_recorded "DEFAULT CURRENT_DATE"
-        DECIMAL grade_coefficient "DEFAULT 1.0 CHECK (grade_coefficient > 0)"
-        TIMESTAMP created_at "DEFAULT CURRENT_TIMESTAMP"
-        TIMESTAMP updated_at "DEFAULT CURRENT_TIMESTAMP"
+        BIGINT student_id FK
+        BIGINT subject_id FK
+        DECIMAL grade "0-20"
+        DATE date_recorded
+        DECIMAL grade_coefficient
+        TIMESTAMP created_at
+        TIMESTAMP updated_at
     }
-
+    
     SubjectComment {
         BIGSERIAL id PK
-        BIGINT student_id FK "REFERENCES Student(id) ON DELETE CASCADE"
-        BIGINT subject_id FK "REFERENCES Subject(id) ON DELETE CASCADE"
+        BIGINT student_id FK
+        BIGINT subject_id FK
         TEXT comment "NOT NULL"
-        TIMESTAMP created_at "DEFAULT CURRENT_TIMESTAMP"
+        TIMESTAMP created_at
     }
-
+    
     Backup {
         BIGSERIAL id PK
-        VARCHAR(20) backup_type "CHECK IN ('AUTO', 'MANUAL')"
-        VARCHAR(255) file_path "NOT NULL"
+        VARCHAR backup_type "AUTO or MANUAL"
+        VARCHAR file_path "NOT NULL"
         BIGINT file_size
-        VARCHAR(20) status "DEFAULT 'SUCCESS' CHECK IN ('SUCCESS', 'FAILED', 'IN_PROGRESS')"
+        VARCHAR status "SUCCESS/FAILED/IN_PROGRESS"
         TEXT error_message
-        TIMESTAMP created_at "DEFAULT CURRENT_TIMESTAMP"
+        TIMESTAMP created_at
     }
-
-    %% Relations
-    Class ||--o{ Student : "has"
-    Student ||--o{ Grade : "receives"
-    Subject ||--o{ Grade : "graded_in"
-    Student ||--o{ SubjectComment : "commented_on"
-    Subject ||--o{ SubjectComment : "comment_for"
+    
+    Class ||--o{ Student : has
+    Student ||--o{ Grade : receives
+    Subject ||--o{ Grade : graded_in
+    Student ||--o{ SubjectComment : commented_on
+    Subject ||--o{ SubjectComment : comment_for
 ```
