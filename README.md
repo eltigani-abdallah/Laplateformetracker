@@ -305,23 +305,23 @@ SQL requests example:
 
 ```sql
 -- Example of searchGeneral() request
-SELECT * FROM students 
-WHERE CAST(id AS TEXT) LIKE ? 
-   OR LOWER(first_name) LIKE LOWER(?) 
-   OR LOWER(last_name) LIKE LOWER(?)
-   OR CAST(age AS TEXT) LIKE ?
-   OR CAST(class_name AS TEXT) LIKE ?
-ORDER BY id 
+SELECT s.*, c.class_name 
+FROM students s
+LEFT JOIN class c ON s.class_id = c.id
+WHERE CAST(s.id AS TEXT) LIKE ? 
+   OR LOWER(s.first_name) LIKE LOWER(?) 
+   OR LOWER(s.last_name) LIKE LOWER(?)
+   OR CAST(s.age AS TEXT) LIKE ?
+ORDER BY s.id 
 LIMIT ? OFFSET ?
 
 -- Example of countSearchGeneral() request
-SELECT COUNT(*) FROM students 
-WHERE (CAST(id AS TEXT) LIKE ? 
-    OR LOWER(first_name) LIKE LOWER(?) 
-    OR LOWER(last_name) LIKE LOWER(?) 
-    OR CAST(age AS TEXT) LIKE ? 
-    OR CAST(class_name AS TEXT) LIKE ?)
-
+SELECT COUNT(*) FROM students s
+LEFT JOIN class c ON s.class_id = c.id
+WHERE (CAST(s.id AS TEXT) LIKE ? 
+    OR LOWER(s.first_name) LIKE LOWER(?) 
+    OR LOWER(s.last_name) LIKE LOWER(?) 
+    OR CAST(s.age AS TEXT) LIKE ?)
 ```
 
 Snipset example in StudentDAOImpl:
@@ -414,24 +414,25 @@ Snipset example in StudentDAOImpl:
 
 ```sql
 -- Example of countBySubject() request
-    SELECT COUNT(DISTINCT subject) FROM grades 
-    WHERE student_id = ? AND LOWER(subject) LIKE LOWER(?)
+SELECT COUNT(DISTINCT subject_id) FROM grades 
+WHERE student_id = ? AND subject_id IN (SELECT id FROM subject WHERE LOWER(name) LIKE LOWER(?))
 
 -- Example of searchBySubject() request 
 SELECT 
-    g.subject,
-    GROUP_CONCAT(g.value, ', ') as grades,
-    (SELECT calculateWeightedAverageGrade(g.student_id, g.subject)) as student_average,
-    (SELECT MIN(calculateWeightedAverageGrade(student_id, g.subject)) 
-     FROM (SELECT DISTINCT student_id FROM grades WHERE subject = g.subject) s) as class_min_average,
-    (SELECT MAX(calculateWeightedAverageGrade(student_id, g.subject)) 
-     FROM (SELECT DISTINCT student_id FROM grades WHERE subject = g.subject) s) as class_max_average,
+    s.name AS subject,
+    GROUP_CONCAT(g.grade, ', ') as grades,
+    (SELECT calculateWeightedAverageGrade(g.student_id, g.subject_id)) as student_average,
+    (SELECT MIN(calculateWeightedAverageGrade(student_id, g.subject_id)) 
+     FROM (SELECT DISTINCT student_id FROM grades WHERE subject_id = g.subject_id) s) as class_min_average,
+    (SELECT MAX(calculateWeightedAverageGrade(student_id, g.subject_id)) 
+     FROM (SELECT DISTINCT student_id FROM grades WHERE subject_id = g.subject_id) s) as class_max_average,
     sc.comment as teacher_comment
 FROM grades g
-LEFT JOIN subject_comments sc ON sc.student_id = g.student_id AND sc.subject = g.subject
-WHERE g.student_id = ? AND LOWER(g.subject) LIKE LOWER(?)
-GROUP BY g.subject, sc.comment
-ORDER BY g.subject
+LEFT JOIN subject s ON g.subject_id = s.id
+LEFT JOIN subject_comments sc ON sc.student_id = g.student_id AND sc.subject_id = g.subject_id
+WHERE g.student_id = ? AND LOWER(s.name) LIKE LOWER(?)
+GROUP BY s.name, sc.comment
+ORDER BY s.name
 LIMIT ? OFFSET ?
 ```
 
@@ -1286,7 +1287,7 @@ Each class has a unique identifier, a name.
 |                      Class                        |
 +---------------------------------------------------+
 | - id: BIGSERIAL PRIMARY KEY                       |
-| - name: VARCHAR(5) NOT NULL UNIQUE                | -- example : T1, 5B, 3A ..
+| - class_name: VARCHAR(5) NOT NULL UNIQUE                | -- example : T1, 5B, 3A ..
 +---------------------------------------------------+
 ```
 
@@ -1327,18 +1328,20 @@ The `Grade` table records the grades received by students for specific subjects.
 Each record is linked to a student and a subject, includes the grade value, the recording date. Timestamps for creation and updates are also included.
 
 ```
-+---------------------------------------------------------------+
-|                     Grade                                     |
-+---------------------------------------------------------------+
-| - id: BIGSERIAL PRIMARY KEY                                   |
-| - student_id: BIGINT REFERENCES Student(id) ON DELETE CASCADE |  -- Foreign key with action
-| - subject_id: BIGINT REFERENCES Subject(id) ON DELETE CASCADE |  -- Foreign key with action
-| - grade: DECIMAL(4,2) CHECK (grade >= 0 AND grade <= 20)      |  -- Constraint on grade
-| - date_recorded: DATE DEFAULT CURRENT_DATE                    |  -- Default date recorded
-| - created_at: TIMESTAMP DEFAULT CURRENT_TIMESTAMP             |
-| - updated_at: TIMESTAMP DEFAULT CURRENT_TIMESTAMP             |
-+---------------------------------------------------------------+
++---------------------------------------------------------------------+
+|                              Grade                                  |
++---------------------------------------------------------------------+
+| - id: BIGSERIAL PRIMARY KEY                                         |
+| - student_id: BIGINT REFERENCES Student(id) ON DELETE CASCADE       |  -- Foreign key with action
+| - subject_id: BIGINT REFERENCES Subject(id) ON DELETE CASCADE       |  -- Foreign key with action
+| - grade: DECIMAL(4,2) CHECK (grade >= 0 AND grade <= 20)            |  -- Constraint on grade
+| - date_recorded: DATE DEFAULT CURRENT_DATE                          |  -- Default date recorded
+| - coefficient: DECIMAL(3,2) DEFAULT 1.0 CHECK (coefficient > 0)     |  -- Coefficient for the specific grade
+| - created_at: TIMESTAMP DEFAULT CURRENT_TIMESTAMP                   |
+| - updated_at: TIMESTAMP DEFAULT CURRENT_TIMESTAMP                   |
++---------------------------------------------------------------------+
 ```
+
 ### SubjectComment Table
 The `SubjectComment' table is designed to store comments made by teachers for specific students in their respective subjects. Each comment is linked to a student and as subject, allowing for personnalised feedback.
 
@@ -1352,4 +1355,22 @@ The `SubjectComment' table is designed to store comments made by teachers for sp
 | - comment: TEXT NOT NULL                                      |  -- Comment from the teacher
 | - created_at: TIMESTAMP DEFAULT CURRENT_TIMESTAMP             |  -- Timestamp for record keeping
 +---------------------------------------------------------------+
+```
+
+### BackUp Table
+The `Backup` table maintains a record of backup operations, including the type of backup , file path, size, status, and any error messages encountered during backup process. A timestamp for the creation of each log entry is also included
+
+```
++----------------------------------------------------------------------+
+|                  Backup Logs                                         |
++----------------------------------------------------------------------+
+| - id: BIGSERIAL PRIMARY KEY                                          |
+| - backup_type: VARCHAR(50) CHECK (backup_type IN ('AUTO', 'MANUAL')) |  -- Backup type constraint
+| - file_path: VARCHAR(255) NOT NULL                                   |
+| - file_size: BIGINT                                                  |
+| - status: VARCHAR(50) DEFAULT 'SUCCESS' CHECK                        |
+|                     (status IN ('SUCCESS', 'FAILED', 'IN_PROGRESS')) |  -- Status constraint
+| - error_message: TEXT                                                |
+| - created_at: TIMESTAMP DEFAULT CURRENT_TIMESTAMP                    |
++----------------------------------------------------------------------+
 ```
