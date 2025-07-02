@@ -1309,3 +1309,15 @@ including their name, age, academic performance...The table also tracks student'
 | - is_active: BOOLEAN DEFAULT TRUE                                                |
 +----------------------------------------------------------------------------------+
 ```
+### Subject Table
+The `Subject` table holds data about various subjects offered in the school. Each subject has a unique identifier, a name and a coefficient value indicating its weight in grading.
+
+```
++---------------------------------------------------+
+|                     Subject                       |
++---------------------------------------------------+
+| - id: BIGSERIAL PRIMARY KEY                       |
+| - name: VARCHAR(50) NOT NULL UNIQUE               |
+| - coefficient: DECIMAL(3,2) DEFAULT 1.0           |  -- Default coefficient value 1
+| - created_at: TIMESTAMP DEFAULT CURRENT_TIMESTAMP |
++---------------------------------------------------+
