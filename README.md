@@ -1151,3 +1151,110 @@ The Service layer contains business logic and orchestrates calls to the DAOs
 | + addHeader(): void                             |
 | + addFooter(): void                             |
 +-------------------------------------------------+
+```
+### Directory Structure
+* * *
+
+```
+StudentManagementSystem/
+│
+├── src/
+│   ├── main/
+│   │   ├── java/
+│   │   │   ├── com/
+│   │   │   │   ├── studentmanagement/
+│   │   │   │   │   ├── model/
+│   │   │   │   │   │   ├── Student.java
+│   │   │   │   │   │   ├── Grade.java
+│   │   │   │   │   │   ├── User.java
+│   │   │   │   │   │   ├── SubjectComment.java
+│   │   │   │   │   │   └── SubjectResult.java
+│   │   │   │   │   ├── dao/
+│   │   │   │   │   │   ├── StudentDAO.java
+│   │   │   │   │   │   ├── StudentDAOImpl.java
+│   │   │   │   │   │   ├── UserDAO.java
+│   │   │   │   │   │   ├── GradeDAO.java
+│   │   │   │   │   │   ├── GradeDAOImpl.java
+│   │   │   │   │   │   ├── SubjectCommentDAO.java
+│   │   │   │   │   │   └── SubjectCommentDAOImpl.java
+│   │   │   │   │   ├── database/
+│   │   │   │   │   │   ├── DatabaseConnection.java
+│   │   │   │   │   │   └── DatabaseConfig.java
+│   │   │   │   │   ├── service/
+│   │   │   │   │   │   ├── StudentService.java
+│   │   │   │   │   │   ├── AuthenticationService.java
+│   │   │   │   │   │   ├── StatisticsService.java
+│   │   │   │   │   │   ├── ImportExportService.java
+│   │   │   │   │   │   └── BackupService.java
+│   │   │   │   │   ├── controller/
+│   │   │   │   │   │   ├── StudentFormController.java
+│   │   │   │   │   │   ├── StatisticsController.java
+│   │   │   │   │   │   ├── CommentController.java
+│   │   │   │   │   │   ├── BackupController.java
+│   │   │   │   │   │   ├── ImportExportController.java
+│   │   │   │   │   │   └── SearchController.java
+│   │   │   │   │   │   └── GradeController.java
+│   │   │   │   │   ├── view/
+│   │   │   │   │   │   ├── MainView.java
+│   │   │   │   │   │   ├── StudentView.java
+│   │   │   │   │   │   ├── AuthenticationView.java
+│   │   │   │   │   │   ├── GeneralGraphicView.java
+│   │   │   │   │   │   └── StudentGraphicView.java
+│   │   │   │   │   ├── utils/
+│   │   │   │   │   │   ├── InputValidator.java
+│   │   │   │   │   │   ├── PasswordUtils.java
+│   │   │   │   │   │   ├── CSVHandler.java
+│   │   │   │   │   │   ├── XMLHandler.java
+│   │   │   │   │   │   ├── JSONHandler.java
+│   │   │   │   │   │   └── PDFExporter.java
+│   │   │   │   │   └── Main.java
+│   │   │   │
+│   │   │   └── resources/
+│   │   │       ├── fxml/
+│   │   │       │   ├── main-view.fxml
+│   │   │       │   ├── student-form.fxml
+│   │   │       │   ├── student-list.fxml
+│   │   │       │   ├── login.fxml
+│   │   │       │   ├── statistics.fxml
+│   │   │       │   └── search.fxml
+│   │   │       ├── css/
+│   │   │       │   └── styles.css
+│   │   │       ├── images/
+│   │   │       │   └── icons/
+│   │   │       ├── database/
+│   │   │       │   └── schema.sql
+│   │   │       └── config/
+│   │   │           └── application.properties
+│   │
+│   └── test/
+│       ├── java/
+│       │   ├── com/
+│       │   │   ├── studentmanagement/
+│       │   │   │   ├── dao/
+│       │   │   │   │   └── StudentDAOTest.java
+│       │   │   │   ├── service/
+│       │   │   │   │   ├── StudentServiceTest.java
+│       │   │   │   │   └── AuthenticationServiceTest.java
+│       │   │   │   └── utils/
+│       │   │   │       └── InputValidatorTest.java
+│       │
+│       └── resources/
+│           └── test-data/
+│               └── sample-students.csv
+│
+├── lib/
+│   ├── postgresql-xx.x.jar
+│   └── other-dependencies.jar
+│
+├── docs/
+│   ├── database-schema.md
+│   └── user-manual.md
+│
+├── scripts/
+│   ├── setup-database.sql
+│   └── sample-data.sql
+│
+├── README.md
+├── .gitignore
+└── pom.xml
+```
