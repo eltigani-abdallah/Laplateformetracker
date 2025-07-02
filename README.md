@@ -1380,21 +1380,21 @@ The `Backup` table maintains a record of backup operations, including the type o
 erDiagram
     User {
         BIGSERIAL id PK
-        VARCHAR username UK "NOT NULL UNIQUE"
+        VARCHAR(255) username UK "NOT NULL UNIQUE"
         TEXT password_hash "NOT NULL"
-        VARCHAR role "DEFAULT 'USER'"
+        VARCHAR(50) role "DEFAULT 'USER'"
         BOOLEAN is_active "DEFAULT TRUE"
     }
 
     Class {
         BIGSERIAL id PK
-        VARCHAR class_name UK "NOT NULL UNIQUE, ex: T1, 5B, 3A"
+        VARCHAR(50) class_name UK "NOT NULL UNIQUE, ex: T1, 5B, 3A"
     }
 
     Student {
         BIGSERIAL id PK
-        VARCHAR first_name "NOT NULL"
-        VARCHAR last_name "NOT NULL"
+        VARCHAR(50) first_name "NOT NULL"
+        VARCHAR(50) last_name "NOT NULL"
         INTEGER age "CHECK (age > 0 AND age < 150)"
         BIGINT class_id FK "REFERENCES Class(id) ON DELETE SET NULL"
         TIMESTAMP created_at "DEFAULT CURRENT_TIMESTAMP"
@@ -1404,7 +1404,7 @@ erDiagram
 
     Subject {
         BIGSERIAL id PK
-        VARCHAR name UK "NOT NULL UNIQUE"
+        VARCHAR(100) name UK "NOT NULL UNIQUE"
         DECIMAL coefficient "DEFAULT 1.0"
         TIMESTAMP created_at "DEFAULT CURRENT_TIMESTAMP"
     }
@@ -1415,7 +1415,7 @@ erDiagram
         BIGINT subject_id FK "REFERENCES Subject(id) ON DELETE CASCADE"
         DECIMAL grade "CHECK (grade >= 0 AND grade <= 20)"
         DATE date_recorded "DEFAULT CURRENT_DATE"
-        DECIMAL grade_coefficient "DEFAULT 1.0 CHECK (coefficient > 0)"
+        DECIMAL grade_coefficient "DEFAULT 1.0 CHECK (grade_coefficient > 0)"
         TIMESTAMP created_at "DEFAULT CURRENT_TIMESTAMP"
         TIMESTAMP updated_at "DEFAULT CURRENT_TIMESTAMP"
     }
@@ -1428,12 +1428,12 @@ erDiagram
         TIMESTAMP created_at "DEFAULT CURRENT_TIMESTAMP"
     }
 
-    BackupLogs {
+    Backup {
         BIGSERIAL id PK
-        VARCHAR backup_type "CHECK IN ('AUTO', 'MANUAL')"
-        VARCHAR file_path "NOT NULL"
+        VARCHAR(20) backup_type "CHECK IN ('AUTO', 'MANUAL')"
+        VARCHAR(255) file_path "NOT NULL"
         BIGINT file_size
-        VARCHAR status "DEFAULT 'SUCCESS' CHECK IN ('SUCCESS', 'FAILED', 'IN_PROGRESS')"
+        VARCHAR(20) status "DEFAULT 'SUCCESS' CHECK IN ('SUCCESS', 'FAILED', 'IN_PROGRESS')"
         TEXT error_message
         TIMESTAMP created_at "DEFAULT CURRENT_TIMESTAMP"
     }
