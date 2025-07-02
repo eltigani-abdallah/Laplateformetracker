@@ -40,3 +40,5 @@ build/
 
 ### pom file###
 pom.xml
+run.bat
+test.bat
