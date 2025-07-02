@@ -1378,62 +1378,60 @@ The `Backup` table maintains a record of backup operations, including the type o
 
 ```mermaid
 erDiagram
+    User ||--o{ Student : manages
+    Class ||--o{ Student : contains
+    Student ||--o{ Grade : has
+    Subject ||--o{ Grade : includes
+    Student ||--o{ SubjectComment : receives
+    Subject ||--o{ SubjectComment : has
+
     User {
         id BIGSERIAL PK
-        username VARCHAR UK
+        username VARCHAR
         password_hash TEXT
         role VARCHAR
         is_active BOOLEAN
     }
+    
     Class {
         id BIGSERIAL PK
-        class_name VARCHAR UK
+        class_name VARCHAR
     }
+    
     Student {
         id BIGSERIAL PK
         first_name VARCHAR
         last_name VARCHAR
         age INTEGER
         class_id BIGINT FK
-        created_at TIMESTAMP
-        updated_at TIMESTAMP
         is_active BOOLEAN
     }
+    
     Subject {
         id BIGSERIAL PK
-        name VARCHAR UK
+        name VARCHAR
         coefficient DECIMAL
-        created_at TIMESTAMP
     }
+    
     Grade {
         id BIGSERIAL PK
         student_id BIGINT FK
         subject_id BIGINT FK
         grade DECIMAL
         date_recorded DATE
-        grade_coefficient DECIMAL
-        created_at TIMESTAMP
-        updated_at TIMESTAMP
     }
+    
     SubjectComment {
         id BIGSERIAL PK
         student_id BIGINT FK
         subject_id BIGINT FK
         comment TEXT
-        created_at TIMESTAMP
     }
+    
     Backup {
         id BIGSERIAL PK
         backup_type VARCHAR
         file_path VARCHAR
-        file_size BIGINT
         status VARCHAR
-        error_message TEXT
-        created_at TIMESTAMP
     }
-    Class ||--o{ Student : has
-    Student ||--o{ Grade : receives
-    Subject ||--o{ Grade : graded_in
-    Student ||--o{ SubjectComment : commented_on
-    Subject ||--o{ SubjectComment : comment_for
 ```
