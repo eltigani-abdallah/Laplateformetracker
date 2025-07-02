@@ -1415,7 +1415,7 @@ erDiagram
         BIGINT subject_id FK "REFERENCES Subject(id) ON DELETE CASCADE"
         DECIMAL grade "CHECK (grade >= 0 AND grade <= 20)"
         DATE date_recorded "DEFAULT CURRENT_DATE"
-        DECIMAL grade_coefficient "DEFAULT 1.0 CHECK (coefficient > 0)"
+        DECIMAL grade_coefficient "DEFAULT 1.0 CHECK (grade_coefficient > 0)"
         TIMESTAMP created_at "DEFAULT CURRENT_TIMESTAMP"
         TIMESTAMP updated_at "DEFAULT CURRENT_TIMESTAMP"
     }
@@ -1428,21 +1428,19 @@ erDiagram
         TIMESTAMP created_at "DEFAULT CURRENT_TIMESTAMP"
     }
 
-    BackupLogs {
+    Backup {
         BIGSERIAL id PK
-        VARCHAR backup_type "CHECK IN ('AUTO', 'MANUAL')"
+        VARCHAR backup_type "CHECK (backup_type IN ('AUTO', 'MANUAL'))"
         VARCHAR file_path "NOT NULL"
         BIGINT file_size
-        VARCHAR status "DEFAULT 'SUCCESS' CHECK IN ('SUCCESS', 'FAILED', 'IN_PROGRESS')"
+        VARCHAR status "DEFAULT 'SUCCESS' CHECK (status IN ('SUCCESS', 'FAILED', 'IN_PROGRESS'))"
         TEXT error_message
         TIMESTAMP created_at "DEFAULT CURRENT_TIMESTAMP"
     }
 
-    %% Relations
-    Class ||--o{ Student : "has"
-    Student ||--o{ Grade : "receives"
-    Subject ||--o{ Grade : "graded_in"
-    Student ||--o{ SubjectComment : "commented_on"
-    Subject ||--o{ SubjectComment : "comment_for"
-
+    Class ||--o{ Student : has
+    Student ||--o{ Grade : receives
+    Subject ||--o{ Grade : graded_in
+    Student ||--o{ SubjectComment : commented_on
+    Subject ||--o{ SubjectComment : comment_for
 ```
