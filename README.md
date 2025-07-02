@@ -1360,7 +1360,7 @@ The `Backup` table maintains a record of backup operations, including the type o
 
 ```
 +----------------------------------------------------------------------+
-|                  Backup Logs                                         |
+|                  Backup                                              |
 +----------------------------------------------------------------------+
 | - id: BIGSERIAL PRIMARY KEY                                          |
 | - backup_type: VARCHAR(50) CHECK (backup_type IN ('AUTO', 'MANUAL')) |  -- Backup type constraint
