@@ -3,6 +3,7 @@ package com.studentmanagement.controller;
 import com.studentmanagement.service.AuthenticationService;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
+import com.studentmanagement.utils.AlertUtils;
 import javafx.scene.control.Button;
 
 
@@ -40,11 +41,17 @@ public class LoginController {
    
    @FXML
    private void handleLogin(){
+        String username = textFieldUsername.getText().trim();
+        String password = textFieldPassword.getText().trim();
 
+        if (username.isEmpty() || password.isEmpty()){
+            AlertUtils.showAlert("Erreur", "Veuillez remplir tous les champs.");
+            return;
+        }
    }
 
    @FXML
    private void handleRegister(){
-    
+
    }
 }
