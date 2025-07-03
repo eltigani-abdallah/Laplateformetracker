@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.layout.AnchorPane?>
+<TabPane fx:id="mainTabPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+         prefHeight="523.0" prefWidth="808.0" tabClosingPolicy="UNAVAILABLE"
+         xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/16"
+          stylesheets="@../css/style.css"
+          fx:controller="com.studentmanagement.controller.TabController">
+  <tabs>
+    <!-- Dashboard Tab -->
+    <Tab id="dashboard-tab" fx:id="dashboardTab" text="Bonjour !">
+      <content>
+        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+        <!-- <fx:include source="Dashboard.fxml" /> -->
+      </content>
+    </Tab>
+    <!-- Students Tab -->
+    <Tab id="students-tab" fx:id="studentsTab" text="Les Étudiants">
+      <content>
+        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+        <!-- <fx:include source="Students.fxml" /> -->
+      </content>
+    </Tab>
+    <!-- Students Stats Tab -->
+    <Tab id="and-their-stats" fx:id="studentsStats" text="Et Leurs Stats">
+      <content>
+        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+        <!-- <fx:include source="StudentsStats.fxml" /> -->
+      </content>
+    </Tab>
+    <!-- Student Tab -->
+    <Tab id="one-student" fx:id="student" text="Un Étudiant">
+      <content>
+        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+        <!-- <fx:include source="Student.fxml" /> -->
+      </content>
+    </Tab>
+    <!-- Student Stat Tab -->
+    <Tab id="and-his-stats" fx:id="studentStats" text="Et Ses Stats">
+      <content>
+        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+        <!-- <fx:include source="StudentStats.fxml" /> -->
+      </content>
+    </Tab>
+  </tabs>
+</TabPane>
