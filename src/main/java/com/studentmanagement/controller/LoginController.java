@@ -49,7 +49,7 @@ public class LoginController {
         String password = textFieldPassword.getText().trim();
 
         if (username.isEmpty() || password.isEmpty()){
-            AlertUtils.showAlert("Erreur", "Veuillez remplir tous les champs.");
+            AlertUtils.showError("Erreur", "Veuillez remplir tous les champs.");
             return;
         }
 
@@ -61,7 +61,7 @@ public class LoginController {
                 AlertUtils.showAlert("Erreur de connection", "Nom d'utilisateur ou mot de passe incorect.");               
             }
         } catch (Exception e) {
-            AlertUtils.showAlert("Erreur", "Une erreur est survenue lors de la connextion: "+ e.getMessage()); 
+            AlertUtils.showError("Erreur", "Une erreur est survenue lors de la connextion: "+ e.getMessage()); 
         }
    }
 
@@ -85,11 +85,26 @@ public class LoginController {
             stage.setTitle("ÉduSys - Inscription");
             stage.show();
         } catch (Exception e){
-            AlertUtils.showAlert("Erreur", "Impossible de charger la page d'inscription: " + e.getMessage());
+            AlertUtils.showError("Erreur", "Impossible de charger la page d'inscription: " + e.getMessage());
         }
    }
 
    private void showMainView(){
+    try {
+        //load main view
+        FXMLLoader Loader = new FXMLLoader(getClass().getResource("/fxml/tab.fxml"));
+        Parent root = Loader.load();
 
+        //Get the actual stage
+        Stage stage = (Stage) buttonLogin.getScene().getWindow();
+
+        //Create a new scene
+        Scene scene = new Scene(root);
+        stage.setScene(scene);
+        stage.setTitle("ÉduSys - Gestion des Étudiants");
+        stage.show();
+    } catch (Exception e){
+        AlertUtils.showError("Erreur", "Impossible de charger la vue principale : " + e.getMessage());
+    }
    }
 }
