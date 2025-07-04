@@ -60,7 +60,7 @@ public class LoginController {
                 clearForm();
                 showMainView();
             } else {
-                AlertUtils.showAlert("Erreur de connection", "Nom d'utilisateur ou mot de passe incorect.");    
+                AlertUtils.showInformation("Information", "Nom d'utilisateur ou mot de passe incorect.");    
                 textFieldPassword.clear();     
             }
         } catch (Exception e) {
