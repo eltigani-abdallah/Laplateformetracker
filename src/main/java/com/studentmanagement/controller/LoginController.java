@@ -43,6 +43,7 @@ public class LoginController {
     buttonRegister.setOnAction(event -> handleRegister());
    }
    
+   // Handle login
    @FXML
    private void handleLogin(){
         String username = textFieldUsername.getText().trim();
@@ -56,22 +57,31 @@ public class LoginController {
         try {
             boolean loginSucess = authService.authenticate(username, password);
             if (loginSucess){
+                clearForm();
                 showMainView();
             } else {
-                AlertUtils.showAlert("Erreur de connection", "Nom d'utilisateur ou mot de passe incorect.");               
+                AlertUtils.showAlert("Erreur de connection", "Nom d'utilisateur ou mot de passe incorect.");    
+                textFieldPassword.clear();     
             }
         } catch (Exception e) {
             AlertUtils.showError("Erreur", "Une erreur est survenue lors de la connextion: "+ e.getMessage()); 
+            textFieldPassword.clear();
         }
    }
 
+   //handle register
    @FXML
    private void handleRegister(){
         showRegisterView();
    }
 
+   //show register view
    private void showRegisterView() {
         try {
+
+            //Clear form before navigating to register
+            clearForm();
+
             //load register view
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/register.fxml"));
             Parent root = loader.load();
@@ -89,6 +99,7 @@ public class LoginController {
         }
    }
 
+   //show main view
    private void showMainView(){
     try {
         //load main view
@@ -106,5 +117,11 @@ public class LoginController {
     } catch (Exception e){
         AlertUtils.showError("Erreur", "Impossible de charger la vue principale : " + e.getMessage());
     }
+   }
+
+   //Clear form
+   private void clearForm() {
+    textFieldUsername.clear();
+    textFieldPassword.clear();
    }
 }
