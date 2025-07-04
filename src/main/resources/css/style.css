@@ -16,6 +16,11 @@ Shadow colors:
 * {
     font-family: "System", Arial, sans-serif;
     font-size: 12px;
+    -fx-very-light-color: #f5f5f5;
+    -fx-light-color: #e8e8e8; 
+    -fx-medium-color: #d0d0d0;
+    -fx-medium-dark-color : #b6b6b6;
+    -fx-dark-color: #4a4a4a;
 }
 
 /**************************************
@@ -24,19 +29,19 @@ Shadow colors:
 
 /* Target the main TabPane by its ID */
 #mainTabPane {
-    -fx-background-color: #f5f5f5;
-    background-color: #f5f5f5;
-    -fx-border-color: #e8e8e8;
-    border-color: #e8e8e8;
+    -fx-background-color: -fx-very-light-color;
+    background-color: -fx-very-light-color;
+    -fx-border-color: -fx-light-color;
+    border-color: -fx-light-color;
     -fx-border-width: 1px;
     border-width: 1px;
 }
 
 /* Control the tab context menu position */
 #mainTabPane .tab-down-button {
-    -fx-background-color: #e8e8e8;
-    background-color: #e8e8e8;
-    -fx-text-fill: #4a4a4a;
+    -fx-background-color: -fx-light-color;
+    background-color: -fx-light-color;
+    -fx-text-fill: -fx-dark-color;
 }
 
 /* Tab styling */
@@ -46,16 +51,16 @@ Shadow colors:
     -fx-border-radius: 8px 8px 0 0;
     border-radius: 8px 8px 0 0;
     -fx-background-radius: 8px 8px 0 0;
-    -fx-border-color: #4a4a4a;
-    border-color:  #4a4a4a;
+    -fx-border-color: -fx-dark-color;
+    border-color:  -fx-dark-color;
     -fx-border-width: 1px 1px 0 1px;
-    border-width: 1px 1px 0 1px; ;
+    border-width: 1px 1px 0 1px;
     -fx-focus-color: transparent;
     -fx-faint-focus-color: transparent;
     /* Uniform gray color for all tabs */
-    -fx-background-color: #e8e8e8;
-    background-color: #e8e8e8;
-    -fx-text-fill: #4a4a4a;
+    -fx-background-color: -fx-light-color;
+    background-color: -fx-light-color;
+    -fx-text-fill: -fx-dark-color;
     -fx-font-weight: bold;
     font-weight: bold;
     -fx-font-size: 12px;
@@ -75,9 +80,9 @@ Shadow colors:
 #and-their-stats,
 #one-student,
 #and-his-stats {
-    -fx-background-color: #e8e8e8;
-    background-color: #e8e8e8;
-    -fx-text-fill: #4a4a4a;
+    -fx-background-color: -fx-light-color;
+    background-color: -fx-light-color;
+    -fx-text-fill: -fx-dark-color;
     -fx-font-weight: bold;
     font-weight: bold;
     -fx-font-size: 14px;
@@ -90,15 +95,15 @@ Shadow colors:
 #and-their-stats:selected,
 #one-student:selected,
 #and-his-stats:selected {
-    -fx-background-color: #d0d0d0;
-    background-color: #d0d0d0;
-    -fx-text-fill: #4a4a4a;
+    -fx-background-color: -fx-medium-color;
+    background-color: -fx-medium-color;
+    -fx-text-fill: -fx-dark-color;
     
     /* normal borders of the tab */
     -fx-border-width: 1px 1px 0 1px;
     border-width: 1px 1px 0 1px;
-    -fx-border-color: #4a4a4a #4a4a4a transparent #4a4a4a;
-    border-color: #4a4a4a #4a4a4a transparent #4a4a4a;
+    -fx-border-color: -fx-dark-color -fx-dark-color transparent -fx-dark-color;
+    border-color: -fx-dark-color -fx-dark-color transparent -fx-dark-color;
      -fx-background-insets: 0 0 -1px 0;
 }
 
@@ -108,14 +113,14 @@ Shadow colors:
 #and-their-stats .tab-content-area,
 #one-student .tab-content-area,
 #and-his-stats .tab-content-area {
-    -fx-background-color: #d0d0d0;
-    background-color: #d0d0d0;
+    -fx-background-color: -fx-medium-color;
+    background-color: -fx-medium-color;
 }
 
 /* Pane color background */
 .tab-pane .tab-content-area {
-    -fx-background-color: #d0d0d0;
-    background-color: #d0d0d0;
+    -fx-background-color: -fx-medium-color;
+    background-color: -fx-medium-color;
 }
 
 /* Style for tab header area */
@@ -126,21 +131,21 @@ Shadow colors:
 
 /* Header background color */
 .tab-pane .tab-header-area .tab-header-background {
-    -fx-background-color: #f5f5f5;
-    background-color: #f5f5f5;
+    -fx-background-color: -fx-very-light-color;
+    background-color: -fx-very-light-color;
     -fx-border-width: 0 0 1px 0;    
     border-width: 0 0 1px 0;    
-    -fx-border-color: #4a4a4a;    
-    border-color: #4a4a4a;
+    -fx-border-color: -fx-dark-color;    
+    border-color: -fx-dar-color;
 }
 
 /* Fixes for tab context menu overflow */
 .tab-pane .tab-down-button .context-menu {
     -fx-effect: dropshadow(gaussian, rgba(154, 154, 154, 0.2), 8, 0, 0, 2);
-    -fx-background-color: #f5f5f5;
-    background-color: #f5f5f5;
-    -fx-border-color: #4a4a4a;
-    border-color: #4a4a4a;
+    -fx-background-color: -fx-very-light-color;
+    background-color: -fx-very-light-color;
+    -fx-border-color: -fx-dark-color;
+    border-color: -fx-dark-color;
     -fx-border-width: 1px;
     border-width: 1px;
     -fx-border-radius: 8px;
@@ -150,8 +155,8 @@ Shadow colors:
 
 /* Force context menu positioning to align with right edge of window */
 .tab-pane .tab-down-button .context-menu {
-    -fx-background-color: #b6b6b6;
-    background-color: #b6b6b6;
+    -fx-background-color: -fx-medium-dark-color;
+    background-color: -medium-dark-color;
     -fx-translate-x: -140px; 
     -fx-translate-y: 20px; 
 }
@@ -163,8 +168,8 @@ Shadow colors:
     -fx-max-width: 140px;
     max-width: 140px;
     -fx-pref-width: 140px;
-    -fx-background-color: #b6b6b6;
-    background-color: #b6b6b6;
+    -fx-background-color: -fx-medium-dark-color;
+    background-color: -fx-medium-dark-color;
     -fx-font-weight: bold;
     font-weight: bold;
     -fx-font-size: 14px;
@@ -177,8 +182,8 @@ Shadow colors:
     background-color: transparent;
     -fx-border-width: 0 0 1px 0;
     border-width: 0 0 1px 0;
-    -fx-border-color: #4a4a4a;
-    border-color: #4a4a4a;
+    -fx-border-color: -fx-dark-color;
+    border-color: -fx-dark-color;
 }
 
 /* Ensure that horizontal ligne is visible */
@@ -195,8 +200,8 @@ Shadow colors:
 
 /* Ensure that the content align well with the active tab */
 .tab-pane .tab-content-area {
-    -fx-background-color: #d0d0d0;
-    background-color: #d0d0d0;
+    -fx-background-color: -fx-medium-color;
+    background-color: -fx-medium-color;
     -fx-border-width: 0;
     border-width: 0;
     -fx-padding: 10px;
