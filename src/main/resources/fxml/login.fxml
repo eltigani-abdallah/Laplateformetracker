@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<Pane id="login-pane" fx:id="loginPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="523.0" prefWidth="808.0" style="-fx-background-color: #d0d0d0;" stylesheets="@../css/style.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.studentmanagement.controller.LoginController">
+<Pane id="login-pane" fx:id="loginPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="523.0" prefWidth="808.0" stylesheets="@../css/style.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.studentmanagement.controller.LoginController">
    <children>
    <!-- LOGO -->
       <ImageView fitHeight="97.0" fitWidth="85.0" layoutX="362.0" layoutY="66.0" pickOnBounds="true" preserveRatio="true">
@@ -17,51 +17,27 @@
          </image>
       </ImageView>
          <!-- Title  -->
-      <Label id="title-logo" layoutX="348.0" layoutY="158.0" prefHeight="39.0" prefWidth="112.0" stylesheets="@../css/style.css" text="ÉDUSYS" textFill="#4a4a4a">
-         <font>
-            <Font name="Tahoma" size="30.0" />
-         </font>
+      <Label id="title-logo" layoutX="348.0" layoutY="158.0" prefHeight="39.0" prefWidth="112.0" stylesheets="@../css/style.css" text="ÉDUSYS" >
       </Label>
          <!-- Username label -->
-      <Label layoutX="309.0" layoutY="209.0" prefHeight="18.0" prefWidth="152.0" text="Ton surnom" textFill="#4a4a4a">
-         <font>
-            <Font size="14.0" />
-         </font>
+      <Label styleClass="label" layoutX="309.0" layoutY="209.0" prefHeight="18.0" prefWidth="152.0" text="Ton surnom" >
       </Label>
       <!-- Text Field Username -->
-      <TextField id="text-field" fx:id="textFieldUsername" layoutX="309.0" layoutY="229.0" prefHeight="30.0" prefWidth="173.0" style="-fx-background-color: white; -fx-background-radius: 8px;" stylesheets="@../css/style.css">
-         <font>
-            <Font size="14.0" />
-         </font>
+      <TextField styleClass="text-field" fx:id="textFieldUsername" layoutX="309.0" layoutY="229.0" prefHeight="30.0" prefWidth="173.0" >
       </TextField>
       <!-- Label password -->
-      <Label layoutX="309.0" layoutY="269.0" prefHeight="18.0" prefWidth="152.0" text="Ton mp" textFill="#4a4a4a">
-         <font>
-            <Font size="14.0" />
-         </font>
+      <Label styleClass="label" layoutX="309.0" layoutY="269.0" prefHeight="18.0" prefWidth="152.0" text="Ton mp">
       </Label>
       <!-- Text Field Password -->
-      <TextField id="text-field" fx:id="textFieldPassword" layoutX="309.0" layoutY="289.0" prefHeight="30.0" prefWidth="173.0" style="-fx-background-color: white; -fx-background-radius: 8px;" stylesheets="@../css/style.css">
-         <font>
-            <Font size="14.0" />
-         </font>
+      <TextField styleClass="text-field" fx:id="textFieldPassword" layoutX="309.0" layoutY="289.0" prefHeight="30.0" prefWidth="173.0" >
       </TextField>
       <!-- Button Login -->
-      <Button id="button-login" fx:id="buttonLogin" layoutX="309.0" layoutY="347.0" mnemonicParsing="false" onAction="#handleLogin" prefHeight="31.0" prefWidth="173.0" style="-fx-background-color: #F8D954; -fx-background-radius: 8px; -fx-text-fill: #4a4a4a;" stylesheets="@../css/style.css" text="Connecte moi" textFill="#4a4a4a">
-         <font>
-            <Font size="14.0" />
-         </font>
+      <Button styleClass="button" fx:id="buttonLogin" layoutX="309.0" layoutY="347.0" mnemonicParsing="false" onAction="#handleLogin" prefHeight="31.0" prefWidth="173.0" text="Connecte moi" >
       </Button>
       <!-- Button Register -->
-      <Button id="button-register" fx:id="buttonRegister" layoutX="309.0" layoutY="427.0" mnemonicParsing="false" onAction="#handleRegister" prefHeight="31.0" prefWidth="173.0" style="-fx-background-color: #F8D954; -fx-background-radius: 8px; -fx-text-fill: #4a4a4a;" stylesheets="@../css/style.css" text="Enregistre moi" textFill="#4a4a4a">
-         <font>
-            <Font size="14.0" />
-         </font>
+      <Button styleClass="button" fx:id="buttonRegister" layoutX="309.0" layoutY="427.0" mnemonicParsing="false" onAction="#handleRegister" prefHeight="31.0" prefWidth="173.0" text="Enregistre moi" >
       </Button>
-      <Label layoutX="384.0" layoutY="401.0" prefHeight="20.0" prefWidth="23.0" text="ou" textFill="#4a4a4a">
-         <font>
-            <Font size="14.0" />
-         </font>
+      <Label styleClass="label" layoutX="384.0" layoutY="401.0" prefHeight="20.0" prefWidth="23.0" text="ou">
       </Label>
    </children>
 </Pane>
