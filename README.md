@@ -769,7 +769,7 @@ The Service layer contains business logic and orchestrates calls to the DAOs
 | + loadView(String): void                        |
 +-------------------------------------------------+
 ```
-- **AuthenticationController.java**:
+- **LoginController.java**:
     - `authService` -> AuthenticationService instance
     - `usernameField` -> TextField instance
     - `passwordField` -> PasswordField instance
@@ -782,7 +782,7 @@ The Service layer contains business logic and orchestrates calls to the DAOs
     - `showAlert()` -> Displays alert dialog box
 ```
 +-------------------------------------------------+
-|            AuthenticationController             |
+|            LoginController                      |
 +-------------------------------------------------+
 | - authService: AuthenticationService            |
 | - usernameField: TextField                      |

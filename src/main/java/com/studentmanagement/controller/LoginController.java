@@ -48,10 +48,29 @@ public class LoginController {
             AlertUtils.showAlert("Erreur", "Veuillez remplir tous les champs.");
             return;
         }
+
+        try {
+            boolean loginSucess = authService.authenticate(username, password);
+            if (loginSucess){
+                showMainView();
+            } else {
+                AlertUtils.showAlert("Erreur de connection", "Nom d'utilisateur ou mot de passe incorect.");               
+            }
+        } catch (Exception e) {
+            AlertUtils.showAlert("Erreur", "Une erreur est survenue lors de la connextion: "+ e.getMessage()); 
+        }
    }
 
    @FXML
    private void handleRegister(){
+        showRegisterView();
+   }
 
+   private void showRegisterView() {
+
+   }
+
+   private void showMainView(){
+    
    }
 }
