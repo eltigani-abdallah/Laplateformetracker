@@ -50,7 +50,7 @@ public class LoginController {
         String password = textFieldPassword.getText().trim();
 
         if (username.isEmpty() || password.isEmpty()){
-            AlertUtils.showError("Erreur", "Veuillez remplir tous les champs.");
+            AlertUtils.showError("Erreur", "Remplis tous les champs,\nil en manque surement un !");
             return;
         }
 
@@ -60,11 +60,11 @@ public class LoginController {
                 clearForm();
                 showMainView();
             } else {
-                AlertUtils.showInformation("Information", "Nom d'utilisateur ou mot de passe incorect.");    
+                AlertUtils.showInformation("Information", "Ton surnom et/ou ton mot de passe sont incorrects !");    
                 textFieldPassword.clear();     
             }
         } catch (Exception e) {
-            AlertUtils.showError("Erreur", "Une erreur est survenue lors de la connextion: "+ e.getMessage()); 
+            AlertUtils.showError("Erreur", "Oups !\nUne erreur est survenue lors de la connexion :\n"+ e.getMessage()); 
             textFieldPassword.clear();
         }
    }
@@ -95,7 +95,7 @@ public class LoginController {
             stage.setTitle("ÉduSys - Inscription");
             stage.show();
         } catch (Exception e){
-            AlertUtils.showError("Erreur", "Impossible de charger la page d'inscription: " + e.getMessage());
+            AlertUtils.showError("Erreur", "Oups !\nImpossible de charger la page d'inscription :\n " + e.getMessage());
         }
    }
 
@@ -115,7 +115,7 @@ public class LoginController {
         stage.setTitle("ÉduSys - Gestion des Étudiants");
         stage.show();
     } catch (Exception e){
-        AlertUtils.showError("Erreur", "Impossible de charger la vue principale : " + e.getMessage());
+        AlertUtils.showError("Erreur", "Oups !\nImpossible de charger la vue principale :\n " + e.getMessage());
     }
    }
 
