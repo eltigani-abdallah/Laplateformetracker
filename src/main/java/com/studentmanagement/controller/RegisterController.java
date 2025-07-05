@@ -3,10 +3,12 @@ package com.studentmanagement.controller;
 import com.studentmanagement.service.AuthenticationService;
 import com.studentmanagement.utils.AlertUtils;
 import com.studentmanagement.model.User;
+import com.studentmanagement.utils.SceneUtils;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Button;
+import javafx.stage.Stage;
 
 //Controller for the registration page
 public class RegisterController {
@@ -112,8 +114,22 @@ public class RegisterController {
     //Handles the return to the login page
     @FXML
     private void handleBackToLogin(){
-
+        showLoginView();
     }
+
+    //Displays the login view
+    private void showLoginView(){
+        try {
+            clearForm();
+            //Use utility method to change scene
+            Stage stage = (Stage) buttonBackToLogin.getScene().getWindow();
+            LoginController loginController = SceneUtils.changeScene(stage, "/fxml/login.fxml", "ÉduSys - Connection");
+            //Inject the service into the login controller
+            loginController.setAuthService(this.authService);
+        } catch (Exception e){
+            AlertUtils.showError("Erreur", "La page de connection n'est pas accessible.");
+        }
+    } 
 
     //Clears the form fields
     private void clearForm(){
