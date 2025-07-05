@@ -157,8 +157,6 @@ Classes that represent business entities, and contains attributes, constructors,
     - `setUsername()` -> Sets the username
     - `getPasswordHash()` -> Returns the password hash (for DAO access only)
     - `setPasswordHash()` -> Sets the password hash (for DAO access only)
-    - `getEmail()` -> Returns the user email
-    - `setEmail()` -> Sets the user email
     - `toString()` -> Returns a textual representation of the user
 
 ```
@@ -168,7 +166,6 @@ Classes that represent business entities, and contains attributes, constructors,
 | - id: Long                                |
 | - username: String                        |
 | - passwordHash: String                    |
-| - email: String                           |
 +-------------------------------------------+
 | + User()                                  |
 | + User(String, String)                    |
@@ -177,8 +174,6 @@ Classes that represent business entities, and contains attributes, constructors,
 | + setUsername(String): void               |
 | + getPasswordHash(): String               |
 | + setPasswordHash(String): void           |
-| + getEmail(): String                      |
-| + setEmail(String): void                  |
 | + toString(): String                      |
 +-------------------------------------------+
 ```
@@ -769,32 +764,82 @@ The Service layer contains business logic and orchestrates calls to the DAOs
 | + loadView(String): void                        |
 +-------------------------------------------------+
 ```
-- **LoginController.java**:
-    - `authService` -> AuthenticationService instance
-    - `usernameField` -> TextField instance
-    - `passwordField` -> PasswordField instance
-    - `loginButton` -> Button instance
-    - `registerButton` -> Button instance
-    - `initialize()` -> Initializes authentication controller
-    - `handleLogin()` -> Handles login event
-    - `handleRegister()` -> Handles registration event
-    - `showMainView()` -> Displays main view after login
-    - `showAlert()` -> Displays alert dialog box
+
+- **TabController.java**:
+    - `initialize(URL location, ResourceBundle resources)` -> Initializes the tab controller
+    - `handleButtonAction()` -> Handles button click action
+
 ```
 +-------------------------------------------------+
-|            LoginController                      |
+|                TabController                    |
++-------------------------------------------------+
+| + initialize(URL, ResourceBundle): void         |
+| + handleButtonAction(): void                    |
++-------------------------------------------------+
+```
+
+- **LoginController.java**:
+    - `authService` -> AuthenticationService instance
+    - `textFieldUsername` -> TextField instance
+    - `textFieldPassword` -> TextField instance
+    - `buttonLogin` -> Button instance
+    - `buttonRegister` -> Button instance
+    - `initialize()` -> Initializes the authentication controller
+    - `handleLogin()` -> Handles login event
+    - `handleRegister()` -> Handles registration event
+    - `showRegisterView()` -> Displays registration view
+    - `showMainView()` -> Displays main view after successful login
+    - `clearForm()` -> Clears input fields in the login form
+```
++-------------------------------------------------+
+|              LoginController                    |
 +-------------------------------------------------+
 | - authService: AuthenticationService            |
-| - usernameField: TextField                      |
-| - passwordField: PasswordField                  |
-| - loginButton: Button                           |
-| - registerButton: Button                        |
+| - textFieldUsername: TextField                  |
+| - textFieldPassword: TextField                  |
+| - buttonLogin: Button                           |
+| - buttonRegister: Button                        |
 +-------------------------------------------------+
 | + initialize(): void                            |
 | + handleLogin(): void                           |
 | + handleRegister(): void                        |
+| + showRegisterView(): void                      |
 | + showMainView(): void                          |
-| + showAlert(String): void                       |
+| + clearForm(): void                             |
++-------------------------------------------------+
+```
+
+- **RegisterController.java**:
+    - `authService` -> AuthenticationService instance
+    - `textFieldUsername` -> TextField instance
+    - `textFieldPassword` -> TextField instance
+    - `textFieldConfirmPassword` -> TextField instance
+    - `buttonRegister` -> Button instance
+    - `buttonBackToLogin` -> Button instance
+    - `initialize()` -> Initializes the registration controller
+    - `handleRegister()` -> Handles registration event
+    - `handleBackToLogin()` -> Handles event to return to login page
+    - `showLogin()` -> Displays login view after successful registration
+    - `clearForm()` -> Clears input fields in the registration form
+    - `setAuthService(AuthenticationService authService)` -> Sets the AuthenticationService instance for the controller 
+
+```
++-------------------------------------------------+
+|                RegisterController               |
++-------------------------------------------------+
+| - authService: AuthenticationService            |
+| - textFieldUsername: TextField                  |
+| - textFieldPassword: TextField                  |
+| - textFieldConfirmPassword: TextField           |
+| - buttonRegister: Button                        |
+| - buttonBackToLogin: Button                     |
++-------------------------------------------------+
+| + initialize(): void                            |
+| + handleRegister(): void                        |
+| + handleBackToLogin(): void                     |
+| + showLogin(): void                             |
+| + clearForm(): void                             |
+| + setAuthService(AuthenticationService): void   |
 +-------------------------------------------------+
 ```
 - **StudentFormController.java**:
@@ -1049,7 +1094,6 @@ The Service layer contains business logic and orchestrates calls to the DAOs
     - `isValidName()` -> Validates name format
     - `isValidAge()` -> Validates if age is within acceptable range
     - `isValidGrade()` -> Validates if grade is within valid range
-    - `isValidEmail()` -> Validates email format
     - `isValidId()` -> Validates ID format
     - `sanitizeInput()` -> Cleans and secures an input string
     - `validateStudent()` -> Validates all student fields when adding new student
@@ -1062,7 +1106,6 @@ The Service layer contains business logic and orchestrates calls to the DAOs
 | + isValidName(String): boolean                  |
 | + isValidAge(int): boolean                      |
 | + isValidGrade(double): boolean                 |
-| + isValidEmail(String): boolean                 |
 | + isValidId(String): boolean                    |
 | + sanitizeInput(String): String                 |
 | + validateStudent(Student): boolean             |

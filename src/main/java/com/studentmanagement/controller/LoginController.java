@@ -2,10 +2,8 @@ package com.studentmanagement.controller;
 
 import com.studentmanagement.service.AuthenticationService;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.stage.Stage;
-import javafx.scene.Scene;
+import com.studentmanagement.utils.SceneUtils;
 import javafx.scene.control.TextField;
 import com.studentmanagement.utils.AlertUtils;
 import javafx.scene.control.Button;
@@ -28,7 +26,7 @@ public class LoginController {
    private AuthenticationService authService;
 
    public LoginController(){
-    this.authService = new AuthenticationService();
+    //Empty constructor: dependencies will be injected
    }
 
    @FXML
@@ -50,7 +48,7 @@ public class LoginController {
         String password = textFieldPassword.getText().trim();
 
         if (username.isEmpty() || password.isEmpty()){
-            AlertUtils.showError("Erreur", "Remplis tous les champs,\nil en manque surement un !");
+            AlertUtils.showError("Erreur", "Remplis tous les champs,\nil en manque sûrement un !");
             return;
         }
 
@@ -62,6 +60,7 @@ public class LoginController {
             } else {
                 AlertUtils.showInformation("Information", "Ton surnom et/ou ton mot de passe sont incorrects !");    
                 textFieldPassword.clear();     
+                textFieldPassword.requestFocus();
             }
         } catch (Exception e) {
             AlertUtils.showError("Erreur", "Oups !\nUne erreur est survenue lors de la connexion :\n"+ e.getMessage()); 
@@ -82,18 +81,13 @@ public class LoginController {
             //Clear form before navigating to register
             clearForm();
 
-            //load register view
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/register.fxml"));
-            Parent root = loader.load();
-
-            //get the actual stage
-            Stage stage = (Stage) buttonRegister.getScene().getWindow();
-
-            //create a new scene
-            Scene scene = new Scene(root);
-            stage.setScene(scene);
-            stage.setTitle("ÉduSys - Inscription");
-            stage.show();
+        //Use scene utils to show register view
+        Stage stage = (Stage) buttonRegister.getScene().getWindow();
+        RegisterController registerController = SceneUtils.changeScene( stage,  "/fxml/register.fxml",   "ÉduSys - Inscription");
+        
+        //Inject the service into the registration controller
+        registerController.setAuthService(this.authService);
+        
         } catch (Exception e){
             AlertUtils.showError("Erreur", "Oups !\nImpossible de charger la page d'inscription :\n " + e.getMessage());
         }
@@ -102,18 +96,9 @@ public class LoginController {
    //show main view
    private void showMainView(){
     try {
-        //load main view
-        FXMLLoader Loader = new FXMLLoader(getClass().getResource("/fxml/tab.fxml"));
-        Parent root = Loader.load();
-
-        //Get the actual stage
+        //Use Scene utils to show main view
         Stage stage = (Stage) buttonLogin.getScene().getWindow();
-
-        //Create a new scene
-        Scene scene = new Scene(root);
-        stage.setScene(scene);
-        stage.setTitle("ÉduSys - Gestion des Étudiants");
-        stage.show();
+        SceneUtils.changeScene( stage, "/fxml/tab.fxml", "ÉduSys - Gestion des Étudiants");
     } catch (Exception e){
         AlertUtils.showError("Erreur", "Oups !\nImpossible de charger la vue principale :\n " + e.getMessage());
     }
@@ -123,5 +108,10 @@ public class LoginController {
    private void clearForm() {
     textFieldUsername.clear();
     textFieldPassword.clear();
-   }
+    }   
+
+    //Set AuthService
+    public void setAuthService(AuthenticationService authService) {
+        this.authService = authService;
+    }
 }
