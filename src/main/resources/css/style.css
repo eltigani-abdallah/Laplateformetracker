@@ -6,6 +6,7 @@ Main gray colors used:
 - Very light gray: #f5f5f5 (main backgrounds)
 - Light gray: #e8e8e8 (tabs, borders)
 - Medium gray: #d0d0d0 (selected tabs, content areas)
+- Medium dark grey : #b6b6b6; (if needed)
 - Text color: #4a4a4a (dark gray for text)
 
 Shadow colors:
@@ -23,7 +24,6 @@ Shadow colors:
     -fx-medium-color: #d0d0d0;
     -fx-medium-dark-color : #b6b6b6;
     -fx-dark-color: #4a4a4a;
-    -fx-text-field-color: white;
     -fx-button-color: #F8D957;
 }
 
@@ -65,8 +65,8 @@ Shadow colors:
     -fx-background-color: -fx-light-color;
     background-color: -fx-light-color;
     -fx-text-fill: -fx-dark-color;
-    -fx-font-weight: bold;
-    font-weight: bold;
+    -fx-font-family: "System", Arial, sans-serif;
+    font-family: "System", Arial, sans-serif;
     -fx-font-size: 12px;
     font-size: 12px;
 }
@@ -87,9 +87,9 @@ Shadow colors:
     -fx-background-color: -fx-light-color;
     background-color: -fx-light-color;
     -fx-text-fill: -fx-dark-color;
-    -fx-font-weight: bold;
-    font-weight: bold;
-    -fx-font-size: 14px;
+    -fx-font-family:  "System", Arial, sans-serif;
+    font-family: "System", Arial, sans-serif;
+    -fx-font-size:14px;
     font-size: 14px;
 }
 
@@ -106,8 +106,8 @@ Shadow colors:
     /* normal borders of the tab */
     -fx-border-width: 1px 1px 0 1px;
     border-width: 1px 1px 0 1px;
-    -fx-border-color: -fx-dark-color -fx-dark-color transparent -fx-dark-color;
-    border-color: -fx-dark-color -fx-dark-color transparent -fx-dark-color;
+    -fx-border-color: #4a4a4a #4a4a4a transparent #4a4a4a;
+    border-color: #4a4a4a #4a4a4a transparent #4a4a4a;
      -fx-background-insets: 0 0 -1px 0;
 }
 
@@ -140,7 +140,7 @@ Shadow colors:
     -fx-border-width: 0 0 1px 0;    
     border-width: 0 0 1px 0;    
     -fx-border-color: -fx-dark-color;    
-    border-color: -fx-dar-color;
+    border-color: -fx-dark-color;
 }
 
 /* Fixes for tab context menu overflow */
@@ -159,8 +159,8 @@ Shadow colors:
 
 /* Force context menu positioning to align with right edge of window */
 .tab-pane .tab-down-button .context-menu {
-    -fx-background-color: -fx-medium-dark-color;
-    background-color: -medium-dark-color;
+    -fx-background-color: -fx-light-color;
+    background-color: -fx-light-color;
     -fx-translate-x: -140px; 
     -fx-translate-y: 20px; 
 }
@@ -172,12 +172,18 @@ Shadow colors:
     -fx-max-width: 140px;
     max-width: 140px;
     -fx-pref-width: 140px;
-    -fx-background-color: -fx-medium-dark-color;
-    background-color: -fx-medium-dark-color;
-    -fx-font-weight: bold;
-    font-weight: bold;
-    -fx-font-size: 14px;
+    -fx-background-color: -fx-light-color;
+    background-color:  -fx-light-color;
+    -fx-font-family:  "System", Arial, sans-serif;
+    font-family: "System", Arial, sans-serif;
+    -fx-font-size:14px;
     font-size: 14px;
+}
+
+/* Hover effect for context menu items */
+.tab-pane .tab-down-button .context-menu .menu-item:hover {
+    -fx-background-color: derive(-fx-medium-color, -10%);
+    background-color: derive(-fx-medium-color, -10%);
 }
 
 /* Horizontal ligne in the right and left part of the active tab */
