@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report-3.0.xsd" version="3.0" name="com.studentmanagement.database.DatabaseConnectionTest" time="0.376" tests="2" errors="0" skipped="0" failures="0">
+  <properties>
+    <property name="java.specification.version" value="17"/>
+    <property name="sun.cpu.isalist" value="amd64"/>
+    <property name="sun.jnu.encoding" value="Cp1252"/>
+    <property name="java.class.path" value="C:\Users\djana\Documents\JAVA\TRACKER\LaplateformetrackerbaseCopie\target\test-classes;C:\Users\djana\Documents\JAVA\TRACKER\LaplateformetrackerbaseCopie\target\classes;C:\Users\djana\.m2\repository\org\junit\jupiter\junit-jupiter\5.10.0\junit-jupiter-5.10.0.jar;C:\Users\djana\.m2\repository\org\junit\jupiter\junit-jupiter-api\5.10.0\junit-jupiter-api-5.10.0.jar;C:\Users\djana\.m2\repository\org\opentest4j\opentest4j\1.3.0\opentest4j-1.3.0.jar;C:\Users\djana\.m2\repository\org\junit\platform\junit-platform-commons\1.10.0\junit-platform-commons-1.10.0.jar;C:\Users\djana\.m2\repository\org\apiguardian\apiguardian-api\1.1.2\apiguardian-api-1.1.2.jar;C:\Users\djana\.m2\repository\org\junit\jupiter\junit-jupiter-params\5.10.0\junit-jupiter-params-5.10.0.jar;C:\Users\djana\.m2\repository\org\junit\jupiter\junit-jupiter-engine\5.10.0\junit-jupiter-engine-5.10.0.jar;C:\Users\djana\.m2\repository\org\junit\platform\junit-platform-engine\1.10.0\junit-platform-engine-1.10.0.jar;C:\Users\djana\.m2\repository\org\postgresql\postgresql\42.7.3\postgresql-42.7.3.jar;C:\Users\djana\.m2\repository\org\checkerframework\checker-qual\3.42.0\checker-qual-3.42.0.jar;"/>
+    <property name="java.vm.vendor" value="Oracle Corporation"/>
+    <property name="sun.arch.data.model" value="64"/>
+    <property name="user.variant" value=""/>
+    <property name="java.vendor.url" value="https://java.oracle.com/"/>
+    <property name="user.timezone" value="Europe/Paris"/>
+    <property name="os.name" value="Windows 11"/>
+    <property name="java.vm.specification.version" value="17"/>
+    <property name="sun.java.launcher" value="SUN_STANDARD"/>
+    <property name="user.country" value="FR"/>
+    <property name="sun.boot.library.path" value="C:\Program Files\Java\jdk-17\bin"/>
+    <property name="sun.java.command" value="C:\Users\djana\AppData\Local\Temp\surefire16239162696600091599\surefirebooter-20250706124312038_3.jar C:\Users\djana\AppData\Local\Temp\surefire16239162696600091599 2025-07-06T12-43-11_815-jvmRun1 surefire-20250706124312038_1tmp surefire_0-20250706124312038_2tmp"/>
+    <property name="jdk.debug" value="release"/>
+    <property name="surefire.test.class.path" value="C:\Users\djana\Documents\JAVA\TRACKER\LaplateformetrackerbaseCopie\target\test-classes;C:\Users\djana\Documents\JAVA\TRACKER\LaplateformetrackerbaseCopie\target\classes;C:\Users\djana\.m2\repository\org\junit\jupiter\junit-jupiter\5.10.0\junit-jupiter-5.10.0.jar;C:\Users\djana\.m2\repository\org\junit\jupiter\junit-jupiter-api\5.10.0\junit-jupiter-api-5.10.0.jar;C:\Users\djana\.m2\repository\org\opentest4j\opentest4j\1.3.0\opentest4j-1.3.0.jar;C:\Users\djana\.m2\repository\org\junit\platform\junit-platform-commons\1.10.0\junit-platform-commons-1.10.0.jar;C:\Users\djana\.m2\repository\org\apiguardian\apiguardian-api\1.1.2\apiguardian-api-1.1.2.jar;C:\Users\djana\.m2\repository\org\junit\jupiter\junit-jupiter-params\5.10.0\junit-jupiter-params-5.10.0.jar;C:\Users\djana\.m2\repository\org\junit\jupiter\junit-jupiter-engine\5.10.0\junit-jupiter-engine-5.10.0.jar;C:\Users\djana\.m2\repository\org\junit\platform\junit-platform-engine\1.10.0\junit-platform-engine-1.10.0.jar;C:\Users\djana\.m2\repository\org\postgresql\postgresql\42.7.3\postgresql-42.7.3.jar;C:\Users\djana\.m2\repository\org\checkerframework\checker-qual\3.42.0\checker-qual-3.42.0.jar;"/>
+    <property name="sun.cpu.endian" value="little"/>
+    <property name="user.home" value="C:\Users\djana"/>
+    <property name="user.language" value="fr"/>
+    <property name="java.specification.vendor" value="Oracle Corporation"/>
+    <property name="java.version.date" value="2023-10-17"/>
+    <property name="java.home" value="C:\Program Files\Java\jdk-17"/>
+    <property name="file.separator" value="\"/>
+    <property name="basedir" value="C:\Users\djana\Documents\JAVA\TRACKER\LaplateformetrackerbaseCopie"/>
+    <property name="java.vm.compressedOopsMode" value="Zero based"/>
+    <property name="line.separator" value="&#10;"/>
+    <property name="java.vm.specification.vendor" value="Oracle Corporation"/>
+    <property name="java.specification.name" value="Java Platform API Specification"/>
+    <property name="surefire.real.class.path" value="C:\Users\djana\AppData\Local\Temp\surefire16239162696600091599\surefirebooter-20250706124312038_3.jar"/>
+    <property name="user.script" value=""/>
+    <property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers"/>
+    <property name="java.runtime.version" value="17.0.9+11-LTS-201"/>
+    <property name="user.name" value="djana"/>
+    <property name="path.separator" value=";"/>
+    <property name="os.version" value="10.0"/>
+    <property name="java.runtime.name" value="Java(TM) SE Runtime Environment"/>
+    <property name="file.encoding" value="Cp1252"/>
+    <property name="java.vm.name" value="Java HotSpot(TM) 64-Bit Server VM"/>
+    <property name="localRepository" value="C:\Users\djana\.m2\repository"/>
+    <property name="java.vendor.url.bug" value="https://bugreport.java.com/bugreport/"/>
+    <property name="java.io.tmpdir" value="C:\Users\djana\AppData\Local\Temp\"/>
+    <property name="java.version" value="17.0.9"/>
+    <property name="user.dir" value="C:\Users\djana\Documents\JAVA\TRACKER\LaplateformetrackerbaseCopie"/>
+    <property name="os.arch" value="amd64"/>
+    <property name="java.vm.specification.name" value="Java Virtual Machine Specification"/>
+    <property name="sun.os.patch.level" value=""/>
+    <property name="native.encoding" value="Cp1252"/>
+    <property name="java.library.path" value="C:\Program Files\Java\jdk-17\bin;C:\WINDOWS\Sun\Java\bin;C:\WINDOWS\system32;C:\WINDOWS;C:/msys64/mingw64/bin;C:\Program Files (x86)\VMware\VMware Workstation\bin\;C:\windows\system32;C:\windows;C:\windows\System32\Wbem;C:\windows\System32\WindowsPowerShell\v1.0\;C:\windows\System32\OpenSSH\;C:\Program Files\HP\HP One Agent;C:\Program Files\Git\cmd;C:\Program Files\dotnet\;C:\Program Files\Graphviz\bin;C:\Program Files\CMake\bin;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;C:\Program Files (x86)\Windows Kits\10\Windows Performance Toolkit\;C:\Program Files\Java\jdk-17\bin;C:\Program Files (x86)\VMware\VMware Workstation\bin\;C:\windows\system32;C:\windows;C:\windows\System32\Wbem;C:\windows\System32\WindowsPowerShell\v1.0\;C:\windows\System32\OpenSSH\;C:\Program Files\HP\HP One Agent;C:\Program Files\Git\cmd;C:\Program Files\dotnet\;C:\Program Files\Graphviz\bin;C:\msys64\ucrt64\bin;C:\Users\djana\AppData\Local\Programs\Microsoft VS Code\bin;C:\Program Files\MySQL\MySQL Server 8.0\bin;C:\Users\djana\AppData\Local\Programs\Python\Python313;C:\Users\djana\AppData\Local\Programs\Python\Python313\Scripts;C:\Program Files\mingw64\bin;C:\msys64\mingw64\bin;C:\Program Files\PostgreSQL\17\bin;C:\Program Files\JetBrains\CLion 2025.1.1\bin;;C:\Users\djana\AppData\Local\Microsoft\WindowsApps;C:\ProgramData\apache-maven-3.9.10-bin\apache-maven-3.9.10\bin;C:\Program Files\JetBrains\IntelliJ IDEA Community Edition 2025.1.3\bin;;;c:\Users\djana\AppData\Roaming\Code\User\globalStorage\github.copilot-chat\debugCommand;."/>
+    <property name="java.vm.info" value="mixed mode, sharing"/>
+    <property name="java.vendor" value="Oracle Corporation"/>
+    <property name="java.vm.version" value="17.0.9+11-LTS-201"/>
+    <property name="sun.io.unicode.encoding" value="UnicodeLittle"/>
+    <property name="java.class.version" value="61.0"/>
+  </properties>
+  <testcase name="testSimpleQuery" classname="com.studentmanagement.database.DatabaseConnectionTest" time="0.01">
+    <system-out><![CDATA[Connected to database.
+Executing part:
+-- Creating a schema (optional)
+CREATE SCHEMA IF NOT EXISTS student_management;
+
+-- Setting the default schema for the session
+SET search_path TO student_management;
+
+-- Users table
+CREATE TABLE IF NOT EXISTS users (
+    id BIGSERIAL PRIMARY KEY,
+    username VARCHAR(255) NOT NULL UNIQUE,
+    password_hash TEXT NOT NULL,
+    email VARCHAR(100) NOT NULL UNIQUE,
+    role VARCHAR(50) DEFAULT 'USER',
+    is_active BOOLEAN DEFAULT TRUE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Classes table
+CREATE TABLE IF NOT EXISTS classes (
+    id BIGSERIAL PRIMARY KEY,
+    class_name VARCHAR(5) NOT NULL UNIQUE
+);
+
+-- Students table
+CREATE TABLE IF NOT EXISTS students (
+    id BIGSERIAL PRIMARY KEY,
+    first_name VARCHAR(50) NOT NULL,
+    last_name VARCHAR(50) NOT NULL,
+    age INTEGER CHECK (age > 0 AND age < 150),
+    class_id BIGINT REFERENCES classes(id) ON DELETE SET NULL,
+    is_active BOOLEAN DEFAULT TRUE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Subjects table
+CREATE TABLE IF NOT EXISTS subjects (
+    id BIGSERIAL PRIMARY KEY,
+    name VARCHAR(50) NOT NULL UNIQUE,
+    coefficient DECIMAL(3,2) DEFAULT 1.0,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Grades table
+CREATE TABLE IF NOT EXISTS grades (
+    id BIGSERIAL PRIMARY KEY,
+    student_id BIGINT NOT NULL REFERENCES students(id) ON DELETE CASCADE,
+    subject_id BIGINT NOT NULL REFERENCES subjects(id) ON DELETE CASCADE,
+    grade DECIMAL(4,2) CHECK (grade >= 0 AND grade <= 20),
+    date_recorded DATE DEFAULT CURRENT_DATE,
+    grade_coefficient DECIMAL(3,2) DEFAULT 1.0 CHECK (grade_coefficient > 0),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Subject comments table
+CREATE TABLE IF NOT EXISTS subject_comments (
+    id BIGSERIAL PRIMARY KEY,
+    student_id BIGINT NOT NULL REFERENCES students(id) ON DELETE CASCADE,
+    subject_id BIGINT NOT NULL REFERENCES subjects(id) ON DELETE CASCADE,
+    comment TEXT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Backups table
+CREATE TABLE IF NOT EXISTS backups (
+    id BIGSERIAL PRIMARY KEY,
+    backup_type VARCHAR(50) CHECK (backup_type IN ('AUTO', 'MANUAL')),
+    file_path VARCHAR(255) NOT NULL,
+    file_size BIGINT,
+    status VARCHAR(50) DEFAULT 'SUCCESS' CHECK (status IN ('SUCCESS', 'FAILED', 'IN_PROGRESS')),
+    error_message TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Triggers for updating updated_at (for PostgreSQL)
+CREATE OR REPLACE FUNCTION update_updated_at_column()
+RETURNS TRIGGER AS $$
+BEGIN
+   NEW.updated_at = NOW();
+   RETURN NEW;
+END;
+$$ language 'plpgsql';
+Executing part:
+-- Adding triggers to tables where there is updated_at
+CREATE TRIGGER update_users_updated_at BEFORE UPDATE ON users
+FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+CREATE TRIGGER update_students_updated_at BEFORE UPDATE ON students
+FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+CREATE TRIGGER update_grades_updated_at BEFORE UPDATE ON grades
+FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+Schema executed successfully.
+]]></system-out>
+  </testcase>
+  <testcase name="testConnectionEstablished" classname="com.studentmanagement.database.DatabaseConnectionTest" time="0.002"/>
+</testsuite>

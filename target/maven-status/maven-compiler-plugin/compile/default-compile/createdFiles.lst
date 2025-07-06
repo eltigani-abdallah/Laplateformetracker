@@ -1,0 +1,8 @@
+com\studentmanagement\model\Student.class
+com\studentmanagement\dao\SubjectCommentDAO.class
+com\studentmanagement\dao\SubjectCommentDAOImpl.class
+com\studentmanagement\database\DatabaseConnection.class
+com\studentmanagement\Main.class
+com\studentmanagement\database\DatabaseConfig.class
+com\studentmanagement\dao\GradeDAO.class
+com\studentmanagement\dao\GradeDAOImpl.class

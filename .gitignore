@@ -27,3 +27,6 @@ replay_pid*
 pom.xml
 run.bat
 test.bat
+
+# login details
+.application.properties
