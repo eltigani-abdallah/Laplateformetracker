@@ -842,6 +842,60 @@ The Service layer contains business logic and orchestrates calls to the DAOs
 | + setAuthService(AuthenticationService): void   |
 +-------------------------------------------------+
 ```
+
+- **StudentsController.java**:
+    - `studentService` -> StudentService instance
+    - `importExportService` -> ImportExportService instance
+    - `searchField` -> TextField instance for search
+    - `studentTable` -> TableView instance for students list
+    - `pagination` -> Pagination instance
+    - `firstNameField`, `lastNameField`, `ageField`, `classNameField` -> TextField instances for adding students
+    - `initialize()` -> Initializes the students controller and table
+    - `handleSearch()` -> Handles search event and filters students
+    - `handleImport()` -> Handles importing students from CSV file
+    - `handleExport()` -> Handles exporting students to CSV file
+    - `handleAddStudent()` -> Handles adding a new student
+    - `loadStudentsPage()` -> Loads a specific page of students with search filter
+    - `calculatePageCount()` -> Calculates total number of pages
+    - `showEditDialog()` -> Displays a dialog to edit student information
+    - `showDeleteConfirmation()` -> Displays confirmation before deleting a student
+    - `setupEditColumn()` -> Configures the edit column with buttons
+    - `setupDeleteColumn()` -> Configures the delete column with buttons
+    - `setupColumnSorting()` -> Sets up column sorting functionality
+
+```
++-------------------------------------------------------+
+|              StudentsController                       |
++-------------------------------------------------------+
+| - studentService: StudentService                      |
+| - importExportService: ImportExportService            |
+| - searchField: TextField                              |
+| - studentTable: TableView<Student>                    |
+| - pagination: Pagination                              |
+| - firstNameField: TextField                           |
+| - lastNameField: TextField                            |
+| - ageField: TextField                                 |
+| - classNameField: TextField                           |
+| - ROWS_PER_PAGE: int                                  |
++-------------------------------------------------------+
+| + initialize(): void                                  |
+| + handleSearch(): void                                |
+| + handleImport(): void                                |
+| + handleExport(): void                                |
+| + handleAddStudent(): void                            |
+| - loadStudentsPage(int): void                         |
+| - calculatePageCount(): int                           |
+| - showEditDialog(Student): void                       |
+| - showDeleteConfirmation(Student): void               |
+| - setupEditColumn(): void                             |
+| - setupDeleteColumn(): void                           |
+| - setupColumnSorting(): void                          |
+| - setupTableColumns(): void                           |
+| - clearAddForm(): void                                |
+| + setStudentService(StudentService): void             |
+| + setImportExportService(ImportExportService): void   |
++-------------------------------------------------------+
+```
 - **StudentFormController.java**:
     - `initialize()` -> Initializes student form
     - `setStudent()` -> Loads student data into form
