@@ -204,7 +204,9 @@ public class StudentsController{
 
     @FXML
     private void handleSearch(){
-
+        loadStudentsPage(0); //reload the first page with the search filter
+        pagination.setCurrentPageIndex(0);
+        pagination.setPageCount(calculatePageCount());
     }
 
     @FXML
@@ -235,7 +237,7 @@ public class StudentsController{
     }
 
     private void showDeleteConfirmation(Student student){
-        
+
     }
 
 }
