@@ -99,8 +99,12 @@ public class StudentsController{
         averageGradeColumn.setCellValueFactory(new PropertyValueFactory<>("averageGrade"));
     }
 
+    //Config action handlers for buttons
     private void setupButtonHandlers(){
-
+        searchButton.setOnAction(event -> handleSearch());
+        importButton.setOnAction(event -> handleImport());
+        exportButton.setOnAction(event -> handleExport());
+        addButton.setOnAction(event -> handleAddStudent());
     }
 
     private void setupColumnSorting(){
@@ -112,6 +116,26 @@ public class StudentsController{
     }
 
     private void setupDeleteColumn(){
+
+    }
+
+    @FXML
+    private void handleSearch(){
+
+    }
+
+    @FXML
+    private void handleImport(){
+
+    }
+
+    @FXML
+    private void handleExport(){
+
+    }
+
+    @FXML
+    private void handleAddStudent(){
 
     }
 
