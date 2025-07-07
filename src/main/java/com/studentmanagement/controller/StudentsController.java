@@ -6,6 +6,7 @@ import com.studentmanagement.service.StudentService;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 
 public class StudentsController{
 
@@ -84,12 +85,18 @@ public class StudentsController{
         //Activate sorting columns
         setupColumnSorting();
 
-        //load inti data
+        //load initial data
         loadStudentsPage(0);
     }
 
+    //Config the TableView for displaying student data
     private void setupTableColumns(){
-
+        idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
+        firstNameColumn.setCellValueFactory(new PropertyValueFactory<>("firstName"));
+        lastNameColumn.setCellValueFactory(new PropertyValueFactory<>("lastName"));
+        ageColumn.setCellValueFactory(new PropertyValueFactory<>("age"));
+        classNameColumn.setCellValueFactory(new PropertyValueFactory<>("className"));
+        averageGradeColumn.setCellValueFactory(new PropertyValueFactory<>("averageGrade"));
     }
 
     private void setupButtonHandlers(){
@@ -99,10 +106,6 @@ public class StudentsController{
     private void setupColumnSorting(){
 
     }
-
-    // private void setStudentService(){
-
-    // }
 
     private void setupEditColumn(){
 
