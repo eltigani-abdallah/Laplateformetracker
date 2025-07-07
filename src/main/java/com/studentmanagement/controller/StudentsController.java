@@ -3,12 +3,18 @@ package com.studentmanagement.controller;
 import com.studentmanagement.model.Student;
 import com.studentmanagement.service.ImportExportService;
 import com.studentmanagement.service.StudentService;
+import com.studentmanagement.utils.AlertUtils;
 import com.studentmanagement.utils.SearchCriteria;
 
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
+
+import java.io.File;
+import java.util.List;
 
 public class StudentsController{
 
@@ -211,7 +217,31 @@ public class StudentsController{
 
     @FXML
     private void handleImport(){
+        try {
+            FileChooser fileChooser = new FileChooser();
+            fileChooser.setTitle("Importer la recherche");
+            fileChooser.getExtensionFilters().add(
+                new FileChooser.ExtensionFilter("Fichiers CSV", "*.csv")
+            );
 
+            Stage stage = (Stage) importButton.getScene().getWindow();
+            File selectedFile = fileChooser.showOpenDialog(stage);
+
+            if (selectedFile != null){
+                //Use the import service
+                int importedCount = importExportService.ImportFromCSV(selectedFile);
+
+                //Refesh table
+                loadStudentsPage(0);
+                pagination.setCurrentPageIndex(0);
+                pagination.setPageCount(calculatePageCount());
+
+                //Show a succes message
+                AlertUtils.showInformation("Import réussi", importedCount + " étudiant(s) ont été importés avec succès !");
+            }
+        } catch (Exception e){
+            AlertUtils.showError("Erreur d'Importation", "Oups ! Une erreur est survenue lors de l'importation : " + e.getMessage());
+        }
     }
 
     @FXML
