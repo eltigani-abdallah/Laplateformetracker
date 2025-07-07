@@ -81,5 +81,17 @@ public class Grade {
         return value * coefficient;
     }
 
-    
+    // toString method
+    @Override
+    public String toString() {
+        return "Grade{" +
+                "gradeId=" + id +
+                ", studentId=" + studentId +
+                ", subject='" + subject + '\'' +
+                ", value=" + value +
+                ", coefficient=" + coefficient +
+                ", date=" + date +
+                ", weightedValue=" + getWeightedGradeValue() +
+                '}';
+    }
 }
