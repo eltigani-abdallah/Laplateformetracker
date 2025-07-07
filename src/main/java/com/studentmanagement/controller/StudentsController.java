@@ -9,9 +9,15 @@ import com.studentmanagement.utils.SearchCriteria;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.stage.FileChooser;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.File;
@@ -374,7 +380,165 @@ public class StudentsController{
     }
 
     private void showEditDialog(Student student){
+        //Create a new dialog window
+        Stage dialogStage = new Stage();
+        dialogStage.setTitle("Modifier l'étudiant");
+        dialogStage.initModality(Modality.WINDOW_MODAL);
+        dialogStage.setResizable(false);
 
+        //Create the dialog content
+        GridPane grid = new GridPane();
+        grid.setHgap(10);
+        grid.setVgap(10);
+        grid.setPadding(new Insets(20, 20, 20, 20));
+
+        //Add the fields
+        grid.add(new Label("Prénom"), 0,0);
+        TextField firstNameField = new TextField(student.getFirstName());
+        grid.add(firstNameField, 1, 1);
+
+        grid.add(new Label("Nom"), 0,1);
+        TextField lastNameField = new TextField(student.getLastName());
+        grid.add(lastNameField, 1,1);
+
+        grid.add(new Label("Age"), 0,2);
+        TextField ageField = new TextField(String.valueOf(student.getAge()));
+        grid.add(ageField, 1, 2);
+
+        grid.add(new Label("Classe"), 0, 3);
+        TextField classNameField = new TextField(student.getClassName());
+        grid.add(classNameField, 1,3);
+
+        //Buttons
+        Button saveButton = new Button("J'enregistre");
+        Button cancelButton = new Button("J'annule");
+
+        HBox buttonBox = new HBox(10);
+        buttonBox.setAlignment(Pos.CENTER_RIGHT);
+        buttonBox.getChildren().addAll(saveButton, cancelButton);
+        grid.add(buttonBox, 0, 4, 2, 1);
+
+        //Buttons actions
+        saveButton.setOnAction(e -> {
+            try {
+                //Validate and update the student
+                String firstName = firstNameField.getText().trim();
+                String lastName = lastNameField.getText().trim();
+                String ageText = ageField.getText().trim();
+                String className = classNameField.getText().trim();
+
+                boolean hasChanges = false;
+
+                //Verify and apply changes for first name
+                if(!firstName.isEmpty()){
+                    if(!firstName.matches("^[a-zA-ZÀ-ÿ\\s-]+$")){
+                        AlertUtils.showError("Erreur", "Oups !\nLe prénom doit contenir uniquement des lettres.\nLe trait d'union est autorisé pour les prénoms composés.");
+                        firstNameField.selectAll();
+                        firstNameField.requestFocus();
+                        return;
+                    }
+                    //Delete space between - and uppercase first letter
+                    firstName = firstName.replaceAll("\\s*-\\s*", "-");
+                    firstName = firstName.substring(0, 1).toUpperCase() + firstName.substring(1).toLowerCase();
+
+                    if(!firstName.equals(student.getFirstName())){
+                        student.setFirstName(firstName);
+                        hasChanges = true;
+                    }
+                }
+
+                //Verify and apply changes for last name
+            if (!lastName.isEmpty()) {
+                if (!lastName.matches("^[a-zA-ZÀ-ÿ\\s-]+$")) {
+                    AlertUtils.showError("Erreur", "Oups!\nLe nom doit contenir uniquement des lettres et des espaces.\nLe trait d'union est autorisé pour les noms composés comme Dupont-Martin !");
+                    lastNameField.selectAll();
+                    lastNameField.requestFocus();
+                    return;
+                }
+                //Delete space between - and uppercase first letter
+                lastName = lastName.replaceAll("\\s*-\\s*", "-"); 
+                lastName = lastName.substring(0, 1).toUpperCase() + lastName.substring(1).toLowerCase();
+                
+                if (!lastName.equals(student.getLastName())) {
+                    student.setLastName(lastName);
+                    hasChanges = true;
+                }
+            }
+
+                //Verify and apply changes for age
+                if(!ageText.isEmpty()){
+            int age;
+                try {
+                    age = Integer.parseInt(ageText);
+                    if (age <= 3 || age >= 150){
+                        AlertUtils.showError("Erreur de saisie", "Rapelle toi !\nNous n'acceptons pas les étudiants de moins de 3 ans\nni ceux de plus de 150 ans !");
+                        ageField.selectAll();
+                        ageField.requestFocus();
+                        return;
+                    }
+                } catch (NumberFormatException ex){
+                        AlertUtils.showError("Erreur de format", "L'âge doit être un nombre entier\n5 ans 1/2 c'est pas possible !");
+                        return;
+                    }
+                    if(age != student.getAge()){
+                        student.setAge(age);
+                        hasChanges = true;
+                    }
+                }
+                //Verify and apply changes for class name
+            if (!className.isEmpty()) {
+                //Delete space
+                className = className.replaceAll("\\s+", "");
+                
+                // Validation class format (1 letter + 1 number or 1 number + 1 letter)
+                if (!className.matches("^[a-zA-Z][0-9]$") && !className.matches("^[0-9][a-zA-Z]$")) {
+                    AlertUtils.showError("Format incorrect !", "La classe doit contenir une lettre et un chiffre.\nExemples valides : B1, 1B, A3, 2C...\nPas d'espaces ni de caractères spéciaux !");
+                    classNameField.selectAll();
+                    classNameField.requestFocus();
+                    return;
+                }
+                
+                // Format (Upercase letter)
+                if (className.matches("^[a-zA-Z][0-9]$")) {
+                    // Letter than number
+                    className = className.substring(0, 1).toUpperCase() + className.substring(1);
+                } else {
+                    // number than letter
+                    className = className.substring(0, 1) + className.substring(1).toUpperCase();
+                }
+                
+                if (!className.equals(student.getClassName())) {
+                    student.setClassName(className);
+                    hasChanges = true;
+                }
+            }
+            if(!hasChanges){
+                AlertUtils.showInformation("Aucun changement", "Tu n'as rien modifié !\nSi tu veux fermer cette fenêtre, clique sur Annuler");
+                return;
+            }
+            //Save modifications
+            studentService.updateStudent(student);
+
+            //Close dialog window
+            dialogStage.close();
+
+            //update the  table
+            loadStudentsPage((pagination.getCurrentPageIndex()));
+
+            //Show success message
+            AlertUtils.showInformation("Succès", "L'étudiant a été modifié avec succès !");
+
+            } catch (Exception ex){
+                AlertUtils.showError("Erreur", "Une erreur est survenue lors de la modification : " + ex.getMessage());
+            }
+        });
+
+        cancelButton.setOnAction(e -> dialogStage.close());
+
+        //Config scene and show dialog window
+        Scene scene = new Scene(grid);
+        dialogStage.setScene(scene);
+        dialogStage.showAndWait();
     }
 
     private void showDeleteConfirmation(Student student){
