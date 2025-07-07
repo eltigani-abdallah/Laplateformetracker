@@ -1,37 +1,94 @@
 //package main.java.com.studentmanagement.model;
-//package model;
+
 package com.studentmanagement.model;
 
 public class Student {
-    private int id;
-    private String name;
-    private String email;
-    private String birthdate;
+    private Long studentId;
+    private String firstName;
+    private String lastName;
+    private int age;
+    private String className;
+    private double averageGrade;
 
-    public Student(int id, String name, String email, String birthdate) {
-        this.id = id;
-        this.name = name;
-        this.email = email;
-        this.birthdate = birthdate;
+    // Default constructor
+    public Student() {}
+
+    // Constructor with basic parameters
+    public Student(String firstName, String lastName, int age) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.age = age;
     }
 
-    public Student(String name, String email, String birthdate) {
-        this.name = name;
-        this.email = email;
-        this.birthdate = birthdate;
+    // Getter and Setter for studentId
+    public Long getStudentId() {
+        return studentId;
     }
 
-    // Getters & Setters
-    public int getId() { return id; }
-    public void setId(int id) { this.id = id; }
+    public void setStudentId(Long studentId) {
+        this.studentId = studentId;
+    }
 
-    public String getName() { return name; }
-    public void setName(String name) { this.name = name; }
+    // Getter and Setter for firstName
+    public String getFirstName() {
+        return firstName;
+    }
 
-    public String getEmail() { return email; }
-    public void setEmail(String email) { this.email = email; }
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
 
-    public String getBirthdate() { return birthdate; }
-    public void setBirthdate(String birthdate) { this.birthdate = birthdate; }
+    // Getter and Setter for lastName
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    // Getter and Setter for age
+    public int getAge() {
+        return age;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
+    }
+
+    // Getter and Setter for className
+    public String getStudentClassName() {
+        return className;
+    }
+
+    public void setClassName(String className) {
+        this.className = className;
+    }
+
+    // Getter and Setter for averageGrade
+    public double getAverageGrade() {
+        return averageGrade;
+    }
+
+    public void setAverageGrade(double averageGrade) {
+        this.averageGrade = averageGrade;
+    }
+
+    // Method to get full name
+    public String getFullName() {
+        return firstName + " " + lastName;
+    }
+
+    // toString method
+    @Override
+    public String toString() {
+        return "Student{" +
+                "studentId=" + studentId +
+                ", fullName='" + getFullName() + '\'' +
+                ", age=" + age +
+                ", className='" + className + '\'' +
+                ", averageGrade=" + averageGrade +
+                '}';
+    }
 }
 
