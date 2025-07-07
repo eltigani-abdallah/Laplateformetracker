@@ -42,3 +42,6 @@ build/
 pom.xml
 run.bat
 test.bat
+
+### passwords###
+/src/main/resources/config/application.properties

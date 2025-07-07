@@ -1,0 +1,49 @@
+[33mb7b3f13[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mDatabase[m[33m, [m[1;31morigin/Database[m[33m)[m Remove target directory from git tracking
+[33m2d314d5[m Remove application.properties from git tracking
+[33m4be0bec[m  Addind Files DatabaseConfig.java. DatabaseConnection.java. Schema.sql
+[33mf1eceee[m[33m ([m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m, [m[1;32mmain[m[33m)[m add pom and bat to gitignore
+[33m62971ac[m Read me file - change backup table name
+[33md48b617[m Read me file - delete 2 files from directory diagram
+[33me28dc49[m Read me file - database - delete erd for now until repaired
+[33mcbc9f51[m Read me file - fixing erd displaying error part 8
+[33m76398ca[m Read me file - database - fixing displaying error part 7
+[33m0d4b2d6[m Read me file - fixing displaying error part 6
+[33m52d34f9[m Read me file - database - fixing displaying issue part 5
+[33mffe8a0f[m Read me file - database - fixing displayin issue part 4
+[33mf070d86[m Read me file - Database - fixing displaying issue part 3
+[33m365fc7e[m Read me file - Database - Fixing issue displaying mermaid
+[33m1595f24[m Read me file - Database - add entity relationship diagram
+[33md0a9c70[m Read me file - Database - delete avergage grade in student as it should be calculated dynamically
+[33m8fadaca[m Read me file - Database - add backup table and update snipset requests
+[33m9eea804[m Read me file - Database - Add SubjectComment table
+[33mfd15b77[m Read me file - Database - Add grade table
+[33m8d7c07e[m Read me file - Database - Add Subject Table
+[33m5a3e78f[m Read me file - Database add Student table
+[33m5fb5f56[m Read me file - add Database class diagram
+[33m94f932e[m Read me file - Database - User table
+[33me23c68d[m Read me file - add directory structure
+[33m3d6ba3b[m Read me file : add all class diagram
+[33m5b6057d[m Read me file - add StudentDAO and StudentDAOImpl diagram
+[33m8cfdd25[m Read me file - add BaseDAO
+[33mc3cbed9[m Read me file - Add a diagram for User class
+[33me7a7b41[m Read me file - add SubjectComment class diagram
+[33m3492133[m Read me file - add backtick to student.java methods
+[33m546a8cb[m Read me file - delete plaintext
+[33mf19040e[m Read me file - Student class diagram
+[33m6d2fb72[m Read me file - add a classes in different layers : service layer, controller layer, utils layer, and remove, add, adjust other existing classes
+[33m6d8fd33[m Read me file - separate comments and grades
+[33mf3b7741[m  Read Me file - Part 14 - Project architecture - Database Layer Part 2 - add DatabaseConfig
+[33m03fd08c[m  Read Me file - Part 13 - Project architecture - Database Layer Part 1  - add DatabaseConnection
+[33m1abe272[m  Read Me file - Part 12 - Project architecture - DAO Layer Part 7 - add UserDAO and  UserDAOImpl
+[33mced4171[m  Read Me file - Part 11 - Project architecture - DAO Layer Part 6 - add GradeDAOImpl
+[33m122a7e1[m  Read Me file - Part 10 - Project architecture - DAO Layer Part 5- add GradeDAO
+[33m527a1c7[m  Read Me file - Part 9 - Project architecture - DAO Layer Part 4 - example
+[33m2213d83[m  Read Me file - Part 8 - Project architecture - DAO Layer Part 3
+[33m7672b53[m  Read Me file - Part 7 - Project architecture - DAO Layer Part 2
+[33m6aa749f[m  Read Me file - Part 6 - Project architecture - DAO Layer Part 1
+[33m1834783[m  Read Me file - Part 5 - Project architecture - Model Layer part 2
+[33mff14944[m  Read Me file - Part 4 - Project architecture - Model Layer part 1
+[33m482c54e[m  Read Me file - Part 3 - Advanced Features
+[33mc426652[m  Read Me file - Part 2 - Basic Features
+[33m63aea63[m First commit - Read Me file - Part 1 - Description
+[33mecf333f[m Initial commit
