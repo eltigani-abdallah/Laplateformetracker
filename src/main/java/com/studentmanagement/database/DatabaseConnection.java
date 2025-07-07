@@ -1,29 +1,28 @@
-//DatabaseConnection.java
 package com.studentmanagement.database;
-
 
 import java.io.IOException;
 import java.io.InputStream;
-
 import java.nio.charset.StandardCharsets;
 import java.sql.*;
 import java.util.List;
 
 public class DatabaseConnection {
-    private String url;
-    private String username;
-    private String password;
-    private Connection connection;
+    private String url; // Database URL
+    private String username; // Database username
+    private String password; // Database password
+    private Connection connection; // Connection object to manage the database connection
 
+    // Constructor to initialize the database connection
     public DatabaseConnection() {
         DatabaseConfig config = new DatabaseConfig();
         this.url = config.getDatabaseUrl();
         this.username = config.getDatabaseUsername();
         this.password = config.getDatabasePassword();
-        connect();
-        runSchemaIfNeeded();
+        connect(); // Establish the connection
+        runSchemaIfNeeded(); // Run the schema script if needed
     }
 
+    // Method to establish a connection to the database
     private void connect() {
         try {
             connection = DriverManager.getConnection(url, username, password);
@@ -34,41 +33,36 @@ public class DatabaseConnection {
         }
     }
 
+    // Method to run the database schema script if needed
     private void runSchemaIfNeeded() {
-    try {
-        String schemaPath = "/database/schema.sql";
-        InputStream inputStream = getClass().getResourceAsStream(schemaPath);
-
-        if (inputStream == null) {
-            throw new IOException("Unable to find " + schemaPath);
-        }
-
-        // Прочитать весь SQL скрипт
-        String schemaScript = new String(inputStream.readAllBytes(), StandardCharsets.UTF_8);
-        inputStream.close();
-
-        // Разделить по $$ (чтобы сначала выполнить функцию, потом остальное)
-        String[] parts = schemaScript.split("(?<=\\$\\$ language 'plpgsql';)");
-
-        try (Statement stmt = connection.createStatement()) {
-            for (String part : parts) {
-                String trimmed = part.trim();
-                if (!trimmed.isEmpty()) {
-                    System.out.println("Executing part:\n" + trimmed);
-                    stmt.execute(trimmed);
+        try {
+            String schemaPath = "/database/schema.sql";
+            InputStream inputStream = getClass().getResourceAsStream(schemaPath);
+            if (inputStream == null) {
+                throw new IOException("Unable to find " + schemaPath);
+            }
+            // Read the entire SQL script
+            String schemaScript = new String(inputStream.readAllBytes(), StandardCharsets.UTF_8);
+            inputStream.close();
+            // Split by $$ to execute the function first, then the rest
+            String[] parts = schemaScript.split("(?<=\\$\\$ language 'plpgsql';)");
+            try (Statement stmt = connection.createStatement()) {
+                for (String part : parts) {
+                    String trimmed = part.trim();
+                    if (!trimmed.isEmpty()) {
+                        System.out.println("Executing part:\n" + trimmed);
+                        stmt.execute(trimmed);
+                    }
                 }
             }
+            System.out.println("Schema executed successfully.");
+        } catch (Exception e) {
+            System.err.println("Failed to execute schema.sql.");
+            e.printStackTrace();
         }
-
-        System.out.println("Schema executed successfully.");
-    } catch (Exception e) {
-        System.err.println("Failed to execute schema.sql.");
-        e.printStackTrace();
     }
-}
 
-
-
+    // Method to disconnect from the database
     public void disconnect() {
         try {
             if (connection != null && !connection.isClosed())
@@ -78,10 +72,12 @@ public class DatabaseConnection {
         }
     }
 
+    // Getter for the connection object
     public Connection getConnection() {
         return connection;
     }
 
+    // Method to check if the connection is active
     public boolean isConnected() {
         try {
             return connection != null && !connection.isClosed();
@@ -90,6 +86,7 @@ public class DatabaseConnection {
         }
     }
 
+    // Method to execute a SQL query and return the result set
     public ResultSet executeQuery(String sql) {
         try {
             Statement stmt = connection.createStatement();
@@ -100,6 +97,7 @@ public class DatabaseConnection {
         }
     }
 
+    // Method to execute an update SQL statement
     public void executeUpdate(String sql) {
         try (Statement stmt = connection.createStatement()) {
             stmt.executeUpdate(sql);
@@ -108,6 +106,7 @@ public class DatabaseConnection {
         }
     }
 
+    // Method to execute a safe query with parameters to prevent SQL injection
     public void executeSafeQuery(String sql, List<Object> parameters) {
         try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
             for (int i = 0; i < parameters.size(); i++) {
@@ -119,6 +118,7 @@ public class DatabaseConnection {
         }
     }
 
+    // Method to close resources and disconnect from the database
     public void closeResources() {
         disconnect();
     }
