@@ -362,6 +362,14 @@ public class StudentsController{
     }
 
     private int calculatePageCount(){
+        try {
+            //Create an SearchCriteria object to obtain the total number
+            SearchCriteria criteria = new SearchCriteria(searchField.getText());
+            int totalStudents = studentService.getTotalStudents(criteria);
+            return (totalStudents + ROWS_PER_PAGE -1 ) / ROWS_PER_PAGE;
+        } catch (Exception e){
+            AlertUtils.showError("Erreur", "Impossible de calculer le nombre de pages " + e.getMessage());
+        }
         return 1;
     }
 
