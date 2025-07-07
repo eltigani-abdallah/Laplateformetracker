@@ -278,7 +278,59 @@ public class StudentsController{
 
     @FXML
     private void handleAddStudent(){
+        try {
+            //get the field values
+            String firstName = firstNameField.getText().trim();
+            String lastName = lastNameField.getText().trim();
+            String ageText = ageField.getText().trim();
+            String className = classNameField.getText().trim();
 
+            //validate the base
+            if (firstName.isEmpty() || lastName.isEmpty() || ageText.isEmpty() || className.isEmpty()){
+                AlertUtils.showError("Erreur de saisie", "Tous les champs doivent être remplis !");
+                return;
+            }
+
+            //Convert age
+            int age;
+            try {
+                age = Integer.parseInt(ageText);
+                if (age <= 3 || age >= 150){
+                    AlertUtils.showError("Erreur de saisie", "Rapelle toi !\nNous n'acceptons pas les étudiants de moins de 3 ans\nni ceux de plus de 150 ans !");
+                    return;
+                }
+            } catch (NumberFormatException e){
+                    AlertUtils.showError("Erreur de format", "L'âge doit être un nombre entier\n5 ans 1/2 c'est pas possible !");
+                    return;
+                }
+            
+                //Create and add a student
+                Student newStudent = new Student();
+                newStudent.setFirstName(firstName);
+                newStudent.setLastName(lastName);
+                newStudent.setAge(age);
+                newStudent.setClassName(className);
+
+                //Use the createSudent method from StudentService
+                studentService.createStudent(newStudent);
+
+                //Refresh the table empty the fields
+                loadStudentsPage(pagination.getCurrentPageIndex());
+                pagination.setPageCount(calculatePageCount());
+                clearAddForm();
+
+                //Show a success message
+                AlertUtils.showInformation("Succès", "L'étudiant a été ajouté avec succès");                
+        } catch (Exception e){
+            AlertUtils.showError("Erreur", "Une erreur est survenue lors de l'ajout : " + e.getMessage());
+        }
+    }
+
+    private void clearAddForm(){
+        firstNameField.clear();
+        lastNameField.clear();
+        ageField.clear();
+        classNameField.clear();
     }
 
     private void loadStudentsPage(int pageIndex){
