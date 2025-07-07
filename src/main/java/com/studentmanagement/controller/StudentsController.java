@@ -542,7 +542,37 @@ public class StudentsController{
     }
 
     private void showDeleteConfirmation(Student student){
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Confirmation de suppression");
+        alert.setHeaderText("Supprimer l'étudiant");
+        alert.setContentText("Êtes-vous sûr de vouloir supprimer les données de l'étudiant " + 
+                             student.getFirstName() + " " + student.getLastName() + " ?");
+        
+        alert.showAndWait().ifPresent(response -> {
+            if(response == ButtonType.OK){
+                try {
+                    //Delete student data
+                    studentService.deleteStudent(student.getStudentId());
 
+                    //refresh the table
+                    int currentPageIndex = pagination.getCurrentPageIndex();
+                    loadStudentsPage(currentPageIndex);
+
+                    //Update page numbers
+                    int newPageCount = calculatePageCount();
+                    pagination.setPageCount(newPageCount);
+
+                    //if the current page doesn't exist, go to the last page
+                    if(currentPageIndex >= newPageCount && newPageCount > 0){
+                       pagination.setCurrentPageIndex(newPageCount -1); 
+                    }
+                    //Show success message
+                    AlertUtils.showInformation("Succès", "Les données de l'étudiant ont été supprimées avec succès.");
+                }catch (Exception e){
+                    AlertUtils.showError("Erreur", "Une erreur est survenue lors de la suppression : " + e.getMessage());
+                }
+            }
+        });
     }
 
 }

@@ -19,8 +19,13 @@ public class StudentService{
     public List<Student> searchStudents(SearchCriteria criteria){
         return new ArrayList<>();
     }
-    
+
     public int getTotalStudents(SearchCriteria criteria){
         return 0;
+    }
+
+    public void deleteStudent(Long studentId) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'deleteStudent'");
     }
 }
