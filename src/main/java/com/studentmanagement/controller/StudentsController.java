@@ -55,5 +55,70 @@ public class StudentsController{
     private ImportExportService importExportService;
     private final int ROWS_PER_PAGE = 15;
 
+    public StudentsController(){
+        //Empty constructor - dependancies will be injected
+    }
+
+    @FXML
+    private void initialize(){
+        //Init services
+        studentService = new StudentService();
+        importExportService = new ImportExportService();
+
+        //Config columns
+        setupTableColumns();
+
+        //Config action columns edit and delete
+        setupEditColumn();
+        setupDeleteColumn();
+
+        //Init pagination
+        pagination.setPageCount(calculatePageCount());
+        pagination.currentPageIndexProperty().addListener((obs, oldIndex, newIndex)-> {
+           loadStudentsPage(newIndex.intValue()); 
+        });
+
+        //Config buttons events
+        setupButtonHandlers();
+
+        //Activate sorting columns
+        setupColumnSorting();
+
+        //load inti data
+        loadStudentsPage(0);
+    }
+
+    private void setupTableColumns(){
+
+    }
+
+    private void setupButtonHandlers(){
+
+    }
+
+    private void setupColumnSorting(){
+
+    }
+
+    // private void setStudentService(){
+
+    // }
+
+    private void setupEditColumn(){
+
+    }
+
+    private void setupDeleteColumn(){
+
+    }
+
+    private void loadStudentsPage(int pageIndex){
+
+    }
+
+    private int calculatePageCount(){
+        return 1;
+    }
+
 
 }
