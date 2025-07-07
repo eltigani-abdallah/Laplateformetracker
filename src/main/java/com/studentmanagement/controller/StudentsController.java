@@ -6,7 +6,8 @@ import com.studentmanagement.service.StudentService;
 import com.studentmanagement.utils.AlertUtils;
 import com.studentmanagement.utils.SearchCriteria;
 
-//import javafx.collections.FXCollections;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -334,7 +335,30 @@ public class StudentsController{
     }
 
     private void loadStudentsPage(int pageIndex){
+        try {
+            //Create a SearchCriteria object for pagination
+            SearchCriteria criteria = new SearchCriteria(searchField.getText());
+            criteria.setPageNumber(pageIndex + 1); // because pageIndex begins at 0
+            criteria.setPageSize(ROWS_PER_PAGE);
 
+            //Add sort information if available
+            if (!studentTable.getSortOrder().isEmpty()){
+                TableColumn<Student, ?> sortColumn = studentTable.getSortOrder().get(0);
+                String sortField = sortColumn.getId().replace("Column", "");
+                String sortDirection = sortColumn.getSortType().toString();
+                criteria.setSortField(sortField);
+                criteria.setSortDirection(sortDirection);
+            }
+
+            //Get students for the current page
+            List<Student> pageItems = studentService.searchStudents(criteria);
+
+            //Update the table
+            ObservableList<Student> students = FXCollections.observableArrayList(pageItems);
+            studentTable.setItems(students);
+        } catch (Exception e){
+            AlertUtils.showError("Erreur", "Impossible de charger les données : " + e.getMessage());
+        }
     }
 
     private int calculatePageCount(){
