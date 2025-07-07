@@ -6,7 +6,7 @@ import com.studentmanagement.service.StudentService;
 import com.studentmanagement.utils.AlertUtils;
 import com.studentmanagement.utils.SearchCriteria;
 
-import javafx.collections.FXCollections;
+//import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -246,7 +246,34 @@ public class StudentsController{
 
     @FXML
     private void handleExport(){
+        try {
+            FileChooser fileChooser = new FileChooser();
+            fileChooser.setTitle("Exporter la recherche");
+            fileChooser.getExtensionFilters().add(
+                new FileChooser.ExtensionFilter("Fichiers CSV", "*.csv")
+            );
+            Stage stage = (Stage) exportButton.getScene().getWindow();
+            File selectedFile = fileChooser.showSaveDialog(stage);
 
+            if (selectedFile != null){
+                //Get the actual search criteria
+                SearchCriteria criteria = new SearchCriteria(searchField.getText());
+
+                //To export all the search results of the actual search
+                criteria.setPageSize(Integer.MAX_VALUE);
+
+                //To get all the students to export
+                List<Student> studentsToExport = studentService.searchStudents(criteria);
+                 
+                //Use export service
+                importExportService.exportToCSV(studentsToExport, selectedFile);
+
+                //Show success message
+                AlertUtils.showInformation("Export réussi", "Les données ont été exportées avec succès vers\n" + selectedFile.getName());
+            }
+        } catch (Exception e){
+            AlertUtils.showError("Erreur d'exportation", "Une erreur est survenue lors de l'exportation " + e.getMessage());
+        }
     }
 
     @FXML
