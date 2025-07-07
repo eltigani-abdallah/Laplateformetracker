@@ -175,8 +175,31 @@ public class StudentsController{
         });
     }
 
+    //Create the delete button for deleting student data
     private void setupDeleteColumn(){
-
+        deleteColumn.setCellFactory(col -> {
+            TableCell<Student, Void> cell = new TableCell<>(){
+                private final Button deleteButton = new Button("Supprimer");
+                {
+                    deleteButton.getStyleClass().add("button");
+                    deleteButton.setMinHeight(30);
+                    deleteButton.setOnAction(event -> {
+                        Student student = getTableView().getItems().get(getIndex());
+                        showDeleteConfirmation(student);
+                    });
+                }
+                @Override
+                protected void updateItem(Void item, boolean empty){
+                    super.updateItem(item, empty);
+                    if (empty){
+                        setGraphic(null);
+                    } else {
+                        setGraphic(deleteButton);
+                    }
+                }
+            };
+            return cell;
+        });
     }
 
     @FXML
@@ -209,6 +232,10 @@ public class StudentsController{
 
     private void showEditDialog(Student student){
 
+    }
+
+    private void showDeleteConfirmation(Student student){
+        
     }
 
 }
