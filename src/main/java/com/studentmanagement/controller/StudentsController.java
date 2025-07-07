@@ -3,7 +3,9 @@ package com.studentmanagement.controller;
 import com.studentmanagement.model.Student;
 import com.studentmanagement.service.ImportExportService;
 import com.studentmanagement.service.StudentService;
+import com.studentmanagement.utils.SearchCriteria;
 
+import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -107,8 +109,33 @@ public class StudentsController{
         addButton.setOnAction(event -> handleAddStudent());
     }
 
+    //Enable sorting functionnality 
     private void setupColumnSorting(){
+        //Activate sorting for appropriate columns
+        idColumn.setSortable(true);
+        firstNameColumn.setSortable(true);
+        lastNameColumn.setSortable(true);
+        ageColumn.setSortable(true);
+        classNameColumn.setSortable(true);
+        averageGradeColumn.setSortable(true);
 
+        //Config sorting events to update the search
+        studentTable.getSortOrder().addListener((javafx.collections.ListChangeListener.Change<? extends TableColumn<Student, ?>> change) -> {
+            if (change.next() && !change.wasPermutated() && !studentTable.getSortOrder().isEmpty()){
+                //get the sorted column and the direction
+                TableColumn<Student, ?> sortColumn = studentTable.getSortOrder().get(0);
+                String sortField = sortColumn.getId().replace("Column", "");
+                String sortDirection = sortColumn.getSortType().toString();
+
+                //Update search criteria and reload data
+                SearchCriteria criteria = new SearchCriteria(searchField.getText());
+                criteria.setSortField(sortField);
+                criteria.setSortDirection(sortDirection);
+
+                //Reload data with the new sort
+                loadStudentsPage(pagination.getCurrentPageIndex());
+            }
+        });
     }
 
     private void setupEditColumn(){
