@@ -138,8 +138,41 @@ public class StudentsController{
         });
     }
 
-    private void setupEditColumn(){
+    //Setter to inject dependancies
+    public void setStudentService(StudentService studentService){
+        this.studentService = studentService;
+    }
 
+    public void setImportExportService(ImportExportService importExportService){
+        this.importExportService = importExportService;
+    }
+
+    //Create the modify button for editing student data
+    private void setupEditColumn(){
+        editColumn.setCellFactory(col -> {
+            TableCell<Student, Void> cell = new TableCell<>(){
+                private final Button editButton = new Button("Modifier");
+                {
+                    editButton.getStyleClass().add("button");
+                    editButton.setMinHeight(30);
+                    editButton.setOnAction(event -> {
+                        Student student = getTableView().getItems().get(getIndex());
+                        showEditDialog(student);
+                    });
+                }
+
+                @Override
+                protected void updateItem(Void item, boolean empty){
+                    super.updateItem(item, empty);
+                    if (empty){
+                        setGraphic(null);
+                    } else {
+                        setGraphic(editButton);
+                    }
+                }
+            };
+            return cell;
+        });
     }
 
     private void setupDeleteColumn(){
@@ -174,5 +207,8 @@ public class StudentsController{
         return 1;
     }
 
+    private void showEditDialog(Student student){
+
+    }
 
 }
