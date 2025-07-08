@@ -18,8 +18,8 @@
     <!-- Students Tab -->
     <Tab id="students-tab" fx:id="studentsTab" text="Les Étudiants">
       <content>
-        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
-        <!-- <fx:include source="Students.fxml" /> -->
+               <!-- <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" /> -->
+        <fx:include source="Students.fxml" />
       </content>
     </Tab>
     <!-- Students Stats Tab -->

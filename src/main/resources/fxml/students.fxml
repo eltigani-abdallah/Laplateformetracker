@@ -23,7 +23,7 @@
             <!-- left part : search bar and search button  -->
             <HBox alignment="CENTER_LEFT" minHeight="40" spacing="10" HBox.hgrow="ALWAYS">
                <TextField fx:id="searchField" promptText="Rechercher ..." HBox.hgrow="ALWAYS" />
-               <Button fx:id="searchButton" minHeight="30" minWidth="100" onAction="#handleSearch" text="je rechercher" />
+               <Button fx:id="searchButton" minHeight="30" minWidth="100" onAction="#handleSearch" text="Je recherche" />
             </HBox>
             <!-- flexible space between buttons -->
             <Region HBox.hgrow="ALWAYS" />
@@ -84,7 +84,7 @@
             <Label styleClass="label" text="Classe" GridPane.columnIndex="3" GridPane.rowIndex="0" />
             <TextField fx:id="classNameField" styleClass="text-field" GridPane.columnIndex="3" GridPane.rowIndex="1" />
             <!-- Add button -->
-            <Button fx:id="addButton" onAction="#handleAddStudent" styleClass="button" text="+" GridPane.columnIndex="3" GridPane.rowIndex="2" GridPane.valignment="TOP" />
+            <Button fx:id="addButton" onAction="#handleAddStudent" styleClass="button" text="+ J'ajoute" GridPane.columnIndex="3" GridPane.rowIndex="2" GridPane.valignment="TOP" />
             <padding>
                <Insets bottom="15.0" left="10.0" right="10.0" top="5.0" />
             </padding>
