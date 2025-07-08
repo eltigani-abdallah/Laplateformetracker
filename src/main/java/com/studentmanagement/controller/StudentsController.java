@@ -5,6 +5,7 @@ import com.studentmanagement.service.ImportExportService;
 import com.studentmanagement.service.StudentService;
 import com.studentmanagement.utils.AlertUtils;
 import com.studentmanagement.utils.SearchCriteria;
+import com.studentmanagement.utils.StudentValidator;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -286,48 +287,34 @@ public class StudentsController{
     @FXML
     private void handleAddStudent(){
         try {
-            //get the field values
-            String firstName = firstNameField.getText().trim();
-            String lastName = lastNameField.getText().trim();
-            String ageText = ageField.getText().trim();
-            String className = classNameField.getText().trim();
-
-            //validate the base
-            if (firstName.isEmpty() || lastName.isEmpty() || ageText.isEmpty() || className.isEmpty()){
-                AlertUtils.showError("Erreur de saisie", "Tous les champs doivent être remplis !");
+            StudentValidator.ValidationResult result = StudentValidator.validateForCreation(
+                firstNameField, lastNameField, ageField, classNameField
+            );
+            
+            if (!result.isValid()) {
+                AlertUtils.showError("Erreur de saisie", result.getErrorMessage());
+                if (result.getFocusField() != null) {
+                    result.getFocusField().selectAll();
+                    result.getFocusField().requestFocus();
+                }
                 return;
             }
 
-            //Convert age
-            int age;
-            try {
-                age = Integer.parseInt(ageText);
-                if (age <= 3 || age >= 150){
-                    AlertUtils.showError("Erreur de saisie", "Rapelle toi !\nNous n'acceptons pas les étudiants de moins de 3 ans\nni ceux de plus de 150 ans !");
-                    return;
-                }
-            } catch (NumberFormatException e){
-                    AlertUtils.showError("Erreur de format", "L'âge doit être un nombre entier\n5 ans 1/2 c'est pas possible !");
-                    return;
-                }
-            
-                //Create and add a student
-                Student newStudent = new Student();
-                newStudent.setFirstName(firstName);
-                newStudent.setLastName(lastName);
-                newStudent.setAge(age);
-                newStudent.setClassName(className);
+            //Create student with validated data
+            Student newStudent = StudentValidator.createStudentFromFields(
+                firstNameField, lastNameField, ageField, classNameField
+            );
 
-                //Use the createSudent method from StudentService
-                studentService.createStudent(newStudent);
+            //Use the createSudent method from StudentService
+            studentService.createStudent(newStudent);
 
-                //Refresh the table empty the fields
-                loadStudentsPage(pagination.getCurrentPageIndex());
-                pagination.setPageCount(calculatePageCount());
-                clearAddForm();
+            //Refresh the table empty the fields
+            loadStudentsPage(pagination.getCurrentPageIndex());
+            pagination.setPageCount(calculatePageCount());
+            clearAddForm();
 
-                //Show a success message
-                AlertUtils.showInformation("Succès", "L'étudiant a été ajouté avec succès");                
+            //Show a success message
+            AlertUtils.showInformation("Succès", "L'étudiant a été ajouté avec succès");                
         } catch (Exception e){
             AlertUtils.showError("Erreur", "Une erreur est survenue lors de l'ajout : " + e.getMessage());
         }
@@ -421,112 +408,31 @@ public class StudentsController{
         //Buttons actions
         saveButton.setOnAction(e -> {
             try {
-                //Validate and update the student
-                String firstName = firstNameField.getText().trim();
-                String lastName = lastNameField.getText().trim();
-                String ageText = ageField.getText().trim();
-                String className = classNameField.getText().trim();
-
-                boolean hasChanges = false;
-
-                //Verify and apply changes for first name
-                if(!firstName.isEmpty()){
-                    if(!firstName.matches("^[a-zA-ZÀ-ÿ\\s-]+$")){
-                        AlertUtils.showError("Erreur", "Oups !\nLe prénom doit contenir uniquement des lettres.\nLe trait d'union est autorisé pour les prénoms composés.");
-                        firstNameField.selectAll();
-                        firstNameField.requestFocus();
-                        return;
+                //Use validator for modification
+                StudentValidator.ValidationResult result = StudentValidator.validateAndApplyChanges(
+                    student, firstNameField, lastNameField, ageField, classNameField
+                );
+                
+                if (!result.isValid()) {
+                    AlertUtils.showError("Erreur", result.getErrorMessage());
+                    if (result.getFocusField() != null) {
+                        result.getFocusField().selectAll();
+                        result.getFocusField().requestFocus();
                     }
-                    //Delete space between - and uppercase first letter
-                    firstName = firstName.replaceAll("\\s*-\\s*", "-");
-                    firstName = firstName.substring(0, 1).toUpperCase() + firstName.substring(1).toLowerCase();
-
-                    if(!firstName.equals(student.getFirstName())){
-                        student.setFirstName(firstName);
-                        hasChanges = true;
-                    }
-                }
-
-                //Verify and apply changes for last name
-            if (!lastName.isEmpty()) {
-                if (!lastName.matches("^[a-zA-ZÀ-ÿ\\s-]+$")) {
-                    AlertUtils.showError("Erreur", "Oups!\nLe nom doit contenir uniquement des lettres et des espaces.\nLe trait d'union est autorisé pour les noms composés comme Dupont-Martin !");
-                    lastNameField.selectAll();
-                    lastNameField.requestFocus();
                     return;
                 }
-                //Delete space between - and uppercase first letter
-                lastName = lastName.replaceAll("\\s*-\\s*", "-"); 
-                lastName = lastName.substring(0, 1).toUpperCase() + lastName.substring(1).toLowerCase();
-                
-                if (!lastName.equals(student.getLastName())) {
-                    student.setLastName(lastName);
-                    hasChanges = true;
-                }
-            }
 
-                //Verify and apply changes for age
-                if(!ageText.isEmpty()){
-            int age;
-                try {
-                    age = Integer.parseInt(ageText);
-                    if (age <= 3 || age >= 150){
-                        AlertUtils.showError("Erreur de saisie", "Rapelle toi !\nNous n'acceptons pas les étudiants de moins de 3 ans\nni ceux de plus de 150 ans !");
-                        ageField.selectAll();
-                        ageField.requestFocus();
-                        return;
-                    }
-                } catch (NumberFormatException ex){
-                        AlertUtils.showError("Erreur de format", "L'âge doit être un nombre entier\n5 ans 1/2 c'est pas possible !");
-                        return;
-                    }
-                    if(age != student.getAge()){
-                        student.setAge(age);
-                        hasChanges = true;
-                    }
-                }
-                //Verify and apply changes for class name
-            if (!className.isEmpty()) {
-                //Delete space
-                className = className.replaceAll("\\s+", "");
-                
-                // Validation class format (1 letter + 1 number or 1 number + 1 letter)
-                if (!className.matches("^[a-zA-Z][0-9]$") && !className.matches("^[0-9][a-zA-Z]$")) {
-                    AlertUtils.showError("Format incorrect !", "La classe doit contenir une lettre et un chiffre.\nExemples valides : B1, 1B, A3, 2C...\nPas d'espaces ni de caractères spéciaux !");
-                    classNameField.selectAll();
-                    classNameField.requestFocus();
-                    return;
-                }
-                
-                // Format (Upercase letter)
-                if (className.matches("^[a-zA-Z][0-9]$")) {
-                    // Letter than number
-                    className = className.substring(0, 1).toUpperCase() + className.substring(1);
-                } else {
-                    // number than letter
-                    className = className.substring(0, 1) + className.substring(1).toUpperCase();
-                }
-                
-                if (!className.equals(student.getClassName())) {
-                    student.setClassName(className);
-                    hasChanges = true;
-                }
-            }
-            if(!hasChanges){
-                AlertUtils.showInformation("Aucun changement", "Tu n'as rien modifié !\nSi tu veux fermer cette fenêtre, clique sur Annuler");
-                return;
-            }
-            //Save modifications
-            studentService.updateStudent(student);
+                //Save modifications
+                studentService.updateStudent(student);
 
-            //Close dialog window
-            dialogStage.close();
+                //Close dialog window
+                dialogStage.close();
 
-            //update the  table
-            loadStudentsPage((pagination.getCurrentPageIndex()));
+                //update the  table
+                loadStudentsPage((pagination.getCurrentPageIndex()));
 
-            //Show success message
-            AlertUtils.showInformation("Succès", "L'étudiant a été modifié avec succès !");
+                //Show success message
+                AlertUtils.showInformation("Succès", "L'étudiant a été modifié avec succès !");
 
             } catch (Exception ex){
                 AlertUtils.showError("Erreur", "Une erreur est survenue lors de la modification : " + ex.getMessage());

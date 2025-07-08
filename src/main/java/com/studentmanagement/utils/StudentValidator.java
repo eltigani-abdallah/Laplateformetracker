@@ -30,7 +30,7 @@ public class StudentValidator {
     }
 
     //Validate input fields for student creation
-    public static ValidationResult validationForCreation(TextField firstNameField, TextField lastNameField, TextField ageField, TextField classNameField){
+    public static ValidationResult validateForCreation(TextField firstNameField, TextField lastNameField, TextField ageField, TextField classNameField){
         //Verify if all fields are full
         String firstName = firstNameField.getText().trim();
         String lastName = lastNameField.getText().trim();
