@@ -144,12 +144,20 @@ public class StudentValidator {
         return new ValidationResult(true, null, null);
     }
 
+    //Format name
     private static String formatName(String name){
-
+        name = name.replaceAll("\\s*-\\s*", "-");
+        return name.substring(0, 1).toUpperCase() + name.substring(1).toLowerCase();
     }
 
+    //Format class name
     private static String formatClassName(String className){
-
+        className = className.replaceAll("\\s+", "");
+        if (className.matches("^[a-zA-Z][0-9]$")) {
+            return className.substring(0, 1).toUpperCase() + className.substring(1);
+        } else {
+            return className.substring(0, 1) + className.substring(1).toUpperCase();
+        }
     }
 
 }
