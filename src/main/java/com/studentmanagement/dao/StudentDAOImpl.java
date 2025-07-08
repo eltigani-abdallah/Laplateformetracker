@@ -118,4 +118,42 @@ public class StudentDAOImpl extends BaseDAO<Student> implements StudentDAO {
         }
         return students;
     }
+
+    // Count the number of students matching a keyword for pagination purposes
+    @Override
+    public long countSearchGeneral(String keyword) {
+        String like = "%" + keyword.toLowerCase() + "%";
+        String sql = """
+            SELECT COUNT(*)
+            FROM students s
+            LEFT JOIN class c ON s.class_id = c.id
+            WHERE CAST(s.id AS TEXT) LIKE ?
+               OR LOWER(s.first_name) LIKE ?
+               OR LOWER(s.last_name) LIKE ?
+               OR CAST(s.age AS TEXT) LIKE ?
+        """;
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            for (int i = 1; i <= 4; i++) {
+                stmt.setString(i, like);
+            }
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) return rs.getLong(1);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+    // Helper method to map a ResultSet to a Student object
+    @Override
+    protected Student mapResultSet(ResultSet rs) throws SQLException {
+        Student student = new Student();
+        student.setStudentId(rs.getLong("id"));
+        student.setFirstName(rs.getString("first_name"));
+        student.setLastName(rs.getString("last_name"));
+        student.setAge(rs.getInt("age"));
+        student.setClassName(rs.getString("class_name"));
+        student.setAverageGrade(rs.getDouble("average_grade"));
+        return student;
+    }
 }
