@@ -58,3 +58,64 @@ public class StudentDAOImpl extends BaseDAO<Student> implements StudentDAO {
         }
         return students;
     }
+
+    // Update an existing student's information in the database
+    @Override
+    public void updateStudent(Student student) {
+        String sql = "UPDATE students SET first_name = ?, last_name = ?, age = ?, average_grade = ? WHERE id = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setString(1, student.getFirstName());
+            stmt.setString(2, student.getLastName());
+            stmt.setInt(3, student.getAge());
+            stmt.setDouble(4, student.getAverageGrade());
+            stmt.setLong(5, student.getStudentId());
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    // Delete a student from the database by their ID
+    @Override
+    public void deleteStudent(Long id) {
+        String sql = "DELETE FROM students WHERE id = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setLong(1, id);
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    // Search for students based on a keyword with pagination support
+    @Override
+    public List<Student> searchGeneral(String keyword, int limit, int offset) {
+        List<Student> students = new ArrayList<>();
+        String like = "%" + keyword.toLowerCase() + "%";
+        String sql = """
+            SELECT s.*, c.class_name
+            FROM students s
+            LEFT JOIN class c ON s.class_id = c.id
+            WHERE CAST(s.id AS TEXT) LIKE ?
+               OR LOWER(s.first_name) LIKE ?
+               OR LOWER(s.last_name) LIKE ?
+               OR CAST(s.age AS TEXT) LIKE ?
+            ORDER BY s.id
+            LIMIT ? OFFSET ?
+        """;
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            for (int i = 1; i <= 4; i++) {
+                stmt.setString(i, like);
+            }
+            stmt.setInt(5, limit);
+            stmt.setInt(6, offset);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                students.add(mapResultSet(rs));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return students;
+    }
+}
