@@ -160,4 +160,14 @@ public class StudentValidator {
         }
     }
 
+    //Create a new student with validate fields
+    public static Student createStudentFromFields(TextField firstNameField, TextField lastNameField, 
+                                                 TextField ageField, TextField classNameField) {
+        Student student = new Student();
+        student.setFirstName(formatName(firstNameField.getText().trim()));
+        student.setLastName(formatName(lastNameField.getText().trim()));
+        student.setAge(Integer.parseInt(ageField.getText().trim()));
+        student.setClassName(formatClassName(classNameField.getText().trim()));
+        return student;
+    }
 }
