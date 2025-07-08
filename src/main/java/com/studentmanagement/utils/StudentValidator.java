@@ -106,19 +106,41 @@ public class StudentValidator {
         return new ValidationResult(true, null, null);
     }
    
+    //Validate first name
     private static ValidationResult validateFirstName(String firstName, TextField field) {
+        if(!firstName.matches("^[a-zA-ZÀ-ÿ\\s-]+$")) {
+            return new ValidationResult(false, "Oups !\nLe prénom doit contenir uniquement des lettres.\nLe trait d'union est autorisé pour les prénoms composés.", field);
+        }
         return new ValidationResult(true, null, null);
     }
 
+    //Validate last name
     private static ValidationResult validateLastName(String lastName, TextField field) {
+        if(!lastName.matches("^[a-zA-ZÀ-ÿ\\s-]+$")) {
+            return new ValidationResult(false, "Oups!\nLe nom doit contenir uniquement des lettres et des espaces.\nLe trait d'union est autorisé pour les noms composés comme Dupont-Martin !", field);
+        }
         return new ValidationResult(true, null, null);
     }
 
+    //Validate age
     private static ValidationResult validateAge(String ageText, TextField field) {
+         try{
+            int age = Integer.parseInt(ageText);
+            if(age <= 3 || age >= 150) {
+                return new ValidationResult(false, "Rappelle toi !\nNous n'acceptons pas les étudiants de moins de 3 ans\nni ceux de plus de 150 ans !", field);
+            }
+        }catch (NumberFormatException e) {
+            return new ValidationResult(false, "L'âge doit être un nombre entier\n5 ans 1/2 c'est pas possible !", field);
+        }
         return new ValidationResult(true, null, null);
     }
 
-    private static ValidationResult validateClassName(String ClassName, TextField field) {
+    //Validate class name
+    private static ValidationResult validateClassName(String className, TextField field) {
+         String cleanClassName = className.replaceAll("\\s+", "");
+        if(!cleanClassName.matches("^[a-zA-Z][0-9]$") && !cleanClassName.matches("^[0-9][a-zA-Z]$")){
+            return new ValidationResult(false, "La classe doit contenir une lettre et un chiffre.\nExemples valides : B1, 1B, A3, 2C...\nPas d'espaces ni de caractères spéciaux !", field);
+        }
         return new ValidationResult(true, null, null);
     }
 
