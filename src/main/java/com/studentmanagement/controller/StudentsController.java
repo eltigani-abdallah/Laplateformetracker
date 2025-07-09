@@ -24,7 +24,9 @@ import javafx.stage.Stage;
 import java.io.File;
 import java.util.List;
 
-public class StudentsController{
+//Controller for student management
+//Inherits from BaseTableController
+public class StudentsController extends BaseTableController<Student> {
 
     @FXML
     private TextField searchField;
@@ -36,7 +38,7 @@ public class StudentsController{
     private Button exportButton;
 
     @FXML
-    private TableView<Student> studentTable;
+    protected TableView<Student> studentTable;
     @FXML
     private TableColumn<Student, Integer> idColumn;
     @FXML
@@ -77,10 +79,14 @@ public class StudentsController{
     }
 
     @FXML
-    private void initialize(){
+    @Override
+    protected void initialize(){
         //Init services
         studentService = new StudentService();
         importExportService = new ImportExportService();
+        
+        //Set dataTable for parent class
+        dataTable = studentTable;
 
         //Config columns
         setupTableColumns();
@@ -106,7 +112,8 @@ public class StudentsController{
     }
 
     //Config the TableView for displaying student data
-    private void setupTableColumns(){
+    @Override
+    protected void setupTableColumns(){
         idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
         firstNameColumn.setCellValueFactory(new PropertyValueFactory<>("firstName"));
         lastNameColumn.setCellValueFactory(new PropertyValueFactory<>("lastName"));
@@ -217,14 +224,13 @@ public class StudentsController{
     }
 
     @FXML
-    private void handleSearch(){
-        loadStudentsPage(0); //reload the first page with the search filter
-        pagination.setCurrentPageIndex(0);
-        pagination.setPageCount(calculatePageCount());
+    protected void handleSearch(){
+        refreshTableFromStart();
     }
 
     @FXML
-    private void handleImport(){
+    @Override
+    protected void handleImport(){
         try {
             FileChooser fileChooser = new FileChooser();
             fileChooser.setTitle("Importer la recherche");
@@ -240,9 +246,7 @@ public class StudentsController{
                 int importedCount = importExportService.ImportFromCSV(selectedFile);
 
                 //Refesh table
-                loadStudentsPage(0);
-                pagination.setCurrentPageIndex(0);
-                pagination.setPageCount(calculatePageCount());
+                refreshTableFromStart();
 
                 //Show a succes message
                 AlertUtils.showInformation("Import réussi", importedCount + " étudiant(s) ont été importés avec succès !");
@@ -253,7 +257,7 @@ public class StudentsController{
     }
 
     @FXML
-    private void handleExport(){
+    protected void handleExport(){
         try {
             FileChooser fileChooser = new FileChooser();
             fileChooser.setTitle("Exporter la recherche");
@@ -271,10 +275,10 @@ public class StudentsController{
                 criteria.setPageSize(Integer.MAX_VALUE);
 
                 //To get all the students to export
-                List<Student> studentsToExport = studentService.searchStudents(criteria);
+                List<Student> studentsToExport = searchData(criteria);
                  
                 //Use export service
-                importExportService.exportToCSV(studentsToExport, selectedFile);
+                exportToCSV(studentsToExport, selectedFile);
 
                 //Show success message
                 AlertUtils.showInformation("Export réussi", "Les données ont été exportées avec succès vers\n" + selectedFile.getName());
@@ -309,8 +313,7 @@ public class StudentsController{
             studentService.createStudent(newStudent);
 
             //Refresh the table empty the fields
-            loadStudentsPage(pagination.getCurrentPageIndex());
-            pagination.setPageCount(calculatePageCount());
+            refreshTable();
             clearAddForm();
 
             //Show a success message
@@ -318,6 +321,21 @@ public class StudentsController{
         } catch (Exception e){
             AlertUtils.showError("Erreur", "Une erreur est survenue lors de l'ajout : " + e.getMessage());
         }
+    }
+
+    @Override
+    protected List<Student> searchData(SearchCriteria criteria) {
+        return studentService.searchStudents(criteria);
+    }
+    
+    @Override
+    protected int getTotalCount(SearchCriteria criteria) {
+        return studentService.getTotalStudents(criteria);
+    }
+    
+    @Override
+    protected void exportToCSV(List<Student> data, File file) {
+        importExportService.exportToCSV(data, file);
     }
 
     private void clearAddForm(){
@@ -344,7 +362,7 @@ public class StudentsController{
             }
 
             //Get students for the current page
-            List<Student> pageItems = studentService.searchStudents(criteria);
+            List<Student> pageItems = searchData(criteria);
 
             //Update the table
             ObservableList<Student> students = FXCollections.observableArrayList(pageItems);
@@ -354,11 +372,11 @@ public class StudentsController{
         }
     }
 
-    private int calculatePageCount(){
+    protected int calculatePageCount(){
         try {
             //Create an SearchCriteria object to obtain the total number
             SearchCriteria criteria = new SearchCriteria(searchField.getText());
-            int totalStudents = studentService.getTotalStudents(criteria);
+            int totalStudents = getTotalCount(criteria);
             return (totalStudents + ROWS_PER_PAGE -1 ) / ROWS_PER_PAGE;
         } catch (Exception e){
             AlertUtils.showError("Erreur", "Impossible de calculer le nombre de pages " + e.getMessage());
@@ -382,7 +400,7 @@ public class StudentsController{
         //Add the fields
         grid.add(new Label("Prénom"), 0,0);
         TextField firstNameField = new TextField(student.getFirstName());
-        grid.add(firstNameField, 1, 1);
+        grid.add(firstNameField, 1, 0);
 
         grid.add(new Label("Nom"), 0,1);
         TextField lastNameField = new TextField(student.getLastName());
@@ -429,7 +447,7 @@ public class StudentsController{
                 dialogStage.close();
 
                 //update the  table
-                loadStudentsPage((pagination.getCurrentPageIndex()));
+                refreshTable();
 
                 //Show success message
                 AlertUtils.showInformation("Succès", "L'étudiant a été modifié avec succès !");
@@ -462,7 +480,7 @@ public class StudentsController{
 
                     //refresh the table
                     int currentPageIndex = pagination.getCurrentPageIndex();
-                    loadStudentsPage(currentPageIndex);
+                    refreshTable();
 
                     //Update page numbers
                     int newPageCount = calculatePageCount();
