@@ -6,7 +6,9 @@ import java.util.function.Consumer;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
@@ -88,12 +90,30 @@ public class DialogUtils {
                 AlertUtils.showError("Erreur", "Une erreur est survenue :\n " + ex.getMessage());
             }
         });
-        
+
         cancelButton.setOnAction(e -> dialogStage.close());
         // Configure scene and display window
         Scene scene = new Scene(grid);
         dialogStage.setScene(scene);
         dialogStage.showAndWait();
+    }
+    
+    //Shows a delete confirmation window
+    public static void showDeleteConfirmation(String title, String message, Runnable onConfirm) {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Confirmation de suppression");
+        alert.setHeaderText(title);
+        alert.setContentText(message);
+        
+        alert.showAndWait().ifPresent(response -> {
+            if (response == ButtonType.OK) {
+                try {
+                    onConfirm.run();
+                } catch (Exception e) {
+                    AlertUtils.showError("Erreur", "Une erreur est survenue pendant la suppression :\n " + e.getMessage());
+                }
+            }
+        });
     }
     
 
