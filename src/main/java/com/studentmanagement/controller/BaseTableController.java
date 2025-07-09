@@ -7,6 +7,8 @@ import com.studentmanagement.service.ImportExportService;
 import com.studentmanagement.utils.AlertUtils;
 import com.studentmanagement.utils.SearchCriteria;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Pagination;
@@ -125,7 +127,26 @@ public  abstract class BaseTableController<T> {
 
     //loads a page of data
     protected void loadDataPage(int pageIndex){
+        try{
+            SearchCriteria criteria = createSearchCriteria();
+            criteria.setPageNumber( pageIndex + 1);
+            criteria.setPageSize(ROWS_PER_PAGE);
 
+            //Add sorting informatin if available
+            if(!dataTable.getSortOrder().isEmpty()){
+                TableColumn<T, ?> sortColumn = dataTable.getSortOrder().get(0);
+                String sortField = extractSortField(sortColumn);
+                String sortDirection = sortColumn.getSortType().toString();
+                criteria.setSortField(sortField);
+                criteria.setSortDirection(sortDirection);
+            }
+
+            List<T> pageItems = searchData(criteria);
+            ObservableList<T> data = FXCollections.observableArrayList(pageItems);
+            dataTable.setItems(data);
+        } catch (Exception e){
+            AlertUtils.showError("Erreur", "Impossible de charger les données\n" + e.getMessage());
+        }
     }
 
     //Calculates the total number of pages
@@ -138,6 +159,11 @@ public  abstract class BaseTableController<T> {
         return new SearchCriteria(searchField.getText());
     }
 
+    //Extracts the sort field name from a column
+    protected String extractSortField(TableColumn<T, ?> column){
+        return column.getId().replace("Column", "");
+    }
+    
     //=========== ABSTRACT METHODS TO IMPLEMENT =======
     //Sets up table columns
     protected abstract void setupTableColumns();
