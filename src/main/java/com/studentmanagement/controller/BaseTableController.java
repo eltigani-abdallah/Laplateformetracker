@@ -40,11 +40,15 @@ public  abstract class BaseTableController<T> {
 
     //Init required services
     protected void initializeServices(){
-
+        importExportService = new ImportExportService();
     }
 
     //Set up pagination
     private void setupPagination(){
+        pagination.setPageCount(calculatePageCount());
+        pagination.currentPageIndexProperty().addListener((obs, oldIndex, newIndex) -> {
+            loadDataPage(newIndex.intValue());
+        });
 
     }
 
@@ -56,6 +60,16 @@ public  abstract class BaseTableController<T> {
     //Loads initial data
     private void loadInitialData(){
 
+    }
+
+    //loads a page of data
+    protected void loadDataPage(int pageIndex){
+
+    }
+
+    //Calculates the total number of pages
+    protected int calculatePageCount(){
+        return 1;
     }
 
     //=========== ABSTRACT METHODS TO IMPLEMENT =======
