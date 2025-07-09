@@ -26,7 +26,7 @@ public class GradeValidator {
             return focusField;
         }
     }
-    
+
     //Validate grade and coefficient fields
     public static ValidationResult validateGradeInput(TextField gradeField, TextField coefficientField){
         String gradeText = gradeField.getText().trim();
@@ -60,5 +60,20 @@ public class GradeValidator {
             return new ValidationResult(false, "Le coefficient doit être un nombre valide.", coefficientField);
         }
         return new ValidationResult(true, null, null);
+    }
+    
+    //Check if values have changed
+    public static ValidationResult checkForChanges(double originalGrade, double originalCoeff, TextField gradeField, TextField coefficientField){
+        try{
+            double newGrade = Double.parseDouble(gradeField.getText().trim());
+            double newCoeff = Double.parseDouble(coefficientField.getText().trim());
+            if(newGrade == originalGrade && newCoeff == originalCoeff){
+                return new ValidationResult(false, "Tu n'as rien modifié.\nSi tu veux quitter cette fenêtre,\nclique sur J'annule.", null);
+            }
+            return new ValidationResult(true, null, null);
+        } catch (NumberFormatException e){
+            //This should not happen if validateGradeInput is called first
+            return new ValidationResult(false, "Format de nombre invalide.", null);
+        }
     }
 }
