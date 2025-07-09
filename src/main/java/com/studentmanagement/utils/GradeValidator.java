@@ -1,5 +1,8 @@
 package com.studentmanagement.utils;
 
+import com.studentmanagement.model.Grade;
+import com.studentmanagement.model.SubjectComment;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 
 public class GradeValidator {
@@ -61,7 +64,7 @@ public class GradeValidator {
         }
         return new ValidationResult(true, null, null);
     }
-    
+
     //Check if values have changed
     public static ValidationResult checkForChanges(double originalGrade, double originalCoeff, TextField gradeField, TextField coefficientField){
         try{
@@ -75,5 +78,25 @@ public class GradeValidator {
             //This should not happen if validateGradeInput is called first
             return new ValidationResult(false, "Format de nombre invalide.", null);
         }
+    }
+    
+    //Create Grade object from validated fields
+    public static Grade createGradeFromFields(Long studentId, String subject, 
+                                            TextField gradeField, TextField coefficientField) {
+        Grade grade = new Grade();
+        grade.setStudentId(studentId);
+        grade.setSubject(subject);
+        grade.setValue(Double.parseDouble(gradeField.getText().trim()));
+        grade.setCoefficient(Double.parseDouble(coefficientField.getText().trim()));
+        return grade;
+    }
+    
+    //Create SubjectComment object from validated field
+    public static SubjectComment createCommentFromField(Long studentId, String subject, TextArea commentArea) {
+        SubjectComment comment = new SubjectComment();
+        comment.setStudentId(studentId);
+        comment.setSubject(subject);
+        comment.setComment(commentArea.getText().trim());
+        return comment;
     }
 }
