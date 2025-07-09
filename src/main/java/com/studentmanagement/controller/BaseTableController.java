@@ -21,6 +21,8 @@ public  abstract class BaseTableController<T> {
     @FXML
     protected Button exportButton;
     @FXML
+    protected Button importButton;
+    @FXML
     protected TableView<T> dataTable;
     @FXML
     protected Pagination pagination;
@@ -35,6 +37,8 @@ public  abstract class BaseTableController<T> {
         setupTableColumns();
         setupPagination();
         setupSearchAndExport();
+        setupImport();
+        setupColumnSorting();
         loadInitialData();
     }
 
@@ -49,16 +53,40 @@ public  abstract class BaseTableController<T> {
         pagination.currentPageIndexProperty().addListener((obs, oldIndex, newIndex) -> {
             loadDataPage(newIndex.intValue());
         });
-
     }
 
     //Set up search and export buttons
     private void setupSearchAndExport(){
+        searchButton.setOnAction(event -> handleSearch());
+        exportButton.setOnAction(event -> handleExport());
+    } 
+
+    //Sets up import button
+    private void setupImport(){
+        if(importButton !=null){
+            importButton.setOnAction(event -> handleImport());
+        }
+    }
+
+    //Sets up column sorting
+    private void setupColumnSorting(){
 
     }
 
     //Loads initial data
     private void loadInitialData(){
+
+    }
+
+    //Handles search
+    @FXML
+    protected void handleSearch(){
+
+    }
+
+    //Handles CSV export
+    @FXML
+    protected void handleExport(){
 
     }
 
@@ -75,5 +103,8 @@ public  abstract class BaseTableController<T> {
     //=========== ABSTRACT METHODS TO IMPLEMENT =======
     //Sets up table columns
     protected abstract void setupTableColumns();
+
+    //Handles import functionality
+    protected abstract void handleImport();
 
 }
