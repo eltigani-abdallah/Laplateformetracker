@@ -17,11 +17,11 @@
 
 <AnchorPane prefHeight="490.0" prefWidth="808.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.studentmanagement.controller.StudentsController">
    <children>
-      <VBox spacing="15" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <VBox spacing="5" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <!-- Search bar and buttons -->
-         <HBox alignment="CENTER_LEFT" minHeight="60.0" spacing="10.0">
+         <HBox alignment="CENTER_LEFT" minHeight="45.0" spacing="10.0">
             <!-- left part : search bar and search button  -->
-            <HBox alignment="CENTER_LEFT" minHeight="40" spacing="10" HBox.hgrow="ALWAYS">
+            <HBox alignment="CENTER_LEFT" minHeight="35" spacing="10" HBox.hgrow="ALWAYS">
                <TextField fx:id="searchField" promptText="Rechercher ..." HBox.hgrow="ALWAYS" />
                <Button fx:id="searchButton" minHeight="30" minWidth="100" onAction="#handleSearch" text="Je recherche" />
             </HBox>
@@ -33,12 +33,12 @@
                <Button fx:id="exportButton" minHeight="30" minWidth="100" onAction="#handleExport" text="J'exporte" />
             </HBox>
             <padding>
-               <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+               <Insets bottom="3.0" left="10.0" right="10.0" top="3.0" />
             </padding>
          </HBox>
          <!-- Students table with automatic scrollbar -->
          <VBox VBox.vgrow="ALWAYS">
-            <TableView fx:id="studentTable" prefHeight="300" VBox.vgrow="ALWAYS">
+            <TableView fx:id="studentTable" VBox.vgrow="ALWAYS">
                <columns>
                   <TableColumn fx:id="idColumn" prefWidth="60" text="ID" />
                   <TableColumn fx:id="firstNameColumn" prefWidth="120" text="Prénom" />
@@ -50,26 +50,26 @@
                   <TableColumn fx:id="deleteColumn" prefWidth="100" text="Je supprime" />
                </columns>
             </TableView>
-            <!-- Pagination -->
-            <HBox alignment="CENTER" spacing="10">
+            <!-- Pagination with minimal padding -->
+            <HBox alignment="CENTER" spacing="5">
                <Pagination fx:id="pagination" maxPageIndicatorCount="1000" pageCount="1" />
                <padding>
-                  <Insets bottom="5.0" top="5.0" />
+                  <Insets bottom="0.0" top="0.0" />
                </padding>
             </HBox>
          </VBox>
-         <!-- Add student form with + button  -->
-         <GridPane hgap="15" vgap="10">
+         <!-- Add student form with + button on same line -->
+         <GridPane hgap="10" vgap="2">
             <columnConstraints>
-               <ColumnConstraints hgrow="SOMETIMES" percentWidth="25" />
-               <ColumnConstraints hgrow="SOMETIMES" percentWidth="25" />
-               <ColumnConstraints hgrow="SOMETIMES" percentWidth="25" />
-               <ColumnConstraints hgrow="SOMETIMES" percentWidth="25" />
+               <ColumnConstraints hgrow="SOMETIMES" percentWidth="30" />
+               <ColumnConstraints hgrow="SOMETIMES" percentWidth="30" />
+               <ColumnConstraints hgrow="NEVER" maxWidth="70" minWidth="70" />
+               <ColumnConstraints hgrow="NEVER" maxWidth="70" minWidth="70" />
+               <ColumnConstraints hgrow="SOMETIMES" />
             </columnConstraints>
             <rowConstraints>
+               <RowConstraints minHeight="20" vgrow="SOMETIMES" />
                <RowConstraints vgrow="SOMETIMES" />
-               <RowConstraints vgrow="SOMETIMES" />
-               <RowConstraints minHeight="30" vgrow="SOMETIMES" />
             </rowConstraints>
             <!-- Last name -->
             <Label styleClass="label" text="Nom" GridPane.columnIndex="0" GridPane.rowIndex="0" />
@@ -79,14 +79,14 @@
             <TextField fx:id="firstNameField" styleClass="text-field" GridPane.columnIndex="1" GridPane.rowIndex="1" />
             <!-- Age -->
             <Label styleClass="label" text="Age" GridPane.columnIndex="2" GridPane.rowIndex="0" />
-            <TextField fx:id="ageField" styleClass="text-field" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+            <TextField fx:id="ageField" maxWidth="70" styleClass="text-field" GridPane.columnIndex="2" GridPane.rowIndex="1" />
             <!-- Class -->
             <Label styleClass="label" text="Classe" GridPane.columnIndex="3" GridPane.rowIndex="0" />
-            <TextField fx:id="classNameField" styleClass="text-field" GridPane.columnIndex="3" GridPane.rowIndex="1" />
-            <!-- Add button -->
-            <Button fx:id="addButton" onAction="#handleAddStudent" styleClass="button" text="+ J'ajoute" GridPane.columnIndex="3" GridPane.rowIndex="2" GridPane.valignment="TOP" />
+            <TextField fx:id="classNameField" maxWidth="70" styleClass="text-field" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+            <!-- Add button on same line -->
+            <Button fx:id="addButton" onAction="#handleAddStudent" styleClass="button" text="J'ajoute l'étudiant" GridPane.columnIndex="4" GridPane.rowIndex="1" />
             <padding>
-               <Insets bottom="15.0" left="10.0" right="10.0" top="5.0" />
+               <Insets bottom="5.0" left="10.0" right="10.0" top="0.0" />
             </padding>
          </GridPane>
       </VBox>

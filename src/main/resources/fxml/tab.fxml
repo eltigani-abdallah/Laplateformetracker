@@ -32,8 +32,8 @@
     <!-- Student Tab -->
     <Tab id="one-student" fx:id="student" text="Un Étudiant">
       <content>
-        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
-        <!-- <fx:include source="Student.fxml" /> -->
+              <!--   <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" /> -->
+          <fx:include source="Student.fxml" /> 
       </content>
     </Tab>
     <!-- Student Stat Tab -->

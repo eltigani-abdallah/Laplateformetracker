@@ -25,7 +25,6 @@ public class StudentService{
     }
 
     public void deleteStudent(Long studentId) {
-        // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'deleteStudent'");
     }
 }

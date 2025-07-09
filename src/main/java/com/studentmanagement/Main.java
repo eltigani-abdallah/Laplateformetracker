@@ -24,6 +24,9 @@ public class Main extends Application {
         // load students view
         //Parent root = FXMLLoader.load(getClass().getResource("/fxml/students.fxml"));
 
+        // load student view
+        //Parent root = FXMLLoader.load(getClass().getResource("/fxml/student.fxml"));
+
         Image icon = new Image(getClass().getResourceAsStream("/images/icon.png"));
         primaryStage.getIcons().add(icon);
 
