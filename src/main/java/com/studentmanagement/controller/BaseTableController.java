@@ -10,7 +10,6 @@ import com.studentmanagement.utils.SearchCriteria;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Pagination;
 import javafx.scene.control.TableColumn;
@@ -172,6 +171,19 @@ public  abstract class BaseTableController<T> {
         return column.getId().replace("Column", "");
     }
 
+    //Refreshes the current table
+    protected void refreshTable(){
+        loadDataPage(pagination.getCurrentPageIndex());
+        pagination.setPageCount(calculatePageCount());
+    }
+
+    //Refreshes and returns to the first page
+    protected void refreshTableFromStart(){
+        loadDataPage(0);
+        pagination.setCurrentPageIndex(0);
+        pagination.setPageCount(calculatePageCount());
+    }
+
     //=========== ABSTRACT METHODS TO IMPLEMENT =======
     //Sets up table columns
     protected abstract void setupTableColumns();
@@ -187,5 +199,11 @@ public  abstract class BaseTableController<T> {
 
     //Handles import functionality
     protected abstract void handleImport();
+    
+    // ================ Setters for dependency injection ===========
+
+    public void ImportExportService(ImportExportService importExportService){
+        this.importExportService = importExportService;
+    }
 
 }
