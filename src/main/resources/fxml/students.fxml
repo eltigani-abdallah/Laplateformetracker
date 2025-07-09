@@ -29,7 +29,7 @@
             <Region HBox.hgrow="ALWAYS" />
             <!-- Right part : import and export buttons -->
             <HBox alignment="CENTER_RIGHT" spacing="10">
-               <Button fx:id="importButton" minHeight="30" minWidth="100" onAction="#handleImport" text="J'importe" />
+               <Button fx:id="importButton" minHeight="30" minWidth="100" text="J'importe" />
                <Button fx:id="exportButton" minHeight="30" minWidth="100" onAction="#handleExport" text="J'exporte" />
             </HBox>
             <padding>

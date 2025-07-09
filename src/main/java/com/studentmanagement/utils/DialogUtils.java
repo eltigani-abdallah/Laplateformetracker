@@ -12,6 +12,7 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -151,4 +152,21 @@ public class DialogUtils {
         return column;
     }
 
+    //Sets up sorting columns for a table
+    public static void setupColumnSorting(TableView<?> table, Runnable onSortChange) {
+        // Enable sorting for all columns except action columns
+        table.getColumns().forEach(column -> {
+            if(!column.getText().toLowerCase().contains("action") && 
+                !column.getText().toLowerCase().contains("modifier") && 
+                !column.getText().toLowerCase().contains("supprimer")) {
+                column.setSortable(true);
+            }
+        });
+        // Listen for sorting changes
+        table.getSortOrder().addListener((javafx.collections.ListChangeListener.Change<? extends TableColumn<?, ?>> change) -> {
+            if(change.next() && !change.wasPermutated() && !table.getSortOrder().isEmpty()) {
+                onSortChange.run();
+            }
+        });
+    }
 }

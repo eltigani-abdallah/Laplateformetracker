@@ -37,7 +37,7 @@ public class Main extends Application {
         scene.getStylesheets().add(getClass().getResource("/css/style.css").toExternalForm());
        
         // Config main window
-        primaryStage.setTitle("ÉDUSYS - Connection");
+        primaryStage.setTitle("ÉDUSYS");
         primaryStage.setScene(scene);
         primaryStage.show();
     }
