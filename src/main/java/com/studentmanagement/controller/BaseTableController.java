@@ -80,13 +80,15 @@ public  abstract class BaseTableController<T> {
 
     //Loads initial data
     private void loadInitialData(){
-
+        loadDataPage(0);
     }
 
     //Handles search
     @FXML
     protected void handleSearch(){
-
+        loadDataPage(0);
+        pagination.setCurrentPageIndex(0);
+        pagination.setPageCount(calculatePageCount());
     }
 
     //Handles CSV export
