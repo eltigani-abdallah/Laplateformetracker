@@ -60,11 +60,9 @@ public class CSVHandler{
             if (line!=null){
                 String[] parts= line.split(String.valueOf(delimiter));
                 return new Student(
-                        Long.parseLong(parts[0]),
                         parts[1],
                         parts[2],
-                        Integer.parseInt(parts[3]),
-                        Double.parseDouble(parts[4])
+                        Integer.parseInt(parts[3])
                 );
             }
         } catch (IOException | NumberFormatException e){
@@ -78,11 +76,9 @@ public class CSVHandler{
     public Student parsestudentFromCSVLine(String lineToParse){
         String[] parts=lineToParse.split(String.valueOf(delimiter));
         return new Student(
-                Long.parseLong(parts[0]),
                 parts[1],
                 parts[2],
-                Integer.parseInt(parts[3]),
-                Double.parseDouble(parts[4])
+                Integer.parseInt(parts[3])
         );
     }
 
