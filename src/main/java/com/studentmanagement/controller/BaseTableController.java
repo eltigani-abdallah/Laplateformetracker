@@ -10,6 +10,7 @@ import com.studentmanagement.utils.SearchCriteria;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Pagination;
 import javafx.scene.control.TableColumn;
@@ -151,7 +152,14 @@ public  abstract class BaseTableController<T> {
 
     //Calculates the total number of pages
     protected int calculatePageCount(){
-        return 1;
+        try{
+            SearchCriteria criteria = createSearchCriteria();
+            int totalItems = getTotalCount(criteria);
+            return (totalItems + ROWS_PER_PAGE -1) / ROWS_PER_PAGE;
+        } catch (Exception e){
+            AlertUtils.showError("Erreur", "Impossible de calculer le nombre de pages :\n" + e.getMessage());
+            return 1;
+        }
     }
 
     //Creates search criteria based on the user interface
@@ -163,7 +171,7 @@ public  abstract class BaseTableController<T> {
     protected String extractSortField(TableColumn<T, ?> column){
         return column.getId().replace("Column", "");
     }
-    
+
     //=========== ABSTRACT METHODS TO IMPLEMENT =======
     //Sets up table columns
     protected abstract void setupTableColumns();
@@ -173,6 +181,9 @@ public  abstract class BaseTableController<T> {
 
     //Exports data to a CSV file
     protected abstract void exportToCSV(List<T> data, File file);
+
+    //Gets the total count of items
+    protected abstract int getTotalCount(SearchCriteria criteria);
 
     //Handles import functionality
     protected abstract void handleImport();
