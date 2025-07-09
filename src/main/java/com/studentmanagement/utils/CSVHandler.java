@@ -2,9 +2,7 @@ package com.studentmanagement.utils;
 
 import com.studentmanagement.model.Student;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.util.List;
 
 public class CSVHandler{
@@ -15,21 +13,39 @@ public class CSVHandler{
 
     }
 
-//    public CSVHandler(char delimiter){
-//
-//    }
-//
-//    public void exportGeneralSearchResults(List searchResults){
-//
-//    }
-//
-//    public void exportStudentSearchResults(List searchResults){
-//
-//    }
-//
-//    public boolean validateCSVFormat(String CSVPath){
-//
-//    }
+    public CSVHandler(char delimiter){
+        this.delimiter=delimiter;
+    }
+
+
+
+    /**
+     * takes in a list of students that came up in the search and exports that into csv format
+      * @param searchResults List<Student>
+     */
+    public void exportStudentSearchResults(List<Student> searchResults){
+        try(PrintWriter writer= new PrintWriter(new FileWriter("student_export.csv"))){
+            writer.println("id,first_name,last_name,age,grade");
+
+            for (Student student:searchResults){
+                writer.println(formatStudentToCSV(student));
+            }
+
+            System.out.println("exported students to student_export.csv");
+        } catch(IOException e){
+            System.err.println("Export failed :( "+e.getMessage());
+        }
+    }
+
+
+    /**
+     * Validate if the csv path required exists, and if it ends with .csv for format
+     * @param CSVPath the path of the file to be validated
+     * @return true or false. it's a boolean what did you expect?
+     */
+    public boolean validateCSVFormat(String CSVPath){
+        return CSVPath!=null &&  CSVPath.endsWith(".csv") && new File(CSVPath).exists();
+    }
 
     /**
      * takes in the path to a CSV file and uses that to parse student info
@@ -44,7 +60,7 @@ public class CSVHandler{
             if (line!=null){
                 String[] parts= line.split(String.valueOf(delimiter));
                 return new Student(
-                        Integer.parseInt(parts[0]),
+                        Long.parseLong(parts[0]),
                         parts[1],
                         parts[2],
                         Integer.parseInt(parts[3]),
@@ -62,7 +78,7 @@ public class CSVHandler{
     public Student parsestudentFromCSVLine(String lineToParse){
         String[] parts=lineToParse.split(String.valueOf(delimiter));
         return new Student(
-                Integer.parseInt(parts[0]),
+                Long.parseLong(parts[0]),
                 parts[1],
                 parts[2],
                 Integer.parseInt(parts[3]),
@@ -77,11 +93,11 @@ public class CSVHandler{
      */
     public String formatStudentToCSV(Student studentToFormat){
         String studentCSVFormat= String.format("%d,%s,%s,%d,%.2f",
-                studentToFormat.getId(),
+                studentToFormat.getStudentId(),
                 studentToFormat.getFirstName(),
                 studentToFormat.getLastName(),
                 studentToFormat.getAge(),
-                studentToFormat.getGrade()
+                studentToFormat.getAverageGrade()
         );
         return studentCSVFormat;
     }

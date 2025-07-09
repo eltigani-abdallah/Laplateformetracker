@@ -10,7 +10,7 @@ public class CSVHandlerTest {
     @Test
     public void testFormatStudentToCSV(){
         CSVHandler handler=new CSVHandler();
-        Student testStudent= new Student(1, "bob", "Builder", 5, 93.6);
+        Student testStudent= new Student(1L, "bob", "Builder", 5, 93.6);
 
         String expected= "1,bob,Builder,5,93.60";
         String actual= handler.formatStudentToCSV(testStudent);
@@ -25,10 +25,10 @@ public class CSVHandlerTest {
 
         Student s= handler.parsestudentFromCSVLine(line);
 
-        assertEquals(1, s.getId());
+        assertEquals(1, s.getStudentId());
         assertEquals("bob", s.getFirstName());
         assertEquals("Builder", s.getLastName());
         assertEquals(5, s.getAge());
-        assertEquals(93.60, s.getGrade());
+        assertEquals(93.60, s.getAverageGrade());
     }
 }
