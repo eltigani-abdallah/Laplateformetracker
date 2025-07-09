@@ -5,6 +5,7 @@ import com.studentmanagement.service.ImportExportService;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Pagination;
+import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 
@@ -70,7 +71,11 @@ public  abstract class BaseTableController<T> {
 
     //Sets up column sorting
     private void setupColumnSorting(){
-
+        dataTable.getSortOrder().addListener((javafx.collections.ListChangeListener.Change<? extends TableColumn<T, ?>> change) ->{
+            if(change.next() && !change.wasPermutated() && !dataTable.getSortOrder().isEmpty()){
+                loadDataPage(pagination.getCurrentPageIndex());
+            }
+        });
     }
 
     //Loads initial data
