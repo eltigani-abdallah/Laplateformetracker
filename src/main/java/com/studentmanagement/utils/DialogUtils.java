@@ -10,6 +10,8 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
+import javafx.scene.control.TableCell;
+import javafx.scene.control.TableColumn;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -115,6 +117,38 @@ public class DialogUtils {
             }
         });
     }
-    
+
+    //Creates an action button for a table
+    public static <T> TableColumn<T, Void> createActionColumn(String columnTitle, String buttonText, 
+                                                             Consumer<T> onAction) {
+        TableColumn<T, Void> column = new TableColumn<>(columnTitle);
+        
+        column.setCellFactory(col -> {
+            TableCell<T, Void> cell = new TableCell<>() {
+                private final Button actionButton = new Button(buttonText);
+                {
+                    actionButton.getStyleClass().add("button");
+                    actionButton.setMinHeight(30);
+                    actionButton.setOnAction(event -> {
+                        T item = getTableView().getItems().get(getIndex());
+                        onAction.accept(item);
+                    });
+                }
+                
+                @Override
+                protected void updateItem(Void item, boolean empty) {
+                    super.updateItem(item, empty);
+                    if (empty) {
+                        setGraphic(null);
+                    } else {
+                        setGraphic(actionButton);
+                    }
+                }
+            };
+            return cell;
+        });
+        
+        return column;
+    }
 
 }
