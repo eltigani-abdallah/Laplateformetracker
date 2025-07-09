@@ -27,4 +27,39 @@ public  abstract class BaseTableController<T> {
 
     protected ImportExportService importExportService;
     protected final int ROWS_PER_PAGE = 15;
+
+    //Common initialization for all table controllers
+    @FXML
+    protected void initialize(){
+        initializeServices();
+        setupTableColumns();
+        setupPagination();
+        setupSearchAndExport();
+        loadInitialData();
+    }
+
+    //Init required services
+    protected void initializeServices(){
+
+    }
+
+    //Set up pagination
+    private void setupPagination(){
+
+    }
+
+    //Set up search and export buttons
+    private void setupSearchAndExport(){
+
+    }
+
+    //Loads initial data
+    private void loadInitialData(){
+
+    }
+
+    //=========== ABSTRACT METHODS TO IMPLEMENT =======
+    //Sets up table columns
+    protected abstract void setupTableColumns();
+
 }
