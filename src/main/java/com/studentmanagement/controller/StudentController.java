@@ -15,11 +15,13 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.ResourceBundle;
 
+import com.studentmanagement.model.Grade;
 import com.studentmanagement.model.Student;
 import com.studentmanagement.service.GradeService;
 import com.studentmanagement.service.StudentService;
 import com.studentmanagement.service.SubjectCommentService;
 import com.studentmanagement.utils.AlertUtils;
+import com.studentmanagement.utils.GradeValidator;
 import com.studentmanagement.utils.SubjectResult;
 
 
@@ -258,6 +260,39 @@ public class StudentController extends BaseTableController<SubjectResult>  {
             
         } catch (Exception e){
             AlertUtils.showError("Erreur", "Une erreur est survenue lors du chargement de l'étudiant :\n" + e.getMessage());
+        }
+    }
+
+    @FXML
+    protected void handleAddGrade(){
+        try{
+            String subject = subjectComboBox.getValue();
+            if (subject == null || subject.isEmpty()) {
+                AlertUtils.showError("Erreur", "Tu dois sélectionner une matière!");
+                return;
+            }
+        
+            //Validate input using the validator
+            GradeValidator.ValidationResult result = GradeValidator.validateGradeInput(gradeField, coefficientField);
+            if(!result.isValid()){
+                AlertUtils.showError("Erreur", result.getErrorMessage());
+                if(result.getFocusField() != null){
+                    ((TextField)result.getFocusField()).requestFocus();
+                }
+                return;
+            }
+            //Create and save grade using the validator
+            Grade newGrade = GradeValidator.createGradeFromFields(
+                currentStudent.getStudentId(), subject, gradeField, coefficientField);
+            gradeService.saveGrade(newGrade);
+
+            //Clear fields and refresh
+            gradeField.clear();
+            coefficientField.clear();
+            refreshTable();
+            AlertUtils.showInformation("Succès", "La note a été ajoutée avec succès.");
+        } catch(Exception e){
+            AlertUtils.showError("Erreur", "Une erreur est survenue lors de l'ajout de la note :\n" + e.getMessage());
         }
     }
 
