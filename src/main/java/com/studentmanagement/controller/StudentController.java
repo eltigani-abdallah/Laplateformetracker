@@ -398,6 +398,35 @@ public class StudentController extends BaseTableController<SubjectResult>  {
         }
     }
 
+    private void showGradeDeleteConfirmation(String subject, String gradeText) {
+        try{
+            //Parse grade value and coefficient from the grade text
+            String[] parts = gradeText.split(" \\(coef: ");
+            double gradeValue = Double.parseDouble(parts[0]);
+            double coeffValue = Double.parseDouble(parts[1].replace(")", ""));        
+            //Show confirmation dialog
+            DialogUtils.showDeleteConfirmation(
+                "Supprimer la note",
+                "Es tu sûr de vouloir supprimer cette note (" + gradeText + ") pour la matière " + subject + " ?",
+                () -> {
+                    try{
+                        //Delete grade from database
+                        gradeService.deleteGrade(currentStudent.getStudentId(), subject, gradeValue, coeffValue);
+                        //Refresh table
+                        refreshTable();
+                        //Show success message
+                        AlertUtils.showInformation("Succès", "La note a été supprimée avec succès.");
+                    } catch (Exception e) {
+                        AlertUtils.showError("Erreur", "Une erreur est survenue lors de la suppression :\n" + e.getMessage());
+                        throw new RuntimeException(e);
+                    }
+                }
+            );
+        } catch (Exception e){
+            AlertUtils.showError("Erreur", "Une erreur est survenue lors de la suppression de la note : " + e.getMessage());
+        }
+    }
+
 
     //Disable all ui fields buttons and text area until user enter student ID
     private void disableGradeControls(boolean disable){
