@@ -15,6 +15,11 @@ public class Autosaver {
     private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
     private final ImportExportService exporter = new ImportExportService();
 
+    /**
+     * start the autosaving functions
+     * @param studentList list of students to export every intervalSeconds
+     * @param intervalSeconds the interval of time to export
+     */
     public void startAutoSave(List<Student> studentList, int intervalSeconds) {
         scheduler.scheduleAtFixedRate(() -> {
             exporter.exportToCSV(studentList);
@@ -22,6 +27,9 @@ public class Autosaver {
         }, intervalSeconds, intervalSeconds, TimeUnit.SECONDS);
     }
 
+    /**
+     * disable the autosave function
+     */
     public void stopAutoSave(){
         scheduler.shutdown();
         System.out.println("Auto-save disabled");

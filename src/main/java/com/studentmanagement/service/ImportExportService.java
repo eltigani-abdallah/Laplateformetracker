@@ -18,6 +18,11 @@ public class ImportExportService{
 
     }
 
+    /**
+     * import a list of students from a csv file
+     * @param filePath path of file to be imported
+     * @return
+     */
     public List<Student> importFromCSV(String filePath){
         try {
             ColumnPositionMappingStrategy<Student> strategy = new ColumnPositionMappingStrategy<>();
@@ -38,9 +43,10 @@ public class ImportExportService{
     }
 
 
-
-
-
+    /**
+     * export a list of students to a CSV file
+     * @param studentList List<Student> of students to export
+     */
     public void exportToCSV(List<Student> studentList){
         try(PrintWriter writer= new PrintWriter(new FileWriter("export.csv"))) {
             writer.println("first_name,last_name,age");

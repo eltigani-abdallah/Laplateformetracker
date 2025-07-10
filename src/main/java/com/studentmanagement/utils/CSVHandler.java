@@ -8,11 +8,17 @@ import java.util.List;
 public class CSVHandler{
     char delimiter=',';
 
-
+    /**
+     * no argument constructor
+     */
     public CSVHandler(){
 
     }
 
+    /**
+     * constructor with a custom delimiter
+     * @param delimiter
+     */
     public CSVHandler(char delimiter){
         this.delimiter=delimiter;
     }
@@ -73,6 +79,11 @@ public class CSVHandler{
         return null;
     }
 
+    /**
+     * parse student info from a CSV line
+     * @param lineToParse
+     * @return Student object
+     */
     public Student parsestudentFromCSVLine(String lineToParse){
         String[] parts=lineToParse.split(String.valueOf(delimiter));
         return new Student(
@@ -95,14 +106,5 @@ public class CSVHandler{
         );
         return studentCSVFormat;
     }
-    /**
-     * What the frick is a general
-    General parseGeneralFromCSV(String){
-
-    }
-
-    String formatGeneralToCSV(General){
-
-    }*/
 
 }
