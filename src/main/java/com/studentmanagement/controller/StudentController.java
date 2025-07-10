@@ -17,6 +17,7 @@ import java.util.ResourceBundle;
 
 import com.studentmanagement.model.Grade;
 import com.studentmanagement.model.Student;
+import com.studentmanagement.model.SubjectComment;
 import com.studentmanagement.service.GradeService;
 import com.studentmanagement.service.StudentService;
 import com.studentmanagement.service.SubjectCommentService;
@@ -293,6 +294,35 @@ public class StudentController extends BaseTableController<SubjectResult>  {
             AlertUtils.showInformation("Succès", "La note a été ajoutée avec succès.");
         } catch(Exception e){
             AlertUtils.showError("Erreur", "Une erreur est survenue lors de l'ajout de la note :\n" + e.getMessage());
+        }
+    }
+
+    @FXML
+    protected void handleAddComment(){
+        try{
+            String subject = subjectComboBox.getValue();
+            if (subject == null || subject.isEmpty()){
+                AlertUtils.showError("Erreur", "Sélectionne une matière !");
+                return;
+            }
+            String comment = commentArea.getText().trim();
+            if(comment.isEmpty()){
+                AlertUtils.showInformation("Information", "Il n'y a pas de commentaire à ajouter.\nRédiges-en un !");
+                commentArea.requestFocus();
+                return;
+            }
+            
+            //Create and save the comment
+            SubjectComment newComment = new SubjectComment();
+            newComment.setStudentId(currentStudent.getStudentId());
+            newComment.setSubject(subject);
+            newComment.setComment(comment);
+            commentService.saveComment(newComment);
+            commentArea.clear();
+            refreshTable();
+            AlertUtils.showInformation("Succès", "Le commentaire a été ajouté avec succès.");
+        } catch (Exception e){
+            AlertUtils.showError("Erreur", "Une erreur est survenue lors de l'ajout du commentaire : " + e.getMessage());
         }
     }
 
