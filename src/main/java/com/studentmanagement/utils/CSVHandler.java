@@ -25,7 +25,7 @@ public class CSVHandler{
      */
     public void exportStudentSearchResults(List<Student> searchResults){
         try(PrintWriter writer= new PrintWriter(new FileWriter("student_export.csv"))){
-            writer.println("id,first_name,last_name,age,grade");
+            writer.println("first_name,last_name,age");
 
             for (Student student:searchResults){
                 writer.println(formatStudentToCSV(student));
@@ -60,9 +60,9 @@ public class CSVHandler{
             if (line!=null){
                 String[] parts= line.split(String.valueOf(delimiter));
                 return new Student(
+                        parts[0],
                         parts[1],
-                        parts[2],
-                        Integer.parseInt(parts[3])
+                        Integer.parseInt(parts[2])
                 );
             }
         } catch (IOException | NumberFormatException e){
@@ -76,9 +76,9 @@ public class CSVHandler{
     public Student parsestudentFromCSVLine(String lineToParse){
         String[] parts=lineToParse.split(String.valueOf(delimiter));
         return new Student(
+                parts[0],
                 parts[1],
-                parts[2],
-                Integer.parseInt(parts[3])
+                Integer.parseInt(parts[2])
         );
     }
 
@@ -88,12 +88,10 @@ public class CSVHandler{
      * @return String of student info
      */
     public String formatStudentToCSV(Student studentToFormat){
-        String studentCSVFormat= String.format("%d,%s,%s,%d,%.2f",
-                studentToFormat.getStudentId(),
+        String studentCSVFormat= String.format("%s,%s,%d",
                 studentToFormat.getFirstName(),
                 studentToFormat.getLastName(),
-                studentToFormat.getAge(),
-                studentToFormat.getAverageGrade()
+                studentToFormat.getAge()
         );
         return studentCSVFormat;
     }

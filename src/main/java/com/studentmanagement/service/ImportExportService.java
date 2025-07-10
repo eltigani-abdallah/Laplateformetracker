@@ -22,7 +22,7 @@ public class ImportExportService{
         try {
             ColumnPositionMappingStrategy<Student> strategy = new ColumnPositionMappingStrategy<>();
             strategy.setType(Student.class);
-            strategy.setColumnMapping("id", "firstName", "lastName", "age", "grade"); // CSV column order
+            strategy.setColumnMapping("firstName", "lastName", "age"); // CSV column order
 
             return new CsvToBeanBuilder<Student>(new FileReader(filePath))
                     .withMappingStrategy(strategy)
@@ -43,7 +43,7 @@ public class ImportExportService{
 
     public void exportToCSV(List<Student> studentList){
         try(PrintWriter writer= new PrintWriter(new FileWriter("export.csv"))) {
-            writer.println("id, first_name, last_name, age, grade");
+            writer.println("first_name,last_name,age");
 
             for (Student student : studentList) {
                 String line = csvHandler.formatStudentToCSV(student);

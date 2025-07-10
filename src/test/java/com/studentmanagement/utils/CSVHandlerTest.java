@@ -10,9 +10,9 @@ public class CSVHandlerTest {
     @Test
     public void testFormatStudentToCSV(){
         CSVHandler handler=new CSVHandler();
-        Student testStudent= new Student("bob", "Builder", 5);
+        Student testStudent= new Student("Bob", "Builder", 5);
 
-        String expected= "bob,Builder,5";
+        String expected= "Bob,Builder,5";
         String actual= handler.formatStudentToCSV(testStudent);
 
         assertEquals(expected, actual);
