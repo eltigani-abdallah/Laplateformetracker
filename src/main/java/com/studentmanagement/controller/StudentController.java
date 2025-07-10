@@ -11,6 +11,7 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -22,6 +23,7 @@ import com.studentmanagement.service.GradeService;
 import com.studentmanagement.service.StudentService;
 import com.studentmanagement.service.SubjectCommentService;
 import com.studentmanagement.utils.AlertUtils;
+import com.studentmanagement.utils.DialogUtils;
 import com.studentmanagement.utils.GradeValidator;
 import com.studentmanagement.utils.SubjectResult;
 
@@ -335,6 +337,67 @@ public class StudentController extends BaseTableController<SubjectResult>  {
             AlertUtils.showError("Erreur", "Une erreur est survenue lors du tri :\n" + e.getMessage());
         }
     }
+
+    private void showGradeEditDialog(String subject, String gradeText) {
+        try{
+            //Parse grade value and coefficient from the grade text
+            String[] parts = gradeText.split(" \\(coef: ");
+            double gradeValue = Double.parseDouble(parts[0]);
+            double coeffValue = Double.parseDouble(parts[1].replace(")", ""));
+            //Create dialog fields
+            List<DialogUtils.DialogField> fields = new ArrayList<>();
+            fields.add(new DialogUtils.DialogField("Note :", String.valueOf(gradeValue)));
+            fields.add(new DialogUtils.DialogField("Coefficient :", String.valueOf(coeffValue)));
+            //Show dialog
+            DialogUtils.showEditDialog(
+                "Modifier la note", 
+                fields,
+                //On save action
+                (updatedFields) -> {
+                    try{
+                        //Get new values
+                        double newGrade = Double.parseDouble(updatedFields.get(0).getValue());
+                        double newCoeff = Double.parseDouble(updatedFields.get(1).getValue());
+                        //Update grade in database
+                        gradeService.updateGrade(currentStudent.getStudentId(), subject, 
+                            gradeValue, coeffValue, newGrade, newCoeff);
+                        //Refresh table
+                        refreshTable();
+                        //Show success message
+                        AlertUtils.showInformation("Succès", "La note a été modifiée avec succès.");
+                    } catch (Exception ex) {
+                        AlertUtils.showError("Erreur", "Une erreur est survenue lors de la modification : " + ex.getMessage());
+                    }
+                },
+                //Validator
+                (fieldsToValidate) -> {
+                    try {
+                        //Create temporary TextFields for validation
+                        TextField tempGradeField = new TextField(fieldsToValidate.get(0).getValue());
+                        TextField tempCoeffField = new TextField(fieldsToValidate.get(1).getValue());
+                        //Validate input using the validator
+                        GradeValidator.ValidationResult result = GradeValidator.validateGradeInput(
+                            tempGradeField, tempCoeffField);
+                        if (!result.isValid()){
+                            return result.getErrorMessage();
+                        }
+                        //Check if values have changed
+                        result = GradeValidator.checkForChanges(
+                            gradeValue, coeffValue, tempGradeField, tempCoeffField);
+                        if (!result.isValid()){
+                            return result.getErrorMessage();
+                        }
+                        return null;
+                    } catch (Exception e){
+                        return "Une erreur est survenue :\n" + e.getMessage();
+                    }
+                }
+            );
+        } catch (Exception e){
+            AlertUtils.showError("Erreur", "Une erreur est survenue lors de l'édition de la note :\n" + e.getMessage());
+        }
+    }
+
 
     //Disable all ui fields buttons and text area until user enter student ID
     private void disableGradeControls(boolean disable){
