@@ -1,7 +1,6 @@
 package com.studentmanagement.controller;
 
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
@@ -9,14 +8,11 @@ import javafx.scene.layout.VBox;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 
 import java.io.File;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.ResourceBundle;
 
 import com.studentmanagement.model.Grade;
 import com.studentmanagement.model.Student;
@@ -551,4 +547,24 @@ public class StudentController extends BaseTableController<SubjectResult>  {
             AlertUtils.showError("Erreur", "Une erreur est survenue lors de l'export :\n" + e.getMessage());
         }
     }
+  
+    @Override
+    protected void handleImport() {
+        //Import functionality not required for this controller
+        AlertUtils.showInformation("Information", "L'importation n'est pas disponible pour les notes d'étudiant.");
+    }
+
+    //Setters for dependency injection
+    public void setStudentService(StudentService studentService){
+        this.studentService = studentService;
+    }
+
+    public void setGradeService(GradeService gradeService){
+        this.gradeService = gradeService;
+    }
+
+    public void setCommentService(SubjectCommentService commentService) {
+        this.commentService = commentService;
+    }
+
 }
