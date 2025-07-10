@@ -11,8 +11,8 @@
     <!-- Dashboard Tab -->
     <Tab id="dashboard-tab" fx:id="dashboardTab" text="Bonjour !">
       <content>
-        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
-        <!-- <fx:include source="Dashboard.fxml" /> -->
+          <!--  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" /> -->
+        <fx:include source="welcome.fxml" /> 
       </content>
     </Tab>
     <!-- Students Tab -->
