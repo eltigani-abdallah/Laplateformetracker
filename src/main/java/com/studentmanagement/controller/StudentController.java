@@ -10,6 +10,8 @@ import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+
+import java.io.File;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -506,6 +508,23 @@ public class StudentController extends BaseTableController<SubjectResult>  {
         } catch (Exception e){
             AlertUtils.showError("Erreur", "Une erreur est survenue lors du comptage :\n" + e.getMessage());
             return 0;
+        }
+    }
+
+    @Override
+    protected void exportToCSV(List<SubjectResult> data, File file) {
+        try {
+            List<Student> studentData = new ArrayList<>();
+            Student studentWithGrades = new Student();
+            studentWithGrades.setStudentId(currentStudent.getStudentId());
+            studentWithGrades.setFirstName(currentStudent.getFirstName());
+            studentWithGrades.setLastName(currentStudent.getLastName());
+            studentData.add(studentWithGrades);
+            
+            importExportService.exportToCSV(studentData, file);
+            
+        } catch (Exception e){
+            AlertUtils.showError("Erreur", "Une erreur est survenue lors de l'export :\n" + e.getMessage());
         }
     }
 
