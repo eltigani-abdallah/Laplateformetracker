@@ -322,7 +322,17 @@ public class StudentController extends BaseTableController<SubjectResult>  {
             refreshTable();
             AlertUtils.showInformation("Succès", "Le commentaire a été ajouté avec succès.");
         } catch (Exception e){
-            AlertUtils.showError("Erreur", "Une erreur est survenue lors de l'ajout du commentaire : " + e.getMessage());
+            AlertUtils.showError("Erreur", "Une erreur est survenue lors de l'ajout du commentaire :\n" + e.getMessage());
+        }
+    }
+
+    @FXML
+    protected void handleSort(){
+        try{
+            refreshTable();
+            
+        } catch (Exception e){
+            AlertUtils.showError("Erreur", "Une erreur est survenue lors du tri :\n" + e.getMessage());
         }
     }
 
