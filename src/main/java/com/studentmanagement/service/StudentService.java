@@ -27,4 +27,8 @@ public class StudentService{
     public void deleteStudent(Long studentId) {
         throw new UnsupportedOperationException("Unimplemented method 'deleteStudent'");
     }
+
+    public Student getStudentByID(Long studentId) {
+        throw new UnsupportedOperationException("Unimplemented method 'getStudentByID'");
+    }
 }

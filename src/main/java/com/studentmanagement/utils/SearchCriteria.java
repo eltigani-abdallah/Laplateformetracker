@@ -31,4 +31,8 @@ public class SearchCriteria {
     public void setSortDirection(String sortDirection){
         this.sortDirection = sortDirection;
     }
+
+    public String getSearchValue() {
+        throw new UnsupportedOperationException("Unimplemented method 'getSearchValue'");
+    }
 }

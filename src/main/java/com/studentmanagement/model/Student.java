@@ -71,4 +71,8 @@ public class Student{
 
     }
 
+    public void setStudentId(Long studentId) {
+        throw new UnsupportedOperationException("Unimplemented method 'setStudentId'");
+    }
+
 }
