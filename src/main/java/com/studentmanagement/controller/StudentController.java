@@ -6,15 +6,21 @@ import javafx.scene.control.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import java.net.URL;
+import java.util.Arrays;
+import java.util.List;
 import java.util.ResourceBundle;
 
-//minimum version just to compile
-public class StudentController implements Initializable {
+import com.studentmanagement.model.Student;
+import com.studentmanagement.service.GradeService;
+import com.studentmanagement.service.StudentService;
+import com.studentmanagement.service.SubjectCommentService;
+import com.studentmanagement.utils.SubjectResult;
 
-    @FXML
+
+public class StudentController extends BaseTableController<SubjectResult>  {
+
+@FXML
     private TextField studentIdField;
-    @FXML
-    private Button okButton;
     @FXML
     private Label studentNameLabel;
     @FXML
@@ -32,75 +38,37 @@ public class StudentController implements Initializable {
     @FXML
     private Button addCommentButton;
     @FXML
-    private TextField searchField;
+    private Button okButton;
     @FXML
-    private Button sortButton;
+    private Button searchButton;
     @FXML
-    private TableView<?> gradesTable;
+    private TableView<SubjectResult> gradesTable;
     @FXML
-    private TableColumn<?, ?> subjectColumn;
+    private TableColumn<SubjectResult, String> subjectColumn;
     @FXML
-    private TableColumn<?, ?> gradesColumn;
+    private TableColumn<SubjectResult, String> gradesColumn;
     @FXML
-    private TableColumn<?, ?> minAverageColumn;
+    private TableColumn<SubjectResult, Number> minAverageColumn;
     @FXML
-    private TableColumn<?, ?> maxAverageColumn;
+    private TableColumn<SubjectResult, Number> maxAverageColumn;
     @FXML
-    private TableColumn<?, ?> studentAverageColumn;
+    private TableColumn<SubjectResult, Number> studentAverageColumn;
     @FXML
-    private TableColumn<?, ?> commentsColumn;
-    @FXML
-    private Pagination pagination;
-    @FXML
-    private Button exportButton;
+    private TableColumn<SubjectResult, String> commentsColumn;
 
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
-        // Init combo box with subjects
-        ObservableList<String> subjects = FXCollections.observableArrayList(
+    private StudentService studentService;
+    private GradeService gradeService;
+    private SubjectCommentService commentService;
+    private Student currentStudent;
+    private List<String> subjects = Arrays.asList(
             "Français", "Anglais", "Mathématiques", "Histoire", "Géographie", 
             "Sciences Physiques", "Sciences de la Vie et de la Terre", "Arts Plastiques",
             "Éducation Physique et Sportive", "Technologie", "Musique", "Espagnol", "Allemand"
         );
-        subjectComboBox.setItems(subjects);
+
+    public StudentController() {
+        // Empty constructor - dependencies will be injected
     }
 
-    @FXML
-    private void handleLoadStudent() {
-        String studentId = studentIdField.getText();
-        if (studentId != null && !studentId.trim().isEmpty()) {
 
-        }
-    }
-
-    @FXML
-    private void handleAddGrade() {
-        String subject = subjectComboBox.getValue();
-        String grade = gradeField.getText();
-        String coefficient = coefficientField.getText();
-        
-        if (subject != null && !grade.trim().isEmpty() && !coefficient.trim().isEmpty()) {
-            gradeField.clear();
-            coefficientField.clear();
-            subjectComboBox.setValue(null);
-        }
-    }
-
-    @FXML
-    private void handleAddComment() {
-        String comment = commentArea.getText();
-        if (comment != null && !comment.trim().isEmpty()) {
-            commentArea.clear();
-        }
-    }
-
-    @FXML
-    private void handleSort() {
-
-    }
-
-    @FXML
-    private void handleExport() {
-
-    }
 }
