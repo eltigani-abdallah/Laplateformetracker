@@ -91,8 +91,16 @@ public class StudentController extends BaseTableController<SubjectResult>  {
         disableGradeControls(true);
     }
 
+    //Disable all ui fields buttons and text area until user enter student ID
     private void disableGradeControls(boolean disable){
-        
+        subjectComboBox.setDisable(disable);
+        gradeField.setDisable(disable);
+        coefficientField.setDisable(disable);
+        addGradeButton.setDisable(disable);
+        commentArea.setDisable(disable);
+        addCommentButton.setDisable(disable);
+        searchButton.setDisable(disable);
+        exportButton.setDisable(disable);
     }
 
 }
