@@ -3,6 +3,8 @@ package com.studentmanagement.utils;
 import java.util.List;
 import java.util.function.Consumer;
 
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -13,9 +15,11 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
@@ -40,6 +44,31 @@ public class DialogUtils {
         public void focus(){
             textField.selectAll();
             textField.requestFocus();
+        }
+    }
+
+    //Text area
+    public static class TextAreaField {
+        private String label;
+        private TextArea textArea;
+        private String initialValue;
+
+        public TextAreaField(String label, String initialValue){
+            this.label = label;
+            this.initialValue = initialValue != null ? initialValue : "";
+            this.textArea = new TextArea(this.initialValue);
+            this.textArea.setPrefRowCount(5);
+            this.textArea.setPrefColumnCount(30);
+            this.textArea.setWrapText(true);
+        }
+
+        public String getLabel(){ return label; }
+        public TextArea getTextArea(){ return textArea; }
+        public String getValue(){ return textArea.getText().trim(); }
+        public void setValue(String value){ textArea.setText(value); }
+        public void focus(){
+            textArea.selectAll();
+            textArea.requestFocus();
         }
     }
 
@@ -97,6 +126,59 @@ public class DialogUtils {
         cancelButton.setOnAction(e -> dialogStage.close());
         // Configure scene and display window
         Scene scene = new Scene(grid);
+        dialogStage.setScene(scene);
+        dialogStage.showAndWait();
+    }
+    
+    //To show a dialog window with TextArea
+    public static void showTextAreaDialog(String title, TextAreaField textAreaField,
+                                         Button... additionalButtons) {
+        //Create a new dialog window
+        Stage dialogStage = new Stage();
+        dialogStage.setTitle(title);
+        dialogStage.initModality(Modality.WINDOW_MODAL);
+        dialogStage.setResizable(false);
+
+        //Create window content
+        VBox vbox = new VBox(10);
+        vbox.setPadding(new Insets(20, 20, 20, 20));
+
+        //Add label and text area
+        Label label = new Label(textAreaField.getLabel());
+        vbox.getChildren().addAll(label, textAreaField.getTextArea());
+
+        //Buttons
+        Button cancelButton = new Button("J'annule");
+        cancelButton.setOnAction(e -> dialogStage.close());
+        HBox buttonBox = new HBox(10);
+        buttonBox.setAlignment(Pos.CENTER_RIGHT);
+        buttonBox.getChildren().add(cancelButton);
+        
+        //Add additional buttons if provided
+        if (additionalButtons != null && additionalButtons.length > 0) {
+            for (Button button : additionalButtons) {
+                //Store the original action
+                EventHandler<ActionEvent> originalAction = button.getOnAction();
+                
+                //Add new action to close dialog after original action
+                button.setOnAction(e -> {
+                    if (originalAction != null) {
+                        originalAction.handle(e);
+                    }
+                    //Only close if the original action didn't consume the event
+                    if (!e.isConsumed()) {
+                        dialogStage.close();
+                    }
+                });
+                
+                buttonBox.getChildren().add(0, button);
+            }
+        }
+        
+        vbox.getChildren().add(buttonBox);
+        
+        //Configure scene and display window
+        Scene scene = new Scene(vbox);
         dialogStage.setScene(scene);
         dialogStage.showAndWait();
     }
