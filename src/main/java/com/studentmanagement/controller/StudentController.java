@@ -473,6 +473,30 @@ public class StudentController extends BaseTableController<SubjectResult>  {
         }
     }
 
+    private void showCommentDeleteConfirmation(String subject){
+        try{
+            // Show confirmation dialog
+            DialogUtils.showDeleteConfirmation(
+                "Supprimer le commentaire",
+                "Es-tu sûr de vouloir supprimer le commentaire pour la matière " + subject + " ?",
+                () -> {
+                    try {
+                        //Delete comment from database
+                        commentService.deleteComment(currentStudent.getStudentId(), subject);
+                        refreshTable();
+                        //Show success message
+                        AlertUtils.showInformation("Succès", "Le commentaire a été supprimé avec succès.");
+                    } catch (Exception e){
+                        AlertUtils.showError("Erreur", "Une erreur est survenue lors de la suppression :\n" + e.getMessage());
+                        throw new RuntimeException(e);
+                    }
+                }
+            );
+        } catch (Exception e){
+            AlertUtils.showError("Erreur", "Une erreur est survenue lors de la suppression du commentaire : " + e.getMessage());
+        }
+    }
+
     //Disable all ui fields buttons and text area until user enter student ID
     private void disableGradeControls(boolean disable){
         subjectComboBox.setDisable(disable);
@@ -527,7 +551,4 @@ public class StudentController extends BaseTableController<SubjectResult>  {
             AlertUtils.showError("Erreur", "Une erreur est survenue lors de l'export :\n" + e.getMessage());
         }
     }
-
-
-
 }
