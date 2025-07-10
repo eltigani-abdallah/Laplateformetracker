@@ -427,6 +427,48 @@ public class StudentController extends BaseTableController<SubjectResult>  {
         }
     }
 
+    private void showCommentEditDialog(String subject, String comment){
+        try{
+            //Create the text field
+            DialogUtils.TextAreaField commentField = new DialogUtils.TextAreaField(
+                "Commentaire :", comment != null ? comment : "");
+            //Create the save button
+            Button saveButton = new Button("Je modifie");
+            //Save button action
+            saveButton.setOnAction(e -> {
+                try {
+                    String newComment = commentField.getValue();
+                    //If comment is empty
+                    if (newComment.isEmpty()) {
+                        AlertUtils.showInformation("Information", 
+                            "Le commentaire ne peut pas être vide.\nPour supprimer le commentaire,\nutilisez le bouton Je supprime.");
+                        commentField.focus();
+                        //prevent dialog from closing
+                        e.consume();
+                        return;
+                    }
+                    //Verify if there is a change
+                    if (comment != null && comment.equals(newComment)) {
+                        AlertUtils.showInformation("Information", 
+                            "Tu n'as rien changé.\nPour quitter la fenêtre sans modifier,\nclique sur J'annule.");
+                        e.consume(); 
+                        return;
+                    }
+                    //Update the comment in the database
+                    commentService.updateComment(currentStudent.getStudentId(), subject, newComment);
+                    refreshTable();
+                    AlertUtils.showInformation("Succès", "Tes modifications ont bien été prises en compte.");            
+                } catch (Exception ex){
+                    AlertUtils.showError("Erreur", "Une erreur est survenue lors de la modification :\n" + ex.getMessage());
+                    e.consume();
+                }
+            });
+            //show dialog 
+            DialogUtils.showTextAreaDialog("Modifier le commentaire", commentField, saveButton);    
+        } catch (Exception e){
+            AlertUtils.showError("Erreur", "Une erreur est survenue lors de l'édition du commentaire :\n" + e.getMessage());
+        }
+    }
 
     //Disable all ui fields buttons and text area until user enter student ID
     private void disableGradeControls(boolean disable){
