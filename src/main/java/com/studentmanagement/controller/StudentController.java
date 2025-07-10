@@ -70,5 +70,29 @@ public class StudentController extends BaseTableController<SubjectResult>  {
         // Empty constructor - dependencies will be injected
     }
 
+    @FXML
+    @Override
+    protected void initialize(){
+        //Initialize services
+        studentService = new StudentService();
+        gradeService = new GradeService();
+        commentService = new SubjectCommentService();
+
+        //Set up subject combo box
+        subjectComboBox.setItems(FXCollections.observableArrayList(subjects));
+
+        //Rename dataTable reference to match FXML
+        dataTable = gradesTable;
+
+        //Call parent initialization
+        super.initialize();
+
+        //Disable grade adding until a student is loaded
+        disableGradeControls(true);
+    }
+
+    private void disableGradeControls(boolean disable){
+        
+    }
 
 }
