@@ -19,6 +19,7 @@ import com.studentmanagement.model.Student;
 import com.studentmanagement.service.GradeService;
 import com.studentmanagement.service.StudentService;
 import com.studentmanagement.service.SubjectCommentService;
+import com.studentmanagement.utils.AlertUtils;
 import com.studentmanagement.utils.SubjectResult;
 
 
@@ -222,6 +223,42 @@ public class StudentController extends BaseTableController<SubjectResult>  {
                 setText(null);
             }
         });
+    }
+
+ @FXML
+    protected void handleLoadStudent(){
+        try{
+            String studentIdText = studentIdField.getText().trim();
+            if(studentIdText.isEmpty()){
+                AlertUtils.showError("Erreur", "Tu dois remplir l'ID d'étudiant !");
+                return;
+            }
+            try{
+                Long studentId = Long.parseLong(studentIdText);
+                currentStudent = studentService.getStudentByID(studentId);
+                if(currentStudent == null){
+                    AlertUtils.showError("Erreur", "Aucun étudiant trouvé avec cet ID.");
+                    disableGradeControls(true);
+                    return;
+                }
+                
+                //Update UI with student info
+                studentNameLabel.setText("Nom de l'étudiant : " + currentStudent.getFullName());
+                studentClassLabel.setText("Classe : " + currentStudent.getStudentClassName());
+                
+                //Enable grade controls
+                disableGradeControls(false);
+                
+                //Load student grades
+                refreshTable();
+                
+            } catch(NumberFormatException e){
+                AlertUtils.showError("Erreur", "L'ID étudiant doit être un nombre entier.");
+            }
+            
+        } catch (Exception e){
+            AlertUtils.showError("Erreur", "Une erreur est survenue lors du chargement de l'étudiant :\n" + e.getMessage());
+        }
     }
 
     //Disable all ui fields buttons and text area until user enter student ID
