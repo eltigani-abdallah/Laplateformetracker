@@ -496,6 +496,19 @@ public class StudentController extends BaseTableController<SubjectResult>  {
         }
     }
 
+    @Override
+    protected int getTotalCount(SearchCriteria criteria) {
+        try{
+            if (currentStudent == null){
+                return 0;
+            }
+            return gradeService.countBySubject(currentStudent.getStudentId(), criteria.getSearchValue()); 
+        } catch (Exception e){
+            AlertUtils.showError("Erreur", "Une erreur est survenue lors du comptage :\n" + e.getMessage());
+            return 0;
+        }
+    }
+
 
 
 }
