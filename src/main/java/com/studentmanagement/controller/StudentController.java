@@ -25,6 +25,7 @@ import com.studentmanagement.service.SubjectCommentService;
 import com.studentmanagement.utils.AlertUtils;
 import com.studentmanagement.utils.DialogUtils;
 import com.studentmanagement.utils.GradeValidator;
+import com.studentmanagement.utils.SearchCriteria;
 import com.studentmanagement.utils.SubjectResult;
 
 
@@ -481,5 +482,20 @@ public class StudentController extends BaseTableController<SubjectResult>  {
         searchButton.setDisable(disable);
         exportButton.setDisable(disable);
     }
+
+     @Override
+    protected List<SubjectResult> searchData(SearchCriteria criteria) {
+        try{
+            if (currentStudent == null){
+                return new ArrayList<>();
+            }
+            return gradeService.searchBySubject(currentStudent.getStudentId(), criteria);
+        } catch (Exception e){
+            AlertUtils.showError("Erreur", "Une erreur est survenue lors de la recherche :\n" + e.getMessage());
+            return new ArrayList<>();
+        }
+    }
+
+
 
 }
