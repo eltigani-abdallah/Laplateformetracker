@@ -27,7 +27,7 @@ public class ImportExportService{
         try {
             ColumnPositionMappingStrategy<Student> strategy = new ColumnPositionMappingStrategy<>();
             strategy.setType(Student.class);
-            strategy.setColumnMapping("firstName", "lastName", "age"); // CSV column order
+            strategy.setColumnMapping("first_name", "last_name", "age"); // CSV column order
 
             return new CsvToBeanBuilder<Student>(new FileReader(filePath))
                     .withMappingStrategy(strategy)

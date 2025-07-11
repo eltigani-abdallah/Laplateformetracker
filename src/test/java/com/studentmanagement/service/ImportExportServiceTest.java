@@ -51,7 +51,7 @@ public class ImportExportServiceTest {
         File file = tempDir.resolve("students.csv").toFile();
 
         try(PrintWriter writer=new PrintWriter(file)){
-            writer.println("firstName,lastName,age"); // header
+            writer.println("first_name,last_name,age"); // header
             writer.println("Alice,Wonder,6");
             writer.println("Bob,Builder,5");
         }
